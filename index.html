@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>COMP-3111 | Microprocessor & Assembly Lab</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.85);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.55;
+            overflow-x: hidden;
+            font-size: 1.05rem;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .course-header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 2rem;
+        }
+
+        .course-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124, 58, 237, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 6px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .course-header h1 {
+            font-size: clamp(2.2rem, 6vw, 3.3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-sub {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .instructor-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 18px 32px;
+            margin: 28px auto 20px;
+            border: 1px solid var(--border-light);
+            max-width: 980px;
+        }
+
+        .instructor-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+        }
+
+        .instructor-item i {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .weeks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .week-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.3s;
+        }
+
+        .week-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 40px -18px var(--primary-glow);
+        }
+
+        .week-header-bar {
+            background: linear-gradient(90deg, rgba(124,58,237,0.15) 0%, rgba(15,23,42,0.8) 100%);
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .chapter-number {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 0.4rem 1.1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .chapter-title-main {
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: var(--accent);
+            flex: 1;
+        }
+
+        .lecture-btn {
+            background: rgba(124,58,237,0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .lecture-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.97);
+        }
+
+        .week-body {
+            padding: 1.8rem;
+        }
+
+        .week-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.4rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .chapter-topic {
+            background: rgba(124,58,237,0.2);
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            padding: 1.2rem;
+            border-right: 3px solid var(--primary);
+        }
+
+        .info-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            margin-bottom: 0.9rem;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 0.7rem;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            padding-right: 1.2rem;
+            position: relative;
+        }
+
+        .info-box li:before {
+            content: "▹";
+            position: absolute;
+            right: -0.5rem;
+            color: var(--primary);
+        }
+
+        .practical-lab {
+            margin-top: 1.2rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            padding: 1rem 1.4rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        .practical-lab i {
+            color: var(--success);
+            font-size: 1.3rem;
+        }
+
+        .assessment-block {
+            background: rgba(18, 25, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 2.2rem;
+            margin: 2.2rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .assess-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 24px;
+            margin-top: 1.8rem;
+        }
+
+        .assess-card {
+            background: rgba(0,0,0,0.25);
+            padding: 1.4rem 2rem;
+            border-radius: 28px;
+            flex: 1;
+            min-width: 170px;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .assess-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .assess-card p {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .assess-card small {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .textbook-section {
+            background: rgba(0,0,0,0.35);
+            border-radius: 32px;
+            padding: 1.8rem;
+            margin: 1.5rem 0 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid var(--border-light);
+            margin-top: 2.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1rem 0 0.2rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        code {
+            background: #1e293b;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            background: rgba(124,58,237,0.15);
+            border: 1px solid rgba(124,58,237,0.4);
+            border-radius: 20px;
+            padding: 2px 12px;
+            font-size: 0.8rem;
+            margin: 2px 4px;
+            color: var(--accent);
+        }
+
+        @media (max-width: 780px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .week-header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            body {
+                font-size: 1rem;
+            }
+            .chapter-title-main {
+                font-size: 1.2rem;
+            }
+            .instructor-panel {
+                gap: 18px;
+                padding: 16px 20px;
+                border-radius: 32px;
+            }
+            .assess-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .assess-card {
+                min-width: auto;
+            }
+            .container {
+                padding: 0 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .week-body {
+                padding: 1.2rem;
+            }
+            .info-box {
+                padding: 1rem;
+            }
+            .assessment-block {
+                padding: 1.5rem;
+            }
+            .course-header {
+                padding: 2rem 0.5rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="container">
+    <!-- Header -->
+    <div class="course-header">
+        <div class="course-badge"><i class="fas fa-microchip"></i> COMP‑3111 | Bachelor of Cybersecurity Engineering</div>
+        <h1>Microprocessor & Assembly Language <span class="highlight">Lab</span></h1>
+        <div class="course-sub">Kip Irvine • x86 Architecture • From Transistors to Reverse Engineering</div>
+        <div class="instructor-panel">
+            <div class="instructor-item"><i class="fas fa-chalkboard-user"></i> <span>Mahmoud Khalil</span></div>
+            <div class="instructor-item"><i class="fas fa-envelope"></i> <span>mkhalil@ucas.edu.ps</span></div>
+            <div class="instructor-item"><i class="fas fa-flask"></i> <span>Course code: COMP‑3111 (Lab)</span></div>
+            <div class="instructor-item"><i class="fas fa-calendar-alt"></i> <span>1 Credit</span></div>
+        </div>
+    </div>
+
+    <!-- Units -->
+    <div class="weeks-container">
+
+        <!-- UNIT 1: Foundations & Visual Simulation -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-cube"></i> Unit 1</span>
+                <span class="chapter-title-main">Foundations & Visual Simulation (emu8086)</span>
+                <span class="tool-badge"><i class="fas fa-laptop"></i> emu8086</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">16‑bit architecture • registers • flags • loops • hardware mapping</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Understand how assembly mnemonics become machine code and drive the ALU, registers, and buses</li>
+                            <li>Explore general purpose registers (AX,BX,CX,DX) and segment registers visually</li>
+                            <li>Execute <code>MOV</code>, <code>ADD</code>, <code>SUB</code> and interpret Zero, Sign, Overflow flags</li>
+                            <li>Build conditional jumps and loops with <code>CMP</code>, <code>JZ</code>, <code>JNZ</code></li>
+                            <li>Write a simple sorting algorithm entirely in assembly</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-microchip"></i> Core Topics</h4>
+                        <ul>
+                            <li><strong>Assembly → Circuits:</strong> opcode decoding, control unit, data path</li>
+                            <li>General registers, segment registers, instruction pointer</li>
+                            <li>Arithmetic & logic operations, flag register effects</li>
+                            <li>Control flow: unconditional/conditional jumps, loop construction</li>
+                            <li>emu8086 simulation of memory and I/O</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-flask"></i> <strong>Exercise:</strong> Implement bubble sort on a byte array and observe flag changes step‑by‑step.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 2: High-Level to Low-Level & First Assembly Steps -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-code"></i> Unit 2</span>
+                <span class="chapter-title-main">From C to Assembly: Your First Low‑Level Programs</span>
+                <span class="tool-badge"><i class="fas fa-code"></i> MASM / VS Code</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">High‑level mapping • basic instructions • memory layout • first .exe</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>See how <code>if</code>, <code>for</code>, and <code>while</code> translate into compare and jump sequences</li>
+                            <li>Write a simple program using <code>.data</code>, <code>.code</code>, <code>END</code> directives</li>
+                            <li>Understand the role of <code>MOV</code>, <code>ADD</code>, <code>SUB</code>, <code>INC</code>, <code>DEC</code></li>
+                            <li>Assemble, link, and run a 32‑bit console application with MASM</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-book"></i> Introduction to Assembly</h4>
+                        <ul>
+                            <li><strong>High‑level to low‑level:</strong> a short walk through compiler output (C → Assembly)</li>
+                            <li>First assembly program: "Hello, world" without external libraries</li>
+                            <li>Registers vs. memory: immediate, register, direct addressing</li>
+                            <li>Basic arithmetic and data movement patterns</li>
+                            <li>Setting up MASM + Visual Studio Code</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-terminal"></i> <strong>Lab:</strong> Write a program that adds three integers and stores the result – then trace it in a debugger.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 3: Data Movement and Addressing Modes -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-exchange-alt"></i> Unit 3</span>
+                <span class="chapter-title-main">Data Movement and Addressing Modes</span>
+                <span class="tool-badge"><i class="fas fa-code"></i> MASM</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">MOV • LEA • pointers • arrays • indirect addressing</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Master <code>MOV</code>, <code>MOVZX</code>, <code>MOVSX</code>, <code>LEA</code></li>
+                            <li>Use direct, indirect, indexed, and based addressing modes</li>
+                            <li>Work with arrays: accessing elements via ESI, EDI, EBX</li>
+                            <li>Understand the difference between a pointer and a value</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-memory"></i> Addressing Deep Dive</h4>
+                        <ul>
+                            <li>Immediate vs. register vs. memory operands</li>
+                            <li>Indirect operands: <code>[reg]</code>, <code>[reg+disp]</code>, <code>[reg1+reg2]</code></li>
+                            <li>Array traversal and base‑index addressing</li>
+                            <li>Data definition directives: <code>DB</code>, <code>DW</code>, <code>DD</code>, <code>DUP</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-laptop-code"></i> <strong>Lab:</strong> Reverse an array in place using only registers and indirect addressing.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 4: Arithmetic, Logic, and Flags -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-calculator"></i> Unit 4</span>
+                <span class="chapter-title-main">Arithmetic, Logic, and the Flags Register</span>
+                <span class="tool-badge"><i class="fas fa-code"></i> MASM</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">ADD • SUB • MUL • DIV • AND • OR • XOR • shifts</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Use <code>ADD</code>, <code>SUB</code>, <code>INC</code>, <code>DEC</code> with carry and overflow awareness</li>
+                            <li>Multiply and divide with <code>MUL</code>/<code>IMUL</code> and <code>DIV</code>/<code>IDIV</code></li>
+                            <li>Apply bitwise AND, OR, XOR, NOT for masking and toggling</li>
+                            <li>Shift and rotate: <code>SHL</code>, <code>SHR</code>, <code>SAL</code>, <code>SAR</code>, <code>ROL</code>, <code>ROR</code></li>
+                            <li>Read the flags register after each operation</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-flag"></i> Flag‑Driven Logic</h4>
+                        <ul>
+                            <li>Zero flag (ZF), Sign flag (SF), Overflow flag (OF), Carry flag (CF)</li>
+                            <li>Conditional jumps based on flags: <code>JE</code>, <code>JNE</code>, <code>JG</code>, <code>JL</code>, etc.</li>
+                            <li>Implementing high‑level conditions with flag‑based branching</li>
+                            <li>Converting number bases (Bin ↔ Hex ↔ Dec) using logic ops</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-flask"></i> <strong>Exercise:</strong> Build a simple calculator that reads two digits, performs an operation, and displays the result.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 5: Control Flow and Procedures -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-code-branch"></i> Unit 5</span>
+                <span class="chapter-title-main">Control Flow, Procedures, and the Stack</span>
+                <span class="tool-badge"><i class="fas fa-code"></i> MASM</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">CMP • JMP • LOOP • CALL/RET • stack frames • prologue/epilogue</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Construct all common loop patterns with <code>LOOP</code>, <code>JMP</code>, and conditional jumps</li>
+                            <li>Define and call procedures using <code>CALL</code> and <code>RET</code></li>
+                            <li>Pass parameters via registers and the stack</li>
+                            <li>Write proper prologue (<code>push ebp</code> / <code>mov ebp, esp</code>) and epilogue</li>
+                            <li>Understand call conventions (cdecl, stdcall) at the assembly level</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-layer-group"></i> The Stack in Action</h4>
+                        <ul>
+                            <li>Stack operations: <code>PUSH</code>, <code>POP</code>, <code>PUSHAD</code>, <code>POPAD</code></li>
+                            <li>Local variables and stack frames</li>
+                            <li>Recursive procedures and stack limits</li>
+                            <li>Nested procedure calls and preserving registers</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-laptop-code"></i> <strong>Lab:</strong> Implement a recursive factorial function and trace stack changes in x64dbg.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 6: Strings, I/O, and OS Interface -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-keyboard"></i> Unit 6</span>
+                <span class="chapter-title-main">Strings, Input/Output, and Operating System Interface</span>
+                <span class="tool-badge"><i class="fas fa-code"></i> Irvine32</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">string primitives • console I/O • Windows API basics</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Use string instructions: <code>MOVSB</code>, <code>STOSB</code>, <code>LODSB</code>, <code>CMPSB</code></li>
+                            <li>Perform console I/O with Irvine32 (<code>ReadString</code>, <code>WriteString</code>, <code>WriteInt</code>)</li>
+                            <li>Read and write text files using Irvine32 file functions</li>
+                            <li>Call a simple Windows API function (<code>MessageBoxA</code>, <code>ExitProcess</code>) from assembly</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-window-maximize"></i> Bridging to the OS</h4>
+                        <ul>
+                            <li>Irvine32 library: keyboard, display, file operations</li>
+                            <li>String manipulation and parsing</li>
+                            <li>Introduction to Windows API calling convention</li>
+                            <li>Building a complete interactive console application</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-terminal"></i> <strong>Mini Project:</strong> Create a text‑based menu program that encrypts/decrypts a string using a simple XOR cipher.
+                </div>
+            </div>
+        </div>
+
+        <!-- UNIT 7: Reverse Engineering & Dynamic Analysis -->
+        <div class="week-card">
+            <div class="week-header-bar">
+                <span class="chapter-number"><i class="fas fa-bug"></i> Unit 7</span>
+                <span class="chapter-title-main">Reverse Engineering & Dynamic Analysis (x64dbg)</span>
+                <span class="tool-badge"><i class="fas fa-search"></i> x64dbg</span>
+            </div>
+            <div class="week-body">
+                <div class="week-meta">
+                    <span class="chapter-topic">disassembly • breakpoints • C-to-Asm patterns • patching</span>
+                </div>
+                <div class="content-grid">
+                    <div class="info-box">
+                        <h4><i class="fas fa-bullseye"></i> Learning Outcomes</h4>
+                        <ul>
+                            <li>Navigate the x64dbg interface: CPU view, hex dump, memory map</li>
+                            <li>Set software/hardware breakpoints and step through code</li>
+                            <li>Recognize compiler patterns for <code>if‑else</code>, loops, and function calls</li>
+                            <li>Analyze function arguments and return values from disassembly</li>
+                            <li>Apply basic patching (e.g., change <code>JZ</code> to <code>JMP</code>) to alter program behavior</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h4><i class="fas fa-shield-virus"></i> Ethical Analysis</h4>
+                        <ul>
+                            <li>Dynamic debugging vs. static disassembly</li>
+                            <li>Identifying hardcoded credentials and license checks</li>
+                            <li>Patching techniques and binary modification</li>
+                            <li>Legal and ethical boundaries: analysis for defense only</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="practical-lab">
+                    <i class="fas fa-shield-haltered"></i> <strong>Challenge:</strong> Given a crackme.exe, locate the password check routine and patch it to accept any password.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Assessment & Grading -->
+    <div class="assessment-block">
+        <h2><i class="fas fa-chart-simple"></i> Assessment & Grading</h2>
+        <p class="section-desc">Continuous hands‑on evaluation – labs, debugging challenges, and a comprehensive final project</p>
+        <div class="assess-grid">
+            <div class="assess-card"><h3>30%</h3><p>Lab Assignments</p><small>Weekly tasks & simulation logs</small></div>
+            <div class="assess-card"><h3>25%</h3><p>Midterm Practical</p><small>Live coding & debugging exam</small></div>
+            <div class="assess-card"><h3>45%</h3><p>Final Project</p><small>Assembly app or RE report</small></div>
+        </div>
+    </div>
+
+    <!-- Textbook & Tools -->
+    <div class="textbook-section">
+        <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+            <div><i class="fas fa-book-open" style="font-size: 2.8rem; color: var(--primary);"></i></div>
+            <div>
+                <h3 style="font-size: 1.3rem;">📘 Required Textbook & Tools</h3>
+                <p style="margin: 6px 0;"><strong>Kip R. Irvine.</strong> <em>Assembly Language for x86 Processors</em> (7th or 8th Edition). Pearson.</p>
+                <p style="font-size: 0.9rem;"><i class="fas fa-check-circle"></i> Software: <strong>emu8086</strong> (visual simulator), <strong>MASM + Visual Studio Code</strong> (32‑bit development), <strong>x64dbg</strong> (debugger/disassembler).</p>
+                <p style="font-size: 0.9rem;"><i class="fas fa-globe"></i> Supplementary: Intel Manuals, OSDev wiki, Crackmes.one (legal practice binaries).</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p><i class="fas fa-university"></i> University College of Applied Sciences – Cybersecurity Engineering Dept. | Course code: COMP‑3111</p>
+        <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> & industry reverse‑engineering practices | Instructor: <strong>Mahmoud Khalil</strong></p>
+        <p>© 2026 Mahmoud Khalil – All Rights Reserved</p>
+    </footer>
+</div>
+
+<script>
+    (function() {
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('COMP-3111 | Microprocessor Lab scripts loaded');
+
+            // Update footer year automatically
+            const footerYear = document.querySelector('footer p:last-of-type');
+            if (footerYear && footerYear.innerText.includes('© 2026')) {
+                footerYear.innerText = footerYear.innerText.replace('2026', new Date().getFullYear());
+            }
+
+            // Smooth scroll for any internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Week card hover/focus effects
+            const weekCards = document.querySelectorAll('.week-card');
+            weekCards.forEach(card => {
+                card.addEventListener('focusin', () => card.style.borderColor = 'var(--primary)');
+                card.addEventListener('focusout', () => card.style.borderColor = 'var(--border-light)');
+            });
+
+            // Placeholder button click (replace # with actual links later)
+            document.querySelectorAll('.lecture-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                        console.log('Material link placeholder for: ' + this.closest('.week-card')?.querySelector('.chapter-title-main')?.innerText);
+                    }
+                });
+            });
+        });
+    })();
+</script>
+</body>
+</html>
