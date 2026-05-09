@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Unit 3 | Data Movement & Addressing Modes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1c;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: rgba(18, 25, 45, 0.92);
+            border: 1px solid #2d3a5e;
+            border-radius: 1.2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #90cdf4;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: #7dd3fc;
+            margin: 1.5rem 0 0.8rem;
+            border-bottom: 1px solid #2d3a5e;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            color: #b9e6ff;
+            margin: 1rem 0 0.5rem;
+        }
+
+        p {
+            margin-bottom: 0.8rem;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+        }
+
+        .code {
+            background: #0b1120;
+            padding: 1rem;
+            border-radius: 0.6rem;
+            font-family: monospace;
+            border: 1px solid #2d3a5e;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav a {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-size: 0.8rem;
+            border: 1px solid #334155;
+        }
+
+        .nav a:hover {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-radius: 0.8rem;
+            border-left: 3px solid #3b82f6;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: collapse;
+        }
+
+        table td,
+        table th {
+            border: 1px solid #2d3a5e;
+            padding: 0.6rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="nav">
+            <a href="#intro">Intro</a>
+            <a href="#mov">MOV</a>
+            <a href="#modes">Addressing</a>
+            <a href="#pointer">Pointers</a>
+            <a href="#arrays">Arrays</a>
+            <a href="#loops">Loops</a>
+            <a href="#lab">Lab</a>
+        </div>
+
+        <h1><i class="fas fa-memory"></i> Unit 3: Data Movement & Addressing Modes</h1>
+
+        <!-- INTRO -->
+        <h2 id="intro"><i class="fas fa-bolt"></i> Introduction</h2>
+        <p>
+            In assembly language, the programmer directly controls how data moves between registers and memory.
+            Unlike high-level languages, nothing is automatic — every movement must be explicitly defined.
+        </p>
+
+        <div class="box">
+            <i class="fas fa-info-circle"></i>
+            This unit focuses on memory access, pointers, arrays, and how the CPU calculates addresses.
+        </div>
+
+        <!-- MOV -->
+        <h2 id="mov"><i class="fas fa-exchange-alt"></i> MOV Instruction</h2>
+
+        <div class="code">
+            MOV EAX, 5<br>
+            MOV EBX, EAX
+        </div>
+
+        <ul>
+            <li>MOV copies data from source to destination</li>
+            <li>Does NOT modify source</li>
+            <li>Fundamental instruction in assembly</li>
+        </ul>
+
+        <!-- ADDRESSING -->
+        <h2 id="modes"><i class="fas fa-project-diagram"></i> Addressing Modes</h2>
+
+        <table>
+            <tr>
+                <th>Mode</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>Immediate</td>
+                <td>MOV EAX, 10</td>
+            </tr>
+            <tr>
+                <td>Register</td>
+                <td>MOV EAX, EBX</td>
+            </tr>
+            <tr>
+                <td>Direct Memory</td>
+                <td>MOV EAX, num</td>
+            </tr>
+            <tr>
+                <td>Indirect</td>
+                <td>MOV AL, [ESI]</td>
+            </tr>
+            <tr>
+                <td>Indexed</td>
+                <td>MOV AL, [ESI+2]</td>
+            </tr>
+        </table>
+
+        <div class="box">
+            <i class="fas fa-lightbulb"></i>
+            Addressing modes define how CPU calculates the memory location of data.
+        </div>
+
+        <!-- POINTERS -->
+        <h2 id="pointer"><i class="fas fa-map-marker-alt"></i> Pointers</h2>
+
+        <p>A pointer stores a memory address instead of a value.</p>
+
+        <div class="code">
+            MOV ESI, OFFSET value<br>
+            MOV EAX, [ESI]
+        </div>
+
+        <ul>
+            <li>ESI → address</li>
+            <li>[ESI] → value at that address</li>
+        </ul>
+
+        <!-- ARRAYS -->
+        <h2 id="arrays"><i class="fas fa-table"></i> Arrays in Memory</h2>
+
+        <div class="code">
+            numbers DB 1,2,3,4,5
+        </div>
+
+        <p>Arrays are stored in consecutive memory locations.</p>
+
+        <div class="box">
+            Each element is located next to the previous one in memory.
+        </div>
+
+        <!-- LOOPS -->
+        <h2 id="loops"><i class="fas fa-sync"></i> Traversing Arrays</h2>
+
+        <div class="code">
+            MOV ESI, OFFSET array<br>
+            MOV ECX, 5<br><br>
+
+            Next:<br>
+            MOV AL, [ESI]<br>
+            INC ESI<br>
+            LOOP Next
+        </div>
+
+        <ul>
+            <li>ESI moves through memory</li>
+            <li>ECX controls loop count</li>
+        </ul>
+
+        <!-- REVERSE -->
+        <h2><i class="fas fa-exchange-alt"></i> Reversing Arrays</h2>
+
+        <p>Two pointers are used:</p>
+
+        <ul>
+            <li>ESI → start</li>
+            <li>EDI → end</li>
+        </ul>
+
+        <div class="code">
+            MOV AL, [ESI]<br>
+            MOV BL, [EDI]<br><br>
+
+            MOV [ESI], BL<br>
+            MOV [EDI], AL
+        </div>
+
+        <!-- LAB -->
+        <h2 id="lab"><i class="fas fa-flask"></i> Lab Exercise</h2>
+
+        <div class="box">
+            <b>Task:</b> Reverse an array using registers and indirect addressing.
+        </div>
+
+        <ul>
+            <li>Define byte array</li>
+            <li>Use ESI and EDI</li>
+            <li>Swap elements step by step</li>
+            <li>Observe memory in debugger</li>
+        </ul>
+
+        <!-- SUMMARY -->
+        <h2><i class="fas fa-check"></i> Unit Summary</h2>
+
+        <ul>
+            <li>Data movement using MOV</li>
+            <li>Understanding addressing modes</li>
+            <li>Pointer vs value concept</li>
+            <li>Array memory structure</li>
+            <li>Indirect memory access</li>
+            <li>Loop-based traversal</li>
+            <li>In-place array reversal</li>
+        </ul>
+
+        <footer>
+            Unit 3 — Microprocessor & Assembly Language Lab
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

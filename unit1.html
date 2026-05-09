@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1 | Foundations & emu8086</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0f1c;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #111827;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+        }
+
+        /* HEADINGS */
+        h1 {
+            font-size: 2rem;
+            color: #38bdf8;
+            border-left: 4px solid #38bdf8;
+            padding-left: 12px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 25px;
+            color: #7dd3fc;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            margin-top: 15px;
+            color: #bae6fd;
+        }
+
+        /* NAV */
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav a {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        .nav a:hover {
+            background: #38bdf8;
+            color: #000;
+        }
+
+        /* BOXES */
+        .box {
+            background: #0f172a;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #38bdf8;
+            border-radius: 10px;
+        }
+
+        .warning {
+            border-left-color: #f59e0b;
+        }
+
+        .success {
+            border-left-color: #22c55e;
+        }
+
+        /* CODE */
+        .code {
+            background: #050b18;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            color: #dbeafe;
+            margin: 10px 0;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        td,
+        th {
+            border: 1px solid #334155;
+            padding: 8px;
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- NAV -->
+        <div class="nav">
+            <a href="#intro">Intro</a>
+            <a href="#outcomes">Outcomes</a>
+            <a href="#micro">Microprocessor</a>
+            <a href="#asm">Assembly</a>
+            <a href="#arch">Architecture</a>
+            <a href="#alu">ALU</a>
+            <a href="#reg">Registers</a>
+            <a href="#seg">Segments</a>
+            <a href="#ip">IP</a>
+            <a href="#inst">Instructions</a>
+            <a href="#flags">Flags</a>
+            <a href="#cmp">CMP</a>
+            <a href="#loops">Loops</a>
+            <a href="#emu">emu8086</a>
+            <a href="#bubble">Bubble Sort</a>
+            <a href="#lab">Lab</a>
+            <a href="#summary">Summary</a>
+        </div>
+
+        <!-- TITLE -->
+        <h1>Chapter 1: Foundations & Visual Simulation (emu8086)</h1>
+        <p>16-bit Architecture • Registers • Flags • Loops • Hardware Mapping</p>
+
+        <hr>
+
+        <!-- INTRO -->
+        <h2 id="intro">1. Introduction</h2>
+        <p>
+            At the lowest level, all computer operations are executed as machine instructions inside the CPU.
+            Assembly language allows direct control over registers, memory, and processor behavior.
+        </p>
+
+        <div class="box">
+            This unit uses emu8086 to visually simulate CPU execution step-by-step.
+        </div>
+
+        <!-- OUTCOMES -->
+        <h2 id="outcomes">2. Learning Outcomes</h2>
+
+        <div class="grid">
+            <div class="card">Understand assembly → machine code translation</div>
+            <div class="card">Use registers (AX, BX, CX, DX)</div>
+            <div class="card">Execute MOV, ADD, SUB</div>
+            <div class="card">Analyze CPU flags</div>
+            <div class="card">Build loops and conditions</div>
+            <div class="card">Debug using emu8086</div>
+            <div class="card">Implement Bubble Sort in Assembly</div>
+        </div>
+
+        <!-- MICROPROCESSOR -->
+        <h2 id="micro">3. What is a Microprocessor? 🧠</h2>
+
+        <div class="box">
+            CPU executes:
+            <ul>
+                <li>Fetch instruction</li>
+                <li>Decode instruction</li>
+                <li>Execute instruction</li>
+                <li>Store result</li>
+            </ul>
+        </div>
+
+        <!-- ASSEMBLY -->
+        <h2 id="asm">4. Assembly Language💻</h2>
+
+        <div class="box">
+            Assembly is a low-level language where each instruction maps directly to CPU operations.
+        </div>
+
+        <div class="code">
+            MOV AX, 5
+            ADD AX, 3
+        </div>
+
+        <!-- ARCHITECTURE -->
+        <h2 id="arch">5. 8086 Architecture</h2>
+
+        <div class="grid">
+            <div class="card">ALU: arithmetic & logic</div>
+            <div class="card">Control Unit: instruction execution</div>
+            <div class="card">Registers: fast storage</div>
+            <div class="card">Buses: data transfer</div>
+        </div>
+
+        <!-- ALU -->
+        <h2 id="alu">6. ALU</h2>
+
+        <div class="box">
+            ALU performs arithmetic and logic operations.
+        </div>
+
+        <div class="code">
+            MOV AX, 10
+            SUB AX, 10
+        </div>
+
+        <p>Result: AX = 0 → ZF = 1</p>
+
+        <!-- REGISTERS -->
+        <h2 id="reg">7. General Purpose Registers</h2>
+
+        <table>
+            <tr>
+                <th>Register</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>AX</td>
+                <td>Accumulator</td>
+            </tr>
+            <tr>
+                <td>BX</td>
+                <td>Base</td>
+            </tr>
+            <tr>
+                <td>CX</td>
+                <td>Counter</td>
+            </tr>
+            <tr>
+                <td>DX</td>
+                <td>Data</td>
+            </tr>
+        </table>
+
+        <!-- SEGMENTS -->
+        <h2 id="seg">8. Segment Registers</h2>
+
+        <table>
+            <tr>
+                <th>Register</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>CS</td>
+                <td>Code Segment</td>
+            </tr>
+            <tr>
+                <td>DS</td>
+                <td>Data Segment</td>
+            </tr>
+            <tr>
+                <td>SS</td>
+                <td>Stack Segment</td>
+            </tr>
+            <tr>
+                <td>ES</td>
+                <td>Extra Segment</td>
+            </tr>
+        </table>
+
+        <div class="box warning">
+            Physical Address = (Segment × 16) + Offset
+        </div>
+
+        <!-- IP -->
+        <h2 id="ip">9. Instruction Pointer</h2>
+
+        <div class="box">
+            IP holds the address of the next instruction.
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <h2 id="inst">10. Instructions 🧾</h2>
+
+        <div class="code">
+            MOV AX, 5
+            MOV BX, AX
+        </div>
+
+        <div class="code">
+            ADD AX, 3
+            SUB AX, 1
+        </div>
+
+        <!-- FLAGS -->
+        <h2 id="flags">11. Processor Flags 🎯</h2>
+
+        <div class="box">
+            ZF = Zero Flag<br>
+            SF = Sign Flag<br>
+            CF = Carry Flag<br>
+            OF = Overflow Flag
+        </div>
+
+        <div class="code">
+            MOV AX, 5
+            SUB AX, 5
+        </div>
+
+        <p>Result = 0 → ZF = 1</p>
+
+        <!-- CMP -->
+        <h2 id="cmp">12. CMP Instruction</h2>
+
+        <div class="box">
+            CMP compares values without storing result, only affects flags.
+        </div>
+
+        <div class="code">
+            CMP AX, BX
+        </div>
+
+        <!-- LOOPS -->
+        <h2 id="loops">13. Loops</h2>
+
+        <div class="code">
+            MOV CX, 5
+
+            L1:
+            DEC CX
+            JNZ L1
+        </div>
+
+        <!-- EMU -->
+        <h2 id="emu">14. emu8086 Simulator</h2>
+
+        <div class="box">
+            Allows visualization of:
+            <ul>
+                <li>Registers</li>
+                <li>Memory</li>
+                <li>Flags</li>
+                <li>Execution flow</li>
+            </ul>
+        </div>
+
+        <!-- BUBBLE SORT -->
+        <h2 id="bubble">15. Bubble Sort</h2>
+
+        <div class="box">
+            Bubble sort compares adjacent elements and swaps them if needed.
+        </div>
+
+        <div class="code">
+            CMP AL, [SI+1]
+            JBE Skip
+            XCHG AL, [SI+1]
+            MOV [SI], AL
+            Skip:
+        </div>
+
+        <!-- LAB -->
+        <h2 id="lab">16. Lab Exercise 🧪</h2>
+
+        <div class="box warning">
+            Implement Bubble Sort on a byte array and observe CPU flags during execution using emu8086.
+        </div>
+
+        <div class="code">
+            array DB 7, 3, 9, 1, 5
+        </div>
+
+        <!-- SUMMARY -->
+        <h2 id="summary">17. Summary</h2>
+
+        <div class="box success">
+            This unit covered:
+            <ul>
+                <li>8086 architecture</li>
+                <li>Registers & segments</li>
+                <li>Assembly instructions</li>
+                <li>Flags behavior</li>
+                <li>Loops & conditions</li>
+                <li>emu8086 debugging</li>
+                <li>Bubble Sort implementation</li>
+            </ul>
+        </div>
+
+        <footer>
+            Microprocessor & Assembly Language Lab © 2026
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

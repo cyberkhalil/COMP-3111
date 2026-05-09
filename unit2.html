@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2 | From C to Assembly</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #0a0f1c;
+            color: #e2e8f0;
+            padding: 20px;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #111827;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #334155;
+        }
+
+        /* HEADINGS */
+        h1 {
+            color: #38bdf8;
+            border-left: 4px solid #38bdf8;
+            padding-left: 12px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 25px;
+            color: #7dd3fc;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            margin-top: 10px;
+            color: #bae6fd;
+        }
+
+        /* NAV */
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #cbd5e1;
+            background: #1e293b;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        .nav a:hover {
+            background: #38bdf8;
+            color: black;
+        }
+
+        /* BOX */
+        .box {
+            background: #0f172a;
+            padding: 15px;
+            border-left: 4px solid #38bdf8;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .warning {
+            border-left-color: #f59e0b;
+        }
+
+        .success {
+            border-left-color: #22c55e;
+        }
+
+        /* CODE */
+        .code {
+            background: #050b18;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            margin: 10px 0;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        td,
+        th {
+            border: 1px solid #334155;
+            padding: 8px;
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- NAV -->
+        <div class="nav">
+            <a href="#intro">Intro</a>
+            <a href="#outcomes">Outcomes</a>
+            <a href="#flow">Compilation</a>
+            <a href="#conditions">Conditions</a>
+            <a href="#loops">Loops</a>
+            <a href="#masm">MASM</a>
+            <a href="#structure">Structure</a>
+            <a href="#instructions">Instructions</a>
+            <a href="#memory">Memory</a>
+            <a href="#stack">Stack</a>
+            <a href="#debug">Debug</a>
+            <a href="#lab">Lab</a>
+            <a href="#summary">Summary</a>
+        </div>
+
+        <!-- TITLE -->
+        <h1>Unit 2: From C to Assembly — First Low-Level Programs</h1>
+
+        <hr>
+
+        <!-- INTRO -->
+        <h2 id="intro">💻 Introduction</h2>
+
+        <div class="box">
+            High-level languages like C/C++ are human-readable, but CPUs only execute machine instructions.
+            Assembly is the bridge between both worlds.
+        </div>
+
+        <div class="box warning">
+            Understanding this mapping helps you: understand compilers, optimize performance, and debug low-level
+            issues.
+        </div>
+
+        <!-- OUTCOMES -->
+        <h2 id="outcomes">🎯 Learning Outcomes</h2>
+
+        <div class="grid">
+            <div class="card">Convert C code to Assembly logic</div>
+            <div class="card">Use MASM structure (.data / .code / END)</div>
+            <div class="card">Understand MOV, ADD, SUB, INC, DEC</div>
+            <div class="card">Understand addressing modes</div>
+            <div class="card">Build 32-bit programs</div>
+            <div class="card">Debug using VS Code tools</div>
+        </div>
+
+        <!-- COMPILATION -->
+        <h2 id="flow">🔄 Compilation Process</h2>
+
+        <div class="code">
+            C Code → Compiler → Assembly → Machine Code → EXE
+        </div>
+
+        <div class="box">
+            Example:
+        </div>
+
+        <div class="code">
+            x = 5;
+            x = x + 2;
+        </div>
+
+        <div class="code">
+            MOV EAX, 5
+            ADD EAX, 2
+        </div>
+
+        ---
+
+        <!-- CONDITIONS -->
+        <h2 id="conditions">🧠 Conditions in Assembly</h2>
+
+        <div class="box">
+            There is no "if" in CPU. It uses CMP + jumps.
+        </div>
+
+        <div class="code">
+            CMP EAX, EBX
+            JE EqualLabel
+        </div>
+
+        <div class="box warning">
+            CMP affects flags, not values.
+        </div>
+
+        ---
+
+        <!-- LOOPS -->
+        <h2 id="loops">🔁 Loops</h2>
+
+        <div class="box">
+            Loops are created using counters + conditional jumps.
+        </div>
+
+        <div class="code">
+            MOV ECX, 5
+
+            LoopStart:
+            DEC ECX
+            JNZ LoopStart
+        </div>
+
+        ---
+
+        <!-- MASM -->
+        <h2 id="masm">⚙️ MASM Overview</h2>
+
+        <div class="box">
+            MASM = Microsoft Macro Assembler
+        </div>
+
+        <div class="grid">
+            <div class="card">Converts assembly → object code</div>
+            <div class="card">Supports x86 programming</div>
+            <div class="card">Used for low-level applications</div>
+        </div>
+
+        ---
+
+        <!-- STRUCTURE -->
+        <h2 id="structure">📦 Program Structure</h2>
+
+        <div class="code">
+            .data
+            variables here
+
+            .code
+            instructions here
+
+            END main
+        </div>
+
+        ---
+
+        <!-- INSTRUCTIONS -->
+        <h2 id="instructions">💻 Basic Instructions</h2>
+
+        <div class="code">
+            MOV EAX, 10
+            ADD EAX, 5
+            SUB EAX, 2
+            INC EAX
+            DEC EAX
+        </div>
+
+        ---
+
+        <!-- MEMORY -->
+        <h2 id="memory">🧠 Registers vs Memory</h2>
+
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Speed</th>
+                <th>Size</th>
+            </tr>
+            <tr>
+                <td>Registers</td>
+                <td>Very Fast</td>
+                <td>Small</td>
+            </tr>
+            <tr>
+                <td>Memory</td>
+                <td>Slower</td>
+                <td>Large</td>
+            </tr>
+        </table>
+
+        ---
+
+        <!-- STACK -->
+        <h2 id="stack">📚 Stack Basics</h2>
+
+        <div class="box">
+            Stack stores function calls and temporary data.
+        </div>
+
+        <div class="code">
+            PUSH EAX
+            POP EBX
+        </div>
+
+        ---
+
+        <!-- DEBUG -->
+        <h2 id="debug">🔍 Debugging</h2>
+
+        <div class="box warning">
+            Debugging helps you see execution step-by-step.
+        </div>
+
+        <ul>
+            <li>Breakpoints</li>
+            <li>Step execution</li>
+            <li>Register inspection</li>
+            <li>Memory inspection</li>
+        </ul>
+
+        ---
+
+        <!-- LAB -->
+        <h2 id="lab">🧪 Lab Exercise</h2>
+
+        <div class="box">
+            Add three integers and store result in memory.
+        </div>
+
+        <div class="code">
+            MOV EAX, num1
+            ADD EAX, num2
+            ADD EAX, num3
+            MOV result, EAX
+        </div>
+
+        ---
+
+        <!-- SUMMARY -->
+        <h2 id="summary">📌 Unit Summary</h2>
+
+        <div class="box success">
+            This unit covered:
+            <ul>
+                <li>Compilation process (C → Assembly)</li>
+                <li>MASM structure</li>
+                <li>CPU instructions</li>
+                <li>Addressing modes</li>
+                <li>Memory layout</li>
+                <li>Debugging basics</li>
+            </ul>
+        </div>
+
+        <footer>
+            Microprocessor & Assembly Language Lab © 2026
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

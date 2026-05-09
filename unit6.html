@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 6 — Strings, I/O, and OS Interface</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1c;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: rgba(18, 25, 45, 0.92);
+            padding: 2rem;
+            border-radius: 1.2rem;
+            border: 1px solid #2d3a5e;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            color: #38bdf8;
+            border-bottom: 1px solid #2d3a5e;
+            padding-bottom: 0.4rem;
+        }
+
+        p,
+        li {
+            margin: 0.6rem 0;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0.6rem;
+            margin: 1rem 0;
+        }
+
+        .code {
+            background: #0b1120;
+            padding: 1rem;
+            border-radius: 0.6rem;
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #2d3a5e;
+            margin: 1rem 0;
+        }
+
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-nav a {
+            text-decoration: none;
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        .quick-nav a:hover {
+            background: #3b82f6;
+            color: white
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border-top: 1px solid #2d3a5e;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- NAV -->
+    <div class="quick-nav">
+        <a href="#intro">📌 Intro</a>
+        <a href="#strings">🧠 Strings</a>
+        <a href="#regs">⚙️ Registers</a>
+        <a href="#instr">📦 Instructions</a>
+        <a href="#traverse">➡️ Traversal</a>
+        <a href="#irvine">🧰 Irvine32</a>
+        <a href="#io">🖥️ I/O</a>
+        <a href="#files">📁 Files</a>
+        <a href="#api">🪟 API</a>
+        <a href="#xor">🔐 XOR</a>
+        <a href="#menu">📋 Menu</a>
+        <a href="#project">💻 Project</a>
+        <a href="#summary">📌 Summary</a>
+    </div>
+
+    <h1>📘 Unit 6 — Strings, Input/Output, and OS Interface</h1>
+
+    <!-- INTRO -->
+    <h2 id="intro">📌 Introduction</h2>
+    <p>
+        Assembly programs interact directly with memory, users, files, and the operating system.
+        This unit focuses on strings, I/O, files, Windows API, and building interactive programs.
+    </p>
+
+    <div class="box">
+        Key idea: Everything in assembly is handled manually — including strings, input, and system calls.
+    </div>
+
+    <!-- STRINGS -->
+    <h2 id="strings">🧠 Strings in Memory</h2>
+    <p>Strings are sequences of bytes ending with a null terminator (0).</p>
+
+    <div class="code">
+msg DB "Hello",0
+    </div>
+
+    <!-- REGISTERS -->
+    <h2 id="regs">⚙️ String Registers</h2>
+    <ul>
+        <li>ESI → source pointer</li>
+        <li>EDI → destination pointer</li>
+        <li>ECX → counter</li>
+        <li>AL → current byte</li>
+    </ul>
+
+    <!-- INSTRUCTIONS -->
+    <h2 id="instr">📦 String Instructions</h2>
+
+    <div class="code">
+MOVSB  → copy byte  
+LODSB  → load into AL  
+STOSB  → store AL  
+CMPSB  → compare bytes  
+REP MOVSB → repeat operations
+    </div>
+
+    <!-- TRAVERSAL -->
+    <h2 id="traverse">➡️ String Traversal</h2>
+
+    <div class="code">
+MOV ESI, OFFSET msg
+LODSB
+LOOP NextChar
+    </div>
+
+    <!-- IRVINE -->
+    <h2 id="irvine">🧰 Irvine32 Library</h2>
+    <p>
+        Provides simplified functions for input, output, file handling, and system interaction.
+    </p>
+
+    <!-- I/O -->
+    <h2 id="io">🖥️ Console Input/Output</h2>
+
+    <ul>
+        <li>WriteString → display text</li>
+        <li>WriteInt → display numbers</li>
+        <li>ReadString → input text</li>
+        <li>ReadInt → input numbers</li>
+    </ul>
+
+    <!-- FILES -->
+    <h2 id="files">📁 File Operations</h2>
+    <p>
+        Programs can create, read, write, and close files using system procedures.
+    </p>
+
+    <!-- API -->
+    <h2 id="api">🪟 Windows API</h2>
+
+    <ul>
+        <li>MessageBoxA → dialog box</li>
+        <li>ExitProcess → terminate program</li>
+        <li>stdcall → calling convention</li>
+    </ul>
+
+    <div class="code">
+INVOKE MessageBoxA, NULL, ADDR msg, ADDR title, MB_OK
+    </div>
+
+    <!-- XOR -->
+    <h2 id="xor">🔐 XOR Encryption</h2>
+
+    <div class="code">
+Encrypted = Data XOR Key
+Data = Encrypted XOR Key
+    </div>
+
+    <p>
+        XOR is reversible and widely used in simple encryption systems.
+    </p>
+
+    <!-- MENU -->
+    <h2 id="menu">📋 Menu Systems</h2>
+
+    <p>
+        Programs use loops and CMP/JMP to handle user menus.
+    </p>
+
+    <div class="code">
+CMP AL, '1'
+JE Encrypt
+    </div>
+
+    <!-- PROJECT -->
+    <h2 id="project">💻 Mini Project</h2>
+
+    <div class="box">
+        Build a menu-driven XOR encryption system that:
+        <ul>
+            <li>Reads user input</li>
+            <li>Encrypts/decrypts text</li>
+            <li>Loops until exit</li>
+        </ul>
+    </div>
+
+    <!-- SUMMARY -->
+    <h2 id="summary">📌 Unit Summary</h2>
+
+    <ul>
+        <li>String memory representation</li>
+        <li>String instructions (MOVSB, LODSB, STOSB, CMPSB)</li>
+        <li>Console I/O using Irvine32</li>
+        <li>File operations</li>
+        <li>Windows API interaction</li>
+        <li>Menu-driven programs</li>
+        <li>XOR encryption/decryption</li>
+        <li>OS-level interaction using stdcall</li>
+    </ul>
+
+    <footer>
+        Microprocessor & Assembly Language Lab — Unit 6
+    </footer>
+
+</div>
+
+</body>
+</html>

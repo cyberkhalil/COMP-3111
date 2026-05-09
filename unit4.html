@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microprocessor Lab | Unit 5: Control Flow & Stack</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1c;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: rgba(18, 25, 45, 0.92);
+            padding: 2rem;
+            border-radius: 1.2rem;
+            border: 1px solid #2d3a5e;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #90cdf4;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            color: #7dd3fc;
+            border-bottom: 1px solid #2d3a5e;
+            padding-bottom: 0.4rem;
+        }
+
+        h3 {
+            margin-top: 1rem;
+            color: #b9e6ff
+        }
+
+        p {
+            margin: 0.6rem 0
+        }
+
+        ul {
+            margin-left: 1.5rem
+        }
+
+        li {
+            margin-bottom: 0.4rem
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0.6rem;
+            margin: 1rem 0;
+        }
+
+        .code {
+            background: #0b1120;
+            padding: 1rem;
+            border-radius: 0.6rem;
+            font-family: monospace;
+            overflow-x: auto;
+            border: 1px solid #2d3a5e;
+            margin: 1rem 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .table td,
+        .table th {
+            border: 1px solid #2d3a5e;
+            padding: 0.6rem;
+        }
+
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-nav a {
+            text-decoration: none;
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        .quick-nav a:hover {
+            background: #3b82f6;
+            color: white
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border-top: 1px solid #2d3a5e;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- NAV -->
+    <div class="quick-nav">
+        <a href="#intro">Intro</a>
+        <a href="#flow">Control Flow</a>
+        <a href="#cmp">CMP</a>
+        <a href="#jump">Jumps</a>
+        <a href="#loops">Loops</a>
+        <a href="#proc">Procedures</a>
+        <a href="#stack">Stack</a>
+        <a href="#frames">Stack Frames</a>
+        <a href="#rec">Recursion</a>
+        <a href="#lab">Lab</a>
+    </div>
+
+    <h1><i class="fas fa-project-diagram"></i> Unit 5: Control Flow, Procedures, and Stack</h1>
+
+    <!-- INTRO -->
+    <h2 id="intro"><i class="fas fa-microchip"></i> Introduction</h2>
+
+    <p>
+        Programs are not just sequential instructions. They require decision-making, loops, reusable procedures,
+        and structured memory management.
+    </p>
+
+    <div class="box">
+        The stack is a core CPU structure used for procedure calls, local variables, and return addresses.
+    </div>
+
+    <ul>
+        <li>Branching (JMP, CMP)</li>
+        <li>Loops (LOOP, JNZ)</li>
+        <li>Procedures (CALL / RET)</li>
+        <li>Stack operations (PUSH / POP)</li>
+    </ul>
+
+    <!-- CONTROL FLOW -->
+    <h2 id="flow"><i class="fas fa-code-branch"></i> Control Flow</h2>
+
+    <p>Processors normally execute instructions sequentially, but control flow changes execution order.</p>
+
+    <!-- CMP -->
+    <h2 id="cmp"><i class="fas fa-balance-scale"></i> CMP Instruction</h2>
+
+    <div class="code">
+CMP EAX, EBX
+    </div>
+
+    <p>CMP compares values and updates flags without storing result.</p>
+
+    <!-- JUMPS -->
+    <h2 id="jump"><i class="fas fa-arrow-right"></i> Conditional & Unconditional Jumps</h2>
+
+    <div class="code">
+JE Equal
+JNE NotEqual
+JG Greater
+JL Less
+JMP Start
+    </div>
+
+    <p>Jumps control execution based on flag results.</p>
+
+    <!-- LOOPS -->
+    <h2 id="loops"><i class="fas fa-sync"></i> Loops</h2>
+
+    <div class="code">
+MOV ECX, 5
+
+LoopStart:
+DEC EAX
+LOOP LoopStart
+    </div>
+
+    <p>LOOP automatically decrements ECX until it reaches zero.</p>
+
+    <!-- PROCEDURES -->
+    <h2 id="proc"><i class="fas fa-cube"></i> Procedures</h2>
+
+    <div class="box">
+        Procedures are reusable blocks of code that improve modularity.
+    </div>
+
+    <div class="code">
+MyProc PROC
+    MOV EAX, 5
+    RET
+MyProc ENDP
+    </div>
+
+    <!-- STACK -->
+    <h2 id="stack"><i class="fas fa-layer-group"></i> Stack Operations</h2>
+
+    <ul>
+        <li>PUSH → add data to stack</li>
+        <li>POP → remove data from stack</li>
+    </ul>
+
+    <p>Stack follows LIFO (Last In First Out).</p>
+
+    <!-- STACK FRAMES -->
+    <h2 id="frames"><i class="fas fa-window-restore"></i> Stack Frames</h2>
+
+    <div class="box">
+        Stack frames store parameters, return addresses, and local variables.
+    </div>
+
+    <div class="code">
+PUSH EBP
+MOV EBP, ESP
+SUB ESP, 8
+    </div>
+
+    <p>This creates a structured function environment.</p>
+
+    <!-- RECURSION -->
+    <h2 id="rec"><i class="fas fa-recycle"></i> Recursion</h2>
+
+    <p>Recursive procedures call themselves (e.g. factorial, Fibonacci).</p>
+
+    <div class="code">
+Factorial PROC
+CMP EAX, 1
+JLE Done
+
+PUSH EAX
+DEC EAX
+CALL Factorial
+
+POP EBX
+MUL EBX
+
+Done:
+RET
+Factorial ENDP
+    </div>
+
+    <!-- LAB -->
+    <h2 id="lab"><i class="fas fa-flask"></i> Lab Exercise</h2>
+
+    <div class="box">
+        <h3>Recursive Factorial</h3>
+        <ul>
+            <li>Use CALL / RET</li>
+            <li>Build stack frames</li>
+            <li>Trace recursion in debugger</li>
+        </ul>
+    </div>
+
+    <p>Input: 5 → Output: 120</p>
+
+    <!-- SUMMARY -->
+    <h2><i class="fas fa-check"></i> Unit Summary</h2>
+
+    <ul>
+        <li>Control flow and branching</li>
+        <li>Conditional and unconditional jumps</li>
+        <li>Loop construction</li>
+        <li>Procedures (CALL / RET)</li>
+        <li>Stack operations</li>
+        <li>Stack frames and memory layout</li>
+        <li>Recursion</li>
+    </ul>
+
+    <footer>
+        Microprocessor & Assembly Language Lab — Unit 5
+    </footer>
+
+</div>
+
+</body>
+</html>

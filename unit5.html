@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Assembly Language | Unit 5: Control Flow, Procedures, and the Stack</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1c;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: rgba(18, 25, 45, 0.92);
+            border: 1px solid #2d3a5e;
+            border-radius: 1.2rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #90cdf4;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            color: #7dd3fc;
+            border-bottom: 1px solid #2d3a5e;
+            padding-bottom: 0.3rem;
+        }
+
+        h3 {
+            margin-top: 1rem;
+            color: #b9e6ff;
+        }
+
+        p {
+            margin: 0.5rem 0;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+        }
+
+        .box {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid #2d3a5e;
+            padding: 1rem;
+            border-radius: 0.7rem;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #cbd5e1;
+            background: #1e293b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #334155;
+        }
+
+        .nav a:hover {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        code,
+        pre {
+            background: #0b1120;
+            padding: 1rem;
+            display: block;
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            border: 1px solid #2d3a5e;
+            font-family: monospace;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+
+        table td,
+        table th {
+            border: 1px solid #2d3a5e;
+            padding: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            border-top: 1px solid #2d3a5e;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="nav">
+            <a href="#intro">Intro</a>
+            <a href="#flow">Control Flow</a>
+            <a href="#cmp">CMP</a>
+            <a href="#jumps">Jumps</a>
+            <a href="#loops">Loops</a>
+            <a href="#proc">Procedures</a>
+            <a href="#stack">Stack</a>
+            <a href="#frames">Stack Frames</a>
+            <a href="#recursion">Recursion</a>
+            <a href="#lab">Lab</a>
+        </div>
+
+        <h1><i class="fas fa-code-branch"></i> Unit 5 — Control Flow, Procedures, and the Stack</h1>
+
+        <div class="box">
+            Programs require decision-making, loops, reusable procedures, and structured memory management.
+            Assembly provides this through jumps, comparisons, calls, and stack operations.
+        </div>
+
+        <!-- INTRO -->
+        <h2 id="intro"><i class="fas fa-info-circle"></i> 1. Introduction</h2>
+        <p>
+            Program flow in assembly is not linear in real applications. It is controlled using conditional logic,
+            loops, procedure calls, and stack operations.
+        </p>
+
+        <div class="grid">
+            <div class="card">🔁 Loops (repeat execution)</div>
+            <div class="card">🔀 Branching (decision making)</div>
+            <div class="card">📞 Procedures (reusable code)</div>
+            <div class="card">📚 Stack (memory management)</div>
+        </div>
+
+        <!-- CONTROL FLOW -->
+        <h2 id="flow"><i class="fas fa-random"></i> 2. Control Flow</h2>
+        <p>
+            By default, CPU executes instructions sequentially. Control flow instructions modify execution order.
+        </p>
+
+        <ul>
+            <li>Comparisons</li>
+            <li>Conditional jumps</li>
+            <li>Loops</li>
+            <li>Procedure calls</li>
+        </ul>
+
+        <!-- CMP -->
+        <h2 id="cmp"><i class="fas fa-balance-scale"></i> 3. CMP Instruction</h2>
+        <p>
+            CMP compares two values using subtraction without storing the result.
+        </p>
+
+        <pre>CMP EAX, EBX</pre>
+
+        <div class="box">
+            Flags are updated based on comparison result.
+        </div>
+
+        <!-- JUMPS -->
+        <h2 id="jumps"><i class="fas fa-code-branch"></i> 4. Conditional & Unconditional Jumps</h2>
+
+        <table>
+            <tr>
+                <th>Instruction</th>
+                <th>Meaning</th>
+            </tr>
+            <tr>
+                <td>JE</td>
+                <td>Jump if equal</td>
+            </tr>
+            <tr>
+                <td>JNE</td>
+                <td>Jump if not equal</td>
+            </tr>
+            <tr>
+                <td>JG</td>
+                <td>Jump if greater</td>
+            </tr>
+            <tr>
+                <td>JL</td>
+                <td>Jump if less</td>
+            </tr>
+            <tr>
+                <td>JZ</td>
+                <td>Jump if zero</td>
+            </tr>
+            <tr>
+                <td>JNZ</td>
+                <td>Jump if not zero</td>
+            </tr>
+            <tr>
+                <td>JMP</td>
+                <td>Unconditional jump</td>
+            </tr>
+        </table>
+
+        <pre>CMP EAX, EBX
+JE EqualLabel</pre>
+
+        <!-- LOOPS -->
+        <h2 id="loops"><i class="fas fa-sync"></i> 5. Loops</h2>
+
+        <p>Loops repeat execution until condition becomes false.</p>
+
+        <pre>MOV ECX, 5
+
+LoopStart:
+DEC EAX
+LOOP LoopStart</pre>
+
+        <div class="box">
+            LOOP automatically decrements ECX until it reaches zero.
+        </div>
+
+        <!-- PROCEDURES -->
+        <h2 id="proc"><i class="fas fa-cogs"></i> 6. Procedures</h2>
+
+        <p>Procedures are reusable blocks of code.</p>
+
+        <ul>
+            <li>Code reuse</li>
+            <li>Modularity</li>
+            <li>Cleaner structure</li>
+        </ul>
+
+        <pre>MyProcedure PROC
+MOV EAX, 5
+RET
+MyProcedure ENDP</pre>
+
+        <p><b>CALL:</b> pushes return address and jumps</p>
+        <p><b>RET:</b> returns execution</p>
+
+        <!-- STACK -->
+        <h2 id="stack"><i class="fas fa-layer-group"></i> 7. Stack</h2>
+
+        <p>The stack is LIFO (Last In First Out).</p>
+
+        <pre>PUSH EAX
+POP EBX</pre>
+
+        <div class="grid">
+            <div class="card">📥 PUSH → add to stack</div>
+            <div class="card">📤 POP → remove from stack</div>
+            <div class="card">⬇ Stack grows downward</div>
+            <div class="card">📍 ESP points to top</div>
+        </div>
+
+        <!-- STACK FRAMES -->
+        <h2 id="frames"><i class="fas fa-window-restore"></i> 8. Stack Frames</h2>
+
+        <p>Used to manage function execution context.</p>
+
+        <pre>PUSH EBP
+MOV EBP, ESP
+SUB ESP, 8</pre>
+
+        <div class="box">
+            Stack frame contains: parameters, return address, local variables.
+        </div>
+
+        <!-- RECURSION -->
+        <h2 id="recursion"><i class="fas fa-recycle"></i> 9. Recursion</h2>
+
+        <p>Functions that call themselves (e.g., factorial, Fibonacci).</p>
+
+        <pre>CMP EAX, 1
+JLE Done
+
+PUSH EAX
+DEC EAX
+CALL Factorial
+
+POP EBX
+MUL EBX</pre>
+
+        <div class="box">
+            Recursion uses stack heavily → risk of stack overflow.
+        </div>
+
+        <!-- LAB -->
+        <h2 id="lab"><i class="fas fa-flask"></i> 10. Lab Exercise</h2>
+
+        <div class="box">
+            <b>Task:</b> Implement recursive factorial and analyze stack behavior using debugger.
+        </div>
+
+        <ul>
+            <li>Use CALL and RET</li>
+            <li>Create proper stack frames</li>
+            <li>Trace recursion in x64dbg</li>
+            <li>Observe ESP/EBP changes</li>
+        </ul>
+
+        <pre>Input: 5
+Output: 120</pre>
+
+        <!-- SUMMARY -->
+        <h2><i class="fas fa-check"></i> Unit Summary</h2>
+
+        <ul>
+            <li>Control flow and branching</li>
+            <li>Conditional and unconditional jumps</li>
+            <li>Loops using LOOP instruction</li>
+            <li>Procedures using CALL/RET</li>
+            <li>Stack operations (PUSH/POP)</li>
+            <li>Stack frames and memory layout</li>
+            <li>Recursion and nested calls</li>
+            <li>Debugging with x64dbg</li>
+        </ul>
+
+        <footer>
+            Unit 5 — Assembly Language Course | Educational Web Project
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
