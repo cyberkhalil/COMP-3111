@@ -4,8 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>COMP‑3111 | Unit 1 • Foundations & Visual Simulation (emu8086)</title>
+    <title>COMP‑3111 | Unit 1 · Foundations & Visual Simulation (emu8086)</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.85);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,87 +30,106 @@
         }
 
         body {
-            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f4f7fc;
-            color: #1e2b3c;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
             line-height: 1.6;
-            scroll-behavior: smooth;
-            padding-bottom: 3rem;
+            overflow-x: hidden;
+            font-size: 1.05rem;
         }
 
-        /* header / hero */
+        /* animated background grid (same as syllabus) */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero – matching syllabus header */
         .hero {
-            background: linear-gradient(135deg, #0a2540 0%, #1b3b5c 100%);
-            color: white;
-            padding: 2.5rem 1.5rem 2rem;
+            background: linear-gradient(135deg, #0a1424 0%, #122a44 100%);
             text-align: center;
-            border-bottom: 5px solid #f4b436;
+            padding: 2.5rem 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 1rem;
         }
 
         .hero h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.75rem;
         }
 
         .hero .subtitle {
             font-size: 1.15rem;
-            font-weight: 400;
-            opacity: 0.9;
-            margin-top: 0.3rem;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-top: 0.5rem;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 0.25rem 0.9rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            background: rgba(124, 58, 237, 0.15);
             backdrop-filter: blur(4px);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 0.3rem 1.1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.35rem;
         }
 
-        /* main container */
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 1.75rem 1.5rem;
-        }
-
-        /* sticky nav */
+        /* sticky nav – glass effect like syllabus */
         .sticky-nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid #e1e8f0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 0.4rem;
             padding: 0.7rem 1rem;
-            backdrop-filter: blur(6px);
-            background: rgba(255, 255, 255, 0.92);
         }
 
         .sticky-nav a {
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 600;
-            color: #1e3b5c;
-            padding: 0.4rem 0.85rem;
-            border-radius: 24px;
-            transition: 0.2s ease;
-            background: #eef3fa;
+            color: var(--text-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            transition: 0.25s;
             display: flex;
             align-items: center;
             gap: 0.25rem;
@@ -101,37 +137,47 @@
         }
 
         .sticky-nav a:hover {
-            background: #d4e2f9;
-            color: #091c32;
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.96);
         }
 
-        /* section cards */
-        section {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem 2rem 1.8rem;
-            margin: 2rem 0 1.5rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e9eef5;
+        /* section cards – same card style as syllabus week-card */
+        .section-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s, border-color 0.3s, box-shadow 0.3s;
             scroll-margin-top: 90px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 40px -18px var(--primary-glow);
         }
 
         h2 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #0f2b44;
+            color: white;
             margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            border-bottom: 2px solid #f0f4fc;
+            border-bottom: 1px solid var(--border-light);
             padding-bottom: 0.6rem;
         }
 
         h3 {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #1f3a57;
+            color: var(--accent);
             margin: 1.5rem 0 0.8rem;
             display: flex;
             align-items: center;
@@ -140,116 +186,111 @@
 
         p,
         li {
-            font-size: 1rem;
-            color: #2d3a4a;
+            color: #cbd5e6;
         }
 
         ul,
         ol {
-            margin: 0.8rem 0 1rem 1.5rem;
+            margin: 0.8rem 0 1rem 1.8rem;
         }
 
         li {
             margin-bottom: 0.5rem;
         }
 
-        .highlight {
-            background: #eff6ff;
-            border-left: 5px solid #1e4a7a;
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 4px solid var(--primary);
             padding: 1rem 1.3rem;
-            border-radius: 12px;
+            border-radius: 16px;
             margin: 1.2rem 0;
-            font-weight: 500;
         }
 
-        /* code blocks */
         pre {
-            background: #121a24;
-            color: #e3f0fd;
+            background: #0b111e;
+            color: #e6edf3;
             padding: 1.2rem 1.5rem;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow-x: auto;
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
             font-size: 0.9rem;
             line-height: 1.5;
             margin: 1.2rem 0;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            border: 1px solid #2d3e55;
+            border: 1px solid #2d3748;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
         }
 
         code {
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-            background: #e9f0f9;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            color: #0a1e33;
+            background: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
         }
 
         pre code {
             background: transparent;
             padding: 0;
-            color: #e3f0fd;
-        }
-
-        .emoji-icon {
-            font-size: 1.3rem;
-            filter: none;
+            color: #e6edf3;
         }
 
         .grid-2col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
             margin: 1rem 0;
         }
 
         .info-card {
-            background: #f9fcfd;
-            border: 1px solid #d9e4f0;
-            border-radius: 18px;
-            padding: 1.2rem;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 1rem;
+            font-weight: 500;
         }
 
         .btn-exercise {
             display: inline-block;
-            background: #f4b436;
-            color: #0a1f33;
+            background: var(--primary);
+            color: white;
             font-weight: 700;
-            padding: 0.7rem 1.8rem;
-            border-radius: 40px;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
             text-decoration: none;
             margin-top: 1rem;
             transition: 0.2s;
             border: none;
-            cursor: default;
+            cursor: pointer;
             font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
         }
 
         .btn-exercise:hover {
-            background: #e5a823;
+            background: var(--primary-dark);
+            transform: scale(0.96);
         }
 
         hr {
             border: 0;
             height: 1px;
-            background: #dee6f2;
+            background: var(--border-light);
             margin: 2rem 0 1rem;
         }
 
         footer {
             text-align: center;
-            color: #5a6f85;
+            color: var(--text-muted);
             font-size: 0.85rem;
             margin-top: 2.5rem;
         }
 
         @media (max-width: 640px) {
             .hero h1 {
-                font-size: 1.7rem;
+                font-size: 1.8rem;
             }
 
-            section {
+            .section-card {
                 padding: 1.5rem;
             }
         }
@@ -257,153 +298,162 @@
 </head>
 
 <body>
+    <div class="bg-grid"></div>
+
+    <!-- Hero -->
     <div class="hero">
-        <h1>📘 Unit 1 · Foundations & Visual Simulation</h1>
+        <h1>Unit 1 · Foundations & Visual Simulation</h1>
         <div class="subtitle">
-            <span class="badge">🖥️ emu8086</span>
-            <span class="badge">⚡ 16‑bit architecture</span>
-            <span class="badge">🏁 flags & loops</span>
+            <span class="badge"><i class="fas fa-laptop"></i> emu8086</span>
+            <span class="badge"><i class="fas fa-microchip"></i> 16‑bit architecture</span>
+            <span class="badge"><i class="fas fa-flag"></i> flags & loops</span>
         </div>
-        <p style="margin-top:1rem; font-weight:300; opacity:0.9;">COMP‑3111 · Microprocessor & Assembly Language Lab</p>
+        <p style="margin-top:1rem; color: var(--text-muted);">COMP‑3111 · Microprocessor & Assembly Language Lab</p>
     </div>
 
     <!-- Sticky Navigation -->
     <nav class="sticky-nav">
-        <a href="#why">🔍 Why Assembly</a>
-        <a href="#setup">⚙️ Setup</a>
-        <a href="#architecture">🧩 Architecture</a>
-        <a href="#how-machine-code">⚡ Machine Code</a>
-        <a href="#basic-instructions">📌 Instructions</a>
-        <a href="#control-flow">🔄 Control Flow</a>
-        <a href="#bubble-sort">🧪 Bubble Sort</a>
-        <a href="#exercise">📝 Exercise</a>
+        <a href="#why"><i class="fas fa-search"></i> Why Assembly</a>
+        <a href="#setup"><i class="fas fa-cog"></i> Setup</a>
+        <a href="#architecture"><i class="fas fa-cube"></i> Architecture</a>
+        <a href="#machine-code"><i class="fas fa-bolt"></i> Machine Code</a>
+        <a href="#instructions"><i class="fas fa-code"></i> Instructions</a>
+        <a href="#control-flow"><i class="fas fa-shuffle"></i> Control Flow</a>
+        <a href="#find-max"><i class="fas fa-magnifying-glass-chart"></i> Find Max</a>
+        <a href="#exercise"><i class="fas fa-pen-to-square"></i> Exercise</a>
     </nav>
 
     <div class="container">
 
         <!-- Why Assembly -->
-        <section id="why">
-            <h2><span class="emoji-icon">🔍</span> Why Learn Assembly?</h2>
-            <p>Assembly language gives you <strong>complete visibility</strong> into the processor. Every high‑level
-                instruction (like <code>if</code>, <code>for</code>) becomes a sequence of moves, compares, and jumps.
-                As a cybersecurity engineer, you will use it to:</p>
+        <div class="section-card" id="why">
+            <h2><i class="fas fa-search"></i> Why Learn Assembly?</h2>
+            <p>Assembly gives you <strong>x‑ray vision</strong> into the processor. Every high‑level instruction
+                (<code>if</code>, <code>for</code>) becomes a chain of moves, compares, and jumps. As a cybersecurity
+                engineer, you will use this to:</p>
             <ul>
-                <li>🔬 Analyze malware at the lowest level</li>
-                <li>🧱 Understand memory & stack vulnerabilities</li>
-                <li>🛠️ Build tiny, efficient programs</li>
-                <li>📊 See exactly how hardware reacts to code</li>
+                <li>🔬 Analyze malware at the hardware level</li>
+                <li>🧱 Spot memory and stack vulnerabilities</li>
+                <li>🛠️ Write tiny, efficient programs</li>
+                <li>📊 See exactly how the CPU reacts to every instruction</li>
             </ul>
-            <div class="highlight">
-                💡 <strong>emu8086</strong> is your visual laboratory – it shows the CPU, registers, memory and buses as
-                if they were real electronic components.
+            <div class="highlight-box">
+                💡 <strong>emu8086</strong> is your visual lab – it shows the processor, registers, and memory like an
+                interactive electronic board.
             </div>
-        </section>
+        </div>
 
         <!-- Setup emu8086 -->
-        <section id="setup">
-            <h2><span class="emoji-icon">⚙️</span> Installing & Setting Up emu8086</h2>
+        <div class="section-card" id="setup">
+            <h2><i class="fas fa-cog"></i> Installing & Setting Up emu8086</h2>
             <ol>
-                <li>📥 Download from <a href="https://emu8086.com" target="_blank">emu8086.com</a> and install.</li>
+                <li>📥 Download from <a href="https://emu8086.com" target="_blank"
+                        style="color:var(--primary);">emu8086.com</a> and install.</li>
                 <li>🖥️ The main window contains:
                     <ul>
                         <li>📝 Code editor</li>
                         <li>📊 <strong>Emulator</strong> window (registers, flags, memory)</li>
-                        <li>▶️ Step Into (F7) and Run buttons</li>
+                        <li>▶️ <strong>Step Into (F7)</strong> and Run buttons</li>
                     </ul>
                 </li>
-                <li>✅ After installation, open the sample “Hello World” to test.</li>
+                <li>✅ Open the built‑in “Hello World” example to test everything.</li>
             </ol>
-        </section>
+        </div>
 
-        <!-- Processor Architecture -->
-        <section id="architecture">
-            <h2><span class="emoji-icon">🧩</span> 8086 Architecture – Visual Overview</h2>
-            <p>The 8086 is a <strong>16‑bit</strong> processor. Below are its core registers that you will manipulate
-                directly.</p>
+        <!-- Architecture with Visual Metaphor -->
+        <div class="section-card" id="architecture">
+            <h2><i class="fas fa-cube"></i> The 8086 Processor – A Visual Metaphor</h2>
+            <p>Think of the CPU as a tiny office. The registers are like <strong>special sticky notes</strong> that hold
+                numbers while the processor works. The 8086 has 16‑bit registers (they can store values up to 65535).
+            </p>
 
-            <h3>🔹 General‑Purpose Registers</h3>
+            <h3><i class="fas fa-calculator"></i> The Four Main Helpers (General‑Purpose Registers)</h3>
             <div class="grid-2col">
-                <div class="info-card"><strong>AX</strong> (Accumulator) – arithmetic & data</div>
-                <div class="info-card"><strong>BX</strong> (Base) – memory base address</div>
-                <div class="info-card"><strong>CX</strong> (Count) – loop counter</div>
-                <div class="info-card"><strong>DX</strong> (Data) – extra operand / I/O</div>
+                <div class="info-card"><strong>AX</strong> – Calculator (Accumulator)<br><small>Main place for
+                        arithmetic: +, -, *, /</small></div>
+                <div class="info-card"><strong>BX</strong> – Path (Base)<br><small>Often holds a memory address</small>
+                </div>
+                <div class="info-card"><strong>CX</strong> – Counter<br><small>Loop “prayer beads” – counts
+                        repetitions</small></div>
+                <div class="info-card"><strong>DX</strong> – Storage (Data)<br><small>Extra space for big data or
+                        I/O</small></div>
             </div>
-            <p style="font-size:0.95rem; margin-top:0.6rem;">📌 Each 16‑bit register splits into high/low 8‑bit parts:
-                <code>AH/AL</code>, <code>BH/BL</code>, etc.</p>
+            <p style="font-size:0.95rem; margin-top:0.6rem;">📌 Each register splits into high/low 8‑bit parts:
+                <code>AH/AL</code>, <code>BH/BL</code>, etc.
+            </p>
 
-            <h3>🔹 Segment Registers & Pointers</h3>
+            <h3>Segment Registers & Pointers (“GPS” of the CPU)</h3>
             <ul>
-                <li>📂 <strong>CS, DS, SS, ES</strong> – define memory segments.</li>
-                <li>📍 <strong>IP</strong> (Instruction Pointer) – next instruction address.</li>
-                <li>📌 <strong>SP, BP, SI, DI</strong> – stack and index pointers.</li>
+                <li>📂 <strong>CS, DS, SS, ES</strong> – define memory segments (code, data, stack).</li>
+                <li>📍 <strong>IP</strong> – Instruction Pointer (next instruction).</li>
+                <li>📌 <strong>SP, BP, SI, DI</strong> – navigate stack and arrays.</li>
             </ul>
 
-            <h3>🚩 Flags Register</h3>
-            <p>After arithmetic/logic operations, these flags change:</p>
+            <h3><i class="fas fa-flag"></i> Flags – The Processor’s Status Lights</h3>
             <ul>
-                <li><strong>ZF</strong> (Zero) – result = 0</li>
-                <li><strong>SF</strong> (Sign) – negative result (bit 7)</li>
+                <li><strong>ZF</strong> (Zero) – lights up if result = 0</li>
+                <li><strong>SF</strong> (Sign) – high bit; 1 = negative</li>
                 <li><strong>CF</strong> (Carry) – carry out / borrow</li>
-                <li><strong>OF</strong> (Overflow) – signed overflow</li>
+                <li><strong>OF</strong> (Overflow) – signed result doesn’t fit</li>
             </ul>
-            <div class="highlight">👀 In the emulator, watch these flags update <em>live</em> after each instruction.
-            </div>
-        </section>
+            <div class="highlight-box">👀 In the emulator, watch these flags update <em>live</em> after each
+                instruction.</div>
+        </div>
 
-        <!-- How assembly becomes machine code -->
-        <section id="how-machine-code">
-            <h2><span class="emoji-icon">⚡</span> Assembly → Machine Code → Circuits</h2>
+        <!-- Assembly → Machine Code -->
+        <div class="section-card" id="machine-code">
+            <h2><i class="fas fa-bolt"></i> Assembly → Machine Code → Circuits</h2>
             <p>Take the simple instruction:</p>
             <pre><code>MOV AX, 5</code></pre>
-            <p>The assembler converts it to opcode <code>B8</code> followed by two bytes for <code>5</code>. The
+            <p>The assembler turns it into opcode <code>B8</code> followed by two bytes for <code>5</code>. The
                 processor then:</p>
             <ol>
                 <li>📥 Fetches the opcode from memory (address in IP).</li>
                 <li>🧠 Control Unit decodes: “move immediate to AX”.</li>
-                <li>🔗 Sends the value 5 through internal data bus into AX.</li>
+                <li>🔗 Sends the value 5 through the internal data bus into AX.</li>
                 <li>✅ AX updates – you see it in the emulator!</li>
             </ol>
-        </section>
+        </div>
 
         <!-- Basic Instructions -->
-        <section id="basic-instructions">
-            <h2><span class="emoji-icon">📌</span> Basic Instructions & Flag Observation</h2>
+        <div class="section-card" id="instructions">
+            <h2><i class="fas fa-code"></i> First Instructions & Flag Watching</h2>
 
             <h3>🔹 MOV (Data Transfer)</h3>
             <pre><code>MOV AL, 10
 MOV BL, 20
 MOV CL, AL    ; CL = 10</code></pre>
-            <p>Step through and watch AL, BL, CL change.</p>
+            <p>Step through with F7 and watch AL, BL, CL change.</p>
 
             <h3>🔹 ADD and Overflow</h3>
             <pre><code>MOV AL, 100
-ADD AL, 200   ; AL = 44 (300-256), CF=1, OF=1</code></pre>
-            <p>After <code>ADD</code> inspect: CF=1 (carry out), OF=1 (signed overflow), ZF=0, SF=0.</p>
+ADD AL, 200   ; 100+200=300, AL=44 (300-256), CF=1, OF=1</code></pre>
+            <p>After <code>ADD</code>: CF=1 (carry out), OF=1 (overflow), ZF=0, SF=0.</p>
 
             <h3>🔹 SUB and Zero Flag</h3>
             <pre><code>MOV AL, 5
-SUB AL, 5     ; AL = 0  → ZF = 1</code></pre>
+SUB AL, 5     ; AL = 0 → ZF = 1</code></pre>
             <p>Zero flag becomes 1 – used for conditional jumps.</p>
-        </section>
+        </div>
 
         <!-- Control Flow -->
-        <section id="control-flow">
-            <h2><span class="emoji-icon">🔄</span> Control Flow: Jumps & Loops</h2>
+        <div class="section-card" id="control-flow">
+            <h2><i class="fas fa-shuffle"></i> Control Flow: Jumps & Loops</h2>
 
             <h3>🔹 Compare & Conditional Jumps</h3>
             <pre><code>MOV AL, 10
 CMP AL, 10   ; virtual subtraction, ZF=1
 JE  label1   ; jump if equal (ZF=1)
 JNE label2   ; jump if not equal (ZF=0)</code></pre>
-            <p><code>JE</code> is the same as <code>JZ</code> – both check the Zero flag.</p>
+            <p><code>JE</code> = <code>JZ</code> – both check the Zero flag.</p>
 
             <h3>🔹 LOOP Instruction</h3>
             <pre><code>MOV CX, 5
 loop_start:
     ; body
-    LOOP loop_start   ; CX--, if CX != 0 jump</code></pre>
+    LOOP loop_start   ; CX--, if CX ≠ 0 jump</code></pre>
 
-            <h3>🖨️ Example: Print 5→1 (DOS interrupt in emu8086)</h3>
+            <h3>🖨️ Example: Print digits 5→1 (emu8086 DOS interrupt)</h3>
             <pre><code>MOV CX, 5
 MOV AH, 2
 MOV DL, '5'
@@ -411,74 +461,95 @@ print_loop:
     INT 21h
     DEC DL
     LOOP print_loop</code></pre>
-        </section>
+        </div>
 
-        <!-- Bubble Sort -->
-        <section id="bubble-sort">
-            <h2><span class="emoji-icon">🧪</span> Full Exercise: Bubble Sort with Flag Watching</h2>
-            <p>Sort a byte array <strong>in ascending order</strong> and observe flags step‑by‑step.</p>
+        <!-- Find Maximum -->
+        <div class="section-card" id="find-max">
+            <h2><i class="fas fa-magnifying-glass-chart"></i> Hands‑On Lab: Find the Maximum Number (Treasure Hunt!)
+            </h2>
+            <p>Instead of a complex sorting algorithm, we’ll hunt for the <strong>largest value</strong> in an array –
+                one simple loop, clear concepts.</p>
+            <ul>
+                <li>🔹 One single loop (no nesting)</li>
+                <li>🔹 Array traversal, comparison, conditional jump</li>
+                <li>🔹 Flags observed step‑by‑step</li>
+            </ul>
+
+            <h3>🔹 The Plan</h3>
+            <ol>
+                <li>Store a list of numbers in memory.</li>
+                <li>Assume the first element is the maximum (put it in <code>AL</code>).</li>
+                <li>Loop through the rest, comparing with <code>CMP</code>.</li>
+                <li>If a larger number is found (<code>JAE</code> skip otherwise), update <code>AL</code>.</li>
+                <li>At the end, <code>AL</code> holds the maximum.</li>
+            </ol>
+
+            <h3>📋 Complete Code (emu8086)</h3>
             <pre><code>.model small
 .data
-    array db 5, 3, 8, 1, 2
-    n     db 5
+    arr   db 12, 7, 25, 9, 18, 3
+    count db 6
 .code
 main:
     mov ax, @data
     mov ds, ax
 
-    mov cl, n
+    mov cl, count
     dec cl
-outer_loop:
-    mov si, offset array
-    mov ch, cl
-inner_loop:
-    mov al, [si]
-    cmp al, [si+1]
-    jbe no_swap
-    mov ah, [si+1]
-    mov [si], ah
-    mov [si+1], al
-no_swap:
+    mov si, offset arr
+    mov al, [si]      ; first element as max
+    inc si            ; point to second element
+
+search_loop:
+    cmp al, [si]      ; compare max with next
+    jae not_bigger    ; if AL >= [SI], skip
+    mov al, [si]      ; else update max
+not_bigger:
     inc si
-    dec ch
-    jnz inner_loop
     dec cl
-    jnz outer_loop
+    jnz search_loop   ; repeat
+
+    ; AL now has the maximum value
 
     mov ah, 4ch
     int 21h
 end main</code></pre>
-            <p>🔎 While stepping (F7), watch <strong>ZF, CF</strong> after each <code>CMP</code>. The pass moves the
-                largest value to the end – classic bubble behaviour.</p>
-            <div class="highlight">📊 Check the memory window after each pass to see the array gradually sorted.</div>
-        </section>
+
+            <h3>🔎 Flag Observation</h3>
+            <ul>
+                <li>Use <strong>F7</strong> to step through.</li>
+                <li>After each <code>CMP</code>, watch <strong>CF</strong>: if <code>AL</code> is below
+                    <code>[SI]</code>, CF=1, so <code>JAE</code> will <em>not</em> jump and we update AL.
+                </li>
+                <li>Watch <strong>AL</strong> change only when a bigger number appears.</li>
+            </ul>
+            <div class="highlight-box">💡 The treasure is the largest number – you’ve just found it without sorting!
+            </div>
+        </div>
 
         <!-- Exercise -->
-        <section id="exercise">
-            <h2><span class="emoji-icon">📝</span> Lab Exercise</h2>
-            <ul>
-                <li>🔁 Modify the Bubble Sort to sort <strong>descending</strong>.</li>
-                <li>🖨️ Add code to <strong>display the array before and after sorting</strong> (use DOS interrupt 21h
-                    or emu8086 macro).</li>
-                <li>📋 Document the values of <strong>ZF and CF</strong> after each <code>CMP</code> in the first pass.
-                </li>
-            </ul>
-            <a href="#" class="btn-exercise"
-                onclick="alert('Submit your .asm file and flag observations to the lab instructor.')">📤 Submit
-                Assignment</a>
-        </section>
+        <div class="section-card" id="exercise">
+            <h2><i class="fas fa-pen-to-square"></i> Lab Exercise (First Lesson)</h2>
+            <ol>
+                <li>✅ Run the “Find Maximum” program step by step. Take a <strong>screenshot</strong> of AL and the
+                    flags after each loop iteration.</li>
+                <li>🔄 Modify the program to <strong>find the minimum</strong> value instead. (Hint: change the jump
+                    condition and initial assumption.)</li>
+                <li>➕ <strong>Extra challenge:</strong> After finding the maximum, add 10 to it and store the result in
+                    a new variable.</li>
+            </ol>
+        </div>
 
         <hr>
         <footer>
-            🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS<br>
-            Based on Kip Irvine, Assembly Language for x86 Processors · Instructor: Mahmoud Khalil<br>
-            <span style="opacity:0.7;">© 2026 Mahmoud Khalil – For educational use only</span>
+            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
+            <p>For inquiries: makhalil@ucas.edu.pss | Instructor: <strong>Mahmoud Khalil</strong></p>
+            <p>© 2026 Mahmoud Khalil – For educational use only</p>
         </footer>
     </div>
 
-    <!-- smooth scroll behavior (also in css) -->
     <script>
-        // Additional smooth scroll for older browsers
+        // Smooth scroll for navigation links
         document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const target = document.querySelector(this.getAttribute('href'));
