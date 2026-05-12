@@ -21,6 +21,9 @@
             --text-muted: #94a3b8;
             --border-light: rgba(255, 255, 255, 0.08);
             --success: #10b981;
+            --warning: #f59e0b;
+            --exercise-bg: rgba(245, 158, 11, 0.1);
+            --exercise-border: #f59e0b;
         }
 
         * {
@@ -88,12 +91,6 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
-        }
-
-        .hero .course-info {
-            margin-top: 0.75rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
         }
 
         .badge {
@@ -164,6 +161,15 @@
             transform: translateY(-4px);
             border-color: var(--primary);
             box-shadow: 0 25px 40px -18px var(--primary-glow);
+        }
+
+        .exercise-card {
+            background: var(--exercise-bg);
+            border: 2px solid var(--exercise-border);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            scroll-margin-top: 90px;
         }
 
         h2 {
@@ -243,7 +249,6 @@
             line-height: 1.5;
             margin: 1.2rem 0;
             border: 1px solid #2d3748;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
         }
 
         code {
@@ -258,41 +263,14 @@
         pre code {
             background: transparent;
             padding: 0;
-            color: #e6edf3;
         }
 
-        .btn-exercise {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-            padding: 0.7rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            margin-top: 1rem;
-            transition: 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
-        }
-
-        .btn-exercise:hover {
-            background: var(--primary-dark);
-            transform: scale(0.96);
-        }
-
-        .bonus-box {
+        .hint {
             background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            border-radius: 20px;
-            padding: 1.2rem 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .bonus-box h3 {
-            color: var(--success);
-            margin-top: 0;
+            border-left: 4px solid var(--success);
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 12px;
         }
 
         footer {
@@ -315,7 +293,8 @@
                 font-size: 1.8rem;
             }
 
-            .section-card {
+            .section-card,
+            .exercise-card {
                 padding: 1.5rem;
             }
 
@@ -328,33 +307,33 @@
 
 <body>
     <div class="bg-grid"></div>
-
-    <!-- Hero -->
     <div class="hero">
         <h1>Unit 2 · From C to Assembly</h1>
         <div class="subtitle">
             <span class="badge"><i class="fas fa-code"></i> MASM / VS Code</span>
             <span class="badge"><i class="fas fa-layer-group"></i> High‑level mapping</span>
-            <span class="badge"><i class="fas fa-file-code"></i> First .exe</span>
+            <span class="badge"><i class="fas fa-file-code"></i>First .exe</span>
         </div>
-        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab</p>
+        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
     </div>
 
-    <!-- Sticky Navigation -->
+
     <nav class="sticky-nav">
-        <a href="#c-to-asm"><i class="fas fa-arrow-right-arrow-left"></i>From C → Assembly</a>
-        <a href="#masm-structure"><i class="fas fa-cubes"></i> MASM Structure</a>
+        <a href="#c-to-asm"><i class="fas fa-arrow-right-arrow-left"></i> C → Assembly</a>
+        <a href="#structure"><i class="fas fa-cubes"></i> MASM Structure</a>
+        <a href="#hello"><i class="fas fa-heart"></i> Hello World</a>
+        <a href="#addressing"><i class="fas fa-memory"></i> Addressing Modes</a>
         <a href="#cheatsheet"><i class="fas fa-table"></i> Cheat Sheet</a>
+        <a href="#loops"><i class="fas fa-repeat"></i> Loops (for/while)</a>
         <a href="#setup"><i class="fas fa-cog"></i> Setup</a>
         <a href="#lab"><i class="fas fa-flask"></i> Lab</a>
-        <a href="#bonus"><i class="fas fa-star"></i> Bonus</a>
     </nav>
 
     <div class="container">
 
-        <!-- C to Assembly Mapping -->
+        <!-- 1. From C to Assembly -->
         <div class="section-card" id="c-to-asm">
-            <h2><i class="fas fa-arrow-right-arrow-left"></i> From C to Assembly – A Peek Under the Hood</h2>
+            <h2><i class="fas fa-arrow-right-arrow-left"></i> 1. From C to Assembly – A Peek Under the Hood</h2>
             <p>Take this simple C code:</p>
             <pre><code>int a = 10;
 int b = 20;
@@ -378,9 +357,9 @@ end_if:</code></pre>
             </div>
         </div>
 
-        <!-- Structure of a MASM Program -->
-        <div class="section-card" id="masm-structure">
-            <h2><i class="fas fa-cubes"></i> Structure of a MASM Program (32‑bit)</h2>
+        <!-- 2. Structure of a MASM Program -->
+        <div class="section-card" id="structure">
+            <h2><i class="fas fa-cubes"></i> 2. Structure of a MASM Program (32‑bit)</h2>
             <pre><code>.586
 .model flat, stdcall
 .stack 4096
@@ -406,9 +385,67 @@ END main</code></pre>
             </ul>
         </div>
 
-        <!-- Basic Instructions Cheat Sheet -->
+        <!-- 3. Hello World without external libraries (DOS interrupt) -->
+        <div class="section-card" id="hello">
+            <h2><i class="fas fa-heart"></i> 3. Your First Program: "Hello, World!"</h2>
+            <p>Using direct DOS interrupts (works under emulators like DOSBox, or in 32‑bit console with some
+                adjustments). This is the classic way to print a string without Irvine32.</p>
+            <pre><code>.model small
+.stack 100h
+.data
+    msg db 'Hello, World!$'   ; $ is the string terminator for DOS
+.code
+main PROC
+    mov ax, @data
+    mov ds, ax
+    mov dx, OFFSET msg
+    mov ah, 9        ; DOS function to print string
+    int 21h
+    mov ah, 4Ch      ; DOS exit function
+    int 21h
+main ENDP
+END main</code></pre>
+            <div class="highlight-box">
+                💡 Explanation: <code>int 21h</code> is a software interrupt that calls DOS services. Service 9 prints a
+                string, service 4Ch exits the program.
+            </div>
+        </div>
+
+        <!-- 4. Addressing Modes: Immediate, Register, Direct -->
+        <div class="section-card" id="addressing">
+            <h2><i class="fas fa-memory"></i> 4. Addressing Modes: Immediate, Register, Direct</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mode</th>
+                        <th>Example</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Immediate</strong></td>
+                        <td><code>mov eax, 5</code></td>
+                        <td>Constant value 5 is placed into EAX.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Register</strong></td>
+                        <td><code>mov eax, ebx</code></td>
+                        <td>Copy contents of EBX into EAX.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Direct (memory)</strong></td>
+                        <td><code>mov eax, [sum]</code></td>
+                        <td>Load from memory variable <code>sum</code> into EAX.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>These patterns are the foundation of data movement in assembly.</p>
+        </div>
+
+        <!-- 5. Basic Instructions Cheat Sheet -->
         <div class="section-card" id="cheatsheet">
-            <h2><i class="fas fa-table"></i> Basic Instructions Cheat Sheet</h2>
+            <h2><i class="fas fa-table"></i> 5. Basic Instructions Cheat Sheet</h2>
             <table>
                 <thead>
                     <tr>
@@ -447,9 +484,38 @@ END main</code></pre>
             </table>
         </div>
 
-        <!-- Setting Up MASM + Visual Studio Code -->
+        <!-- 6. Loops: for and while in assembly -->
+        <div class="section-card" id="loops">
+            <h2><i class="fas fa-repeat"></i> 6. Translating Loops (for, while)</h2>
+            <p><strong>C for-loop:</strong> <code>for(i=0; i<10; i++) { sum = sum + i; }</code></p>
+            <p><strong>Assembly translation (using ECX as counter):</strong></p>
+            <pre><code>    mov ecx, 0          ; i = 0
+    mov eax, 0          ; sum = 0
+for_loop:
+    cmp ecx, 10
+    jge end_for
+    add eax, ecx
+    inc ecx
+    jmp for_loop
+end_for:
+    ; result in EAX</code></pre>
+            <p><strong>while loop example:</strong> <code>while (x > 0) { x--; }</code></p>
+            <pre><code>    mov eax, x
+while_start:
+    cmp eax, 0
+    jle end_while
+    dec eax
+    jmp while_start
+end_while:</code></pre>
+            <div class="highlight-box">
+                🔁 Notice: conditional jump at the top (or bottom) controls the loop. The compiler often reverses the
+                condition.
+            </div>
+        </div>
+
+        <!-- 7. Setting up MASM + VS Code -->
         <div class="section-card" id="setup">
-            <h2><i class="fas fa-cog"></i> Setting Up MASM + Visual Studio Code</h2>
+            <h2><i class="fas fa-cog"></i> 7. Setting Up MASM + Visual Studio Code</h2>
             <ol>
                 <li>📥 Download & install <strong>MASM32 SDK</strong> from <a href="http://www.masm32.com/"
                         target="_blank" style="color:var(--primary);">masm32.com</a>.</li>
@@ -463,72 +529,12 @@ link /SUBSYSTEM:CONSOLE /DEBUG program.obj</code></pre>
             </ol>
         </div>
 
-        <!-- Lab Exercise (Hardcoded) -->
+        <!-- 8. Lab Exercise (Hardcoded) – Main Task -->
         <div class="section-card" id="lab">
-            <h2><i class="fas fa-flask"></i> Lab Exercise (Hardcoded Values – Main Task)</h2>
-            <p><strong>Write a program that adds three integers and stores the result – then trace it in a
+            <h2><i class="fas fa-flask"></i> 8. Lab Exercise (Hardcoded Values – Main Task)</h2>
+            <p>✅ <strong>Write a program that adds three integers and stores the result – then trace it in a
                     debugger.</strong></p>
-            <p>Use <strong>fixed (hardcoded)</strong> numbers so you can focus on how the instructions work.</p>
-
-            <h3>📋 Complete Code (MASM 32‑bit)</h3>
-            <pre><code>.586
-.model flat, stdcall
-.stack 4096
-
-.data
-    num1 DWORD 10
-    num2 DWORD 20
-    num3 DWORD 30
-    sum  DWORD ?
-
-.code
-main PROC
-    mov eax, num1      ; EAX = 10
-    add eax, num2      ; EAX = 10 + 20 = 30
-    add eax, num3      ; EAX = 30 + 30 = 60
-    mov sum, eax       ; store the result
-
-    ; exit gracefully
-    mov eax, 0
-    ret
-main ENDP
-END main</code></pre>
-
-            <h3>🔎 Debugging Steps (x64dbg / WinDbg)</h3>
-            <ul>
-                <li>Assemble with debugging info (<code>/Zi</code>).</li>
-                <li>Open the <code>.exe</code> in your debugger.</li>
-                <li>Set a breakpoint at <code>main</code>.</li>
-                <li>Step through (F8) and watch <code>EAX</code> change after each <code>ADD</code>.</li>
-                <li>After <code>mov sum, eax</code>, inspect the memory location of <code>sum</code> (should contain 60
-                    = 0x3C).</li>
-            </ul>
-
-        </div>
-
-        <!-- Bonus Challenge -->
-        <div class="section-card" id="bonus">
-            <h2><i class="fas fa-star"></i> Bonus Challenge (User Input)</h2>
-            <div class="bonus-box">
-                <h3><i class="fas fa-trophy"></i> ⭐ Bonus: Interactive Version</h3>
-                <p>Once you understand the hardcoded version, extend the program to <strong>ask the user for three
-                        numbers</strong>, calculate the sum, and display it.</p>
-
-                <h4>Hints (using MASM32 library):</h4>
-                <pre><code>include \masm32\include\masm32.inc
-includelib \masm32\lib\masm32.lib
-
-.data
-    prompt db "Enter a number: ", 0
-    input  db 11 dup(?)      ; buffer for input
-    result db 11 dup(?)
-.code
-    INVOKE StdOut, ADDR prompt
-    INVOKE StdIn, ADDR input, 10
-    ; convert input string to integer, add, convert back, print...</code></pre>
-                <p>📤 <strong>Submit the hardcoded version as your main assignment, and the user‑input version as a
-                        bonus.</strong></p>
-            </div>
+            <p>💻 Use <strong>fixed (hardcoded)</strong> numbers so you can focus on how the instructions work.</p>
         </div>
 
         <hr>

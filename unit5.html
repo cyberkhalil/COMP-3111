@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>COMP‑3111 | Unit 5 · Control Flow, Procedures & The Stack</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.85);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 1.05rem;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1a0a2e 0%, #3b1f6e 100%);
+            color: white;
+            padding: 2.5rem 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .hero .course-info {
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            background: rgba(124, 58, 237, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 0.3rem 1.1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .sticky-nav a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .sticky-nav a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.96);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s, border-color 0.3s, box-shadow 0.3s;
+            scroll-margin-top: 90px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 40px -18px var(--primary-glow);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.6rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 1.5rem 0 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        p, li {
+            color: #cbd5e6;
+        }
+
+        ul, ol {
+            margin: 0.8rem 0 1rem 1.8rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.3rem;
+            border-radius: 16px;
+            margin: 1.2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(124, 58, 237, 0.25);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        pre {
+            background: #0b111e;
+            color: #e6edf3;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 1.2rem 0;
+            border: 1px solid #2d3748;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        .btn-exercise {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-exercise:hover {
+            background: var(--primary-dark);
+            transform: scale(0.96);
+        }
+
+        .bonus-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .bonus-box h3 {
+            color: var(--success);
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2.5rem;
+            padding: 1rem 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-light);
+            margin: 2rem 0 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .section-card {
+                padding: 1.5rem;
+            }
+            .hero {
+                padding: 2rem 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>⚙️ Unit 5 · Control Flow, Procedures & The Stack</h1>
+        <div class="subtitle">
+            <span class="badge"><i class="fas fa-code-branch"></i> CMP · JMP · LOOP</span>
+            <span class="badge"><i class="fas fa-call"></i> CALL · RET</span>
+            <span class="badge"><i class="fas fa-layer-group"></i> Stack Frames</span>
+            <span class="badge"><i class="fas fa-project-diagram"></i> Recursion</span>
+        </div>
+        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav">
+        <a href="#outcomes"><i class="fas fa-bullseye"></i> Outcomes</a>
+        <a href="#control-flow"><i class="fas fa-code-branch"></i> Control Flow</a>
+        <a href="#stack-basics"><i class="fas fa-layer-group"></i> Stack Ops</a>
+        <a href="#procedures"><i class="fas fa-call"></i> Procedures</a>
+        <a href="#stack-frames"><i class="fas fa-window-restore"></i> Stack Frames</a>
+        <a href="#calling-conventions"><i class="fas fa-handshake"></i> Call Conventions</a>
+        <a href="#locals"><i class="fas fa-cube"></i> Local Variables</a>
+        <a href="#recursion"><i class="fas fa-sync-alt"></i> Recursion</a>
+        <a href="#lab"><i class="fas fa-flask"></i> Lab · Factorial</a>
+        <a href="#questions"><i class="fas fa-question-circle"></i> Review</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Learning Outcomes -->
+        <div class="section-card" id="outcomes">
+            <h2><i class="fas fa-bullseye"></i> 🎯 Learning Outcomes</h2>
+            <ul>
+                <li>✅ Construct loops using <code>LOOP</code>, <code>JMP</code>, and conditional jumps (<code>JE</code>, <code>JNE</code>, <code>JG</code>, etc.)</li>
+                <li>✅ Define and call procedures using <code>CALL</code> and <code>RET</code></li>
+                <li>✅ Pass parameters via <strong>registers</strong> and via the <strong>stack</strong></li>
+                <li>✅ Write proper prologue (<code>push ebp</code> / <code>mov ebp, esp</code>) and epilogue</li>
+                <li>✅ Understand call conventions: <code>cdecl</code>, <code>stdcall</code> at assembly level</li>
+                <li>✅ Use stack operations: <code>PUSH</code>, <code>POP</code>, <code>PUSHAD</code>, <code>POPAD</code></li>
+                <li>✅ Create local variables on the stack and understand stack frames</li>
+                <li>✅ Implement recursive procedures and understand stack limits</li>
+            </ul>
+        </div>
+
+        <!-- 1. Control Flow: CMP, JMP, LOOP -->
+        <div class="section-card" id="control-flow">
+            <h2><i class="fas fa-code-branch"></i> 🔀 Control Flow · CMP, JMP, LOOP</h2>
+            
+            <h3><code>CMP</code> – Compare Two Operands</h3>
+            <p>Compares two values and sets flags (ZF, SF, OF, CF) without modifying the operands.</p>
+            <pre><code>CMP EAX, EBX   ; sets flags based on EAX – EBX</code></pre>
+
+            <h3>Conditional Jumps (based on flags)</h3>
+            <table>
+                <thead><tr><th>Jump</th><th>Condition</th><th>Meaning</th></tr></thead>
+                <tbody>
+                    <tr><td><code>JE / JZ</code></td><td>ZF = 1</td><td>Equal / Zero</td></tr>
+                    <tr><td><code>JNE / JNZ</code></td><td>ZF = 0</td><td>Not Equal / Not Zero</td></tr>
+                    <tr><td><code>JG / JNLE</code></td><td>SF = OF and ZF = 0</td><td>Greater (signed)</td></tr>
+                    <tr><td><code>JL / JNGE</code></td><td>SF ≠ OF</td><td>Less (signed)</td></tr>
+                    <tr><td><code>JA / JNBE</code></td><td>CF = 0 and ZF = 0</td><td>Above (unsigned)</td></tr>
+                    <tr><td><code>JB / JNAE</code></td><td>CF = 1</td><td>Below (unsigned)</td></tr>
+                </tbody>
+            </table>
+
+            <h3><code>JMP</code> – Unconditional Jump</h3>
+            <pre><code>JMP label      ; always jumps to label</code></pre>
+
+            <h3><code>LOOP</code> – Loop with <code>ECX</code> counter</h3>
+            <p>Decrements ECX automatically. Jumps to label if ECX ≠ 0.</p>
+            <pre><code>MOV ECX, 5
+myLoop:
+    ; instructions here
+    LOOP myLoop   ; ECX-- and jump if ECX != 0</code></pre>
+
+            <div class="highlight-box">
+                💡 <strong>Example:</strong> Sum numbers 1..10 using conditional jump
+                <pre><code>MOV EAX, 0
+MOV ECX, 10
+sumLoop:
+    ADD EAX, ECX
+    LOOP sumLoop   ; ECX = 9,8,...,1,0 → stops</code></pre>
+            </div>
+        </div>
+
+        <!-- 2. Stack Operations -->
+        <div class="section-card" id="stack-basics">
+            <h2><i class="fas fa-layer-group"></i> 📚 The Stack in Action</h2>
+            <p>The stack is a LIFO (Last-In-First-Out) memory region pointed to by <code>ESP</code> (stack pointer). It grows <strong>downward</strong> (towards lower addresses).</p>
+            
+            <h3><code>PUSH</code> and <code>POP</code></h3>
+            <pre><code>PUSH EAX        ; ESP -= 4, then [ESP] = EAX
+POP  EBX        ; EBX = [ESP], then ESP += 4</code></pre>
+
+            <h3><code>PUSHAD</code> / <code>POPAD</code> – Save/Restore all general registers</h3>
+            <pre><code>PUSHAD          ; pushes EAX,ECX,EDX,EBX,ESP,EBP,ESI,EDI
+; ... some code that might change registers
+POPAD           ; restores all registers</code></pre>
+
+            <div class="highlight-box">
+                🔍 The stack is heavily used for:
+                <ul>
+                    <li>Storing return addresses (by <code>CALL</code>)</li>
+                    <li>Passing parameters to functions</li>
+                    <li>Creating local variables</li>
+                    <li>Saving register values before a call</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 3. Procedures: CALL and RET -->
+        <div class="section-card" id="procedures">
+            <h2><i class="fas fa-call"></i> 📞 Procedures · CALL and RET</h2>
+            <p>A procedure is a reusable block of code. Use <code>CALL</code> to jump to it, and <code>RET</code> to return.</p>
+            <pre><code>main PROC
+    CALL MyProcedure
+    ; execution continues here after RET
+MyProcedure PROC
+    ; ... do something
+    RET
+MyProcedure ENDP</code></pre>
+            <p><strong>What happens inside?</strong></p>
+            <ul>
+                <li><code>CALL</code> pushes the <strong>return address</strong> (next instruction) onto the stack.</li>
+                <li><code>RET</code> pops that address and jumps back.</li>
+            </ul>
+            <h3>Passing Parameters via Registers (simple)</h3>
+            <pre><code>; Add two numbers (EAX, EBX) and return result in EAX
+AddProc PROC
+    ADD EAX, EBX
+    RET
+AddProc ENDP
+
+; Calling it:
+MOV EAX, 10
+MOV EBX, 20
+CALL AddProc   ; EAX = 30</code></pre>
+        </div>
+
+        <!-- 4. Stack Frames: Prologue / Epilogue -->
+        <div class="section-card" id="stack-frames">
+            <h2><i class="fas fa-window-restore"></i> 🖼️ Stack Frames · Prologue & Epilogue</h2>
+            <p>A stack frame is a fixed region on the stack dedicated to a single procedure call. It enables <strong>local variables</strong> and easy parameter access.</p>
+            
+            <h3>Standard Prologue</h3>
+            <pre><code>MyProc PROC
+    push ebp           ; save caller's frame pointer
+    mov  ebp, esp      ; set our own frame pointer</code></pre>
+            
+            <h3>Standard Epilogue</h3>
+            <pre><code>    mov esp, ebp
+    pop ebp
+    ret
+MyProc ENDP</code></pre>
+
+            <p>After prologue, <code>EBP</code> becomes a stable reference to the stack frame:</p>
+            <ul>
+                <li><code>[EBP+8]</code> → first parameter (if any)</li>
+                <li><code>[EBP-4]</code> → first local variable (after allocating space)</li>
+                <li><code>[EBP]</code> → saved EBP</li>
+                <li><code>[EBP+4]</code> → return address</li>
+            </ul>
+
+            <div class="highlight-box">
+                🧠 <strong>Why use EBP?</strong> ESP changes when you push/pop, but EBP stays fixed throughout the procedure, making parameter and local variable access predictable.
+            </div>
+        </div>
+
+        <!-- 5. Calling Conventions: cdecl vs stdcall -->
+        <div class="section-card" id="calling-conventions">
+            <h2><i class="fas fa-handshake"></i> 🤝 Calling Conventions · cdecl / stdcall</h2>
+            <p>Calling conventions define <strong>who cleans the stack</strong> and the <strong>order of parameters</strong>.</p>
+
+            <h3><code>cdecl</code> (default in C/C++)</h3>
+            <ul>
+                <li>Caller pushes parameters from right to left.</li>
+                <li>Caller cleans the stack after the call (<code>add esp, param_bytes</code>).</li>
+                <li>Allows variable number of arguments (like <code>printf</code>).</li>
+            </ul>
+            <pre><code>; Example: add(5, 3) using cdecl
+push 3
+push 5
+call Add
+add esp, 8      ; caller cleans 2 parameters (4 bytes each)</code></pre>
+
+            <h3><code>stdcall</code> (used by Win32 API)</h3>
+            <ul>
+                <li>Caller pushes parameters from right to left.</li>
+                <li>Callee cleans the stack using <code>ret n</code>.</li>
+                <li>No variable arguments.</li>
+            </ul>
+            <pre><code>Add PROC
+    mov eax, [ebp+8]   ; first param
+    add eax, [ebp+12]  ; second param
+    ret 8              ; return and pop 8 bytes (2 params)
+Add ENDP</code></pre>
+            <div class="highlight-box">
+                📌 In MASM, you can specify <code>stdcall</code> in the <code>.model</code> directive: <code>.model flat, stdcall</code>
+            </div>
+        </div>
+
+        <!-- 6. Local Variables on the Stack -->
+        <div class="section-card" id="locals">
+            <h2><i class="fas fa-cube"></i> 📦 Local Variables</h2>
+            <p>Reserve space on the stack by subtracting from <code>ESP</code> inside the prologue.</p>
+            <pre><code>MyProc PROC
+    push ebp
+    mov  ebp, esp
+    sub  esp, 8        ; allocate 8 bytes for two local variables (e.g., two DWORDs)
+
+    ; access locals using [ebp-4], [ebp-8]
+    mov dword ptr [ebp-4], 123   ; first local = 123
+    mov eax, [ebp-4]             ; use it
+
+    mov esp, ebp       ; deallocate locals
+    pop ebp
+    ret
+MyProc ENDP</code></pre>
+            <p>You can also use named constants for clarity:</p>
+            <pre><code>local_a = -4
+local_b = -8</code></pre>
+        </div>
+
+        <!-- 7. Recursive Procedures -->
+        <div class="section-card" id="recursion">
+            <h2><i class="fas fa-sync-alt"></i> 🔁 Recursive Procedures</h2>
+            <p>A recursive procedure calls itself. Each call creates a new stack frame. Too many recursive calls cause <strong>stack overflow</strong>.</p>
+            <p>Example: Factorial (n!) → n * (n-1)! with base case n=0 or n=1 returning 1.</p>
+            <pre><code>Factorial PROC
+    push ebp
+    mov  ebp, esp
+    mov  eax, [ebp+8]   ; parameter n
+
+    cmp  eax, 1
+    jle  base_case      ; if n <= 1 return 1
+
+    dec  eax            ; n-1
+    push eax
+    call Factorial      ; recursive call (result in EAX)
+    ; after return, multiply by original n
+    mov  ecx, [ebp+8]   ; original n
+    imul eax, ecx
+    jmp  done
+
+base_case:
+    mov  eax, 1
+
+done:
+    mov esp, ebp
+    pop ebp
+    ret 4               ; stdcall: clean 1 parameter
+Factorial ENDP</code></pre>
+            <div class="highlight-box">
+                ⚠️ <strong>Stack limit:</strong> Each recursive call uses about 12–16 bytes (return address, saved EBP, parameters). Too many calls (> 1 million in 32‑bit) crash the program.
+            </div>
+        </div>
+
+        <!-- 8. Lab: Recursive Factorial + Debugging -->
+        <div class="section-card" id="lab">
+            <h2><i class="fas fa-flask"></i> 🧪 Lab · Recursive Factorial with x64dbg Tracing</h2>
+            <p><strong>Task:</strong> Implement a recursive factorial function in MASM (32‑bit, stdcall or cdecl). Trace stack changes, local variables, and return addresses in the debugger.</p>
+
+            <div class="bonus-box">
+                <h3><i class="fas fa-trophy"></i> ⭐ Bonus Challenges</h3>
+                <ul>
+                    <li>Modify the code to use <code>cdecl</code> convention (caller cleans).</li>
+                    <li>Add a local variable (e.g., a DWORD) inside Factorial and trace it.</li>
+                    <li>Calculate Fibonacci recursively and compare stack usage.</li>
+                    <li>Make the program ask the user for n (1‑12) and print the factorial.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 9. Review Questions -->
+        <div class="section-card" id="questions">
+            <h2><i class="fas fa-question-circle"></i> ❓ Review Questions</h2>
+            <ol>
+                <li>What is the difference between <code>JE</code> and <code>JNE</code>? Give an example of when you'd use each.</li>
+                <li>How does <code>LOOP</code> work? What register does it use automatically?</li>
+                <li>Explain exactly what the <code>CALL</code> instruction does (including stack changes).</li>
+                <li>Why do we use a prologue (<code>push ebp / mov ebp, esp</code>) in procedures?</li>
+                <li>What is the purpose of <code>PUSHAD</code> and <code>POPAD</code>? Why are they useful?</li>
+                <li>In a standard stack frame, where is the return address stored relative to <code>EBP</code>?</li>
+                <li>What is the difference between <code>cdecl</code> and <code>stdcall</code> regarding stack cleanup?</li>
+                <li>Why does a deep recursion cause a stack overflow? How can we prevent it?</li>
+                <li>Write a procedure that takes two DWORD arguments via the stack and returns their sum in EAX (use <code>stdcall</code>).</li>
+                <li>What will be the value of EAX after running: <code>mov ecx, 3</code> → <code>mov eax, 0</code> → <code>L: add eax, ecx</code> → <code>loop L</code>?</li>
+            </ol>
+        </div>
+
+        <hr>
+        <footer>
+            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
+            <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> & industry reverse‑engineering practices | Instructor: <strong>Mahmoud Khalil</strong></p>
+            <p>© 2026 Mahmoud Khalil – For educational use only</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

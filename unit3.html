@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>COMP‑3111 | Unit 3 · Data Movement & Addressing Modes</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.85);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 1.05rem;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1a0a2e 0%, #3b1f6e 100%);
+            color: white;
+            padding: 2.5rem 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .hero .course-info {
+            margin-top: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            background: rgba(124, 58, 237, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 0.3rem 1.1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .sticky-nav a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .sticky-nav a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.96);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s, border-color 0.3s, box-shadow 0.3s;
+            scroll-margin-top: 90px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 40px -18px var(--primary-glow);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.6rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 1.5rem 0 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        p,
+        li {
+            color: #cbd5e6;
+        }
+
+        ul,
+        ol {
+            margin: 0.8rem 0 1rem 1.8rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.3rem;
+            border-radius: 16px;
+            margin: 1.2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(124, 58, 237, 0.25);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        pre {
+            background: #0b111e;
+            color: #e6edf3;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 1.2rem 0;
+            border: 1px solid #2d3748;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        .btn-exercise {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-exercise:hover {
+            background: var(--primary-dark);
+            transform: scale(0.96);
+        }
+
+        .bonus-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 20px;
+            padding: 1.2rem 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .bonus-box h3 {
+            color: var(--success);
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2.5rem;
+            padding: 1rem 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-light);
+            margin: 2rem 0 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .section-card {
+                padding: 1.5rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>📦 Unit 3 · Data Movement & Addressing Modes</h1>
+        <div class="subtitle">
+            <span class="badge"><i class="fas fa-microchip"></i> MOV · MOVZX · MOVSX · LEA</span>
+            <span class="badge"><i class="fas fa-map-marker-alt"></i> Direct · Indirect · Indexed · Based</span>
+            <span class="badge"><i class="fas fa-database"></i> Arrays & Pointers</span>
+        </div>
+        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+    </div>
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav">
+        <a href="#outcomes"><i class="fas fa-bullseye"></i> Outcomes</a>
+        <a href="#mov-instr"><i class="fas fa-exchange-alt"></i> MOV · MOVZX · MOVSX · LEA</a>
+        <a href="#operand-types"><i class="fas fa-tag"></i> Operand Types</a>
+        <a href="#addressing-modes"><i class="fas fa-location-dot"></i> Addressing Modes</a>
+        <a href="#data-directives"><i class="fas fa-database"></i> DB / DW / DD / DUP</a>
+        <a href="#arrays"><i class="fas fa-table-list"></i> Arrays & ESI/EDI/EBX</a>
+        <a href="#pointer-vs-value"><i class="fas fa-map-pin"></i> Pointer vs Value</a>
+        <a href="#lab"><i class="fas fa-flask"></i> Lab · Reverse Array</a>
+        <a href="#questions"><i class="fas fa-question-circle"></i> Review</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Learning Outcomes -->
+        <div class="section-card" id="outcomes">
+            <h2><i class="fas fa-bullseye"></i> 🎯 Learning Outcomes</h2>
+            <ul>
+                <li>✅ Master <code>MOV</code>, <code>MOVZX</code>, <code>MOVSX</code>, and <code>LEA</code> instructions
+                    professionally.</li>
+                <li>✅ Distinguish between operand types: <strong>immediate, register, memory</strong>.</li>
+                <li>✅ Apply all addressing modes: <strong>direct, indirect, indexed, based, based‑indexed, scaled
+                        indexed</strong>.</li>
+                <li>✅ Work with one‑dimensional and two‑dimensional arrays using <code>ESI</code>, <code>EDI</code>,
+                    <code>EBX</code>.</li>
+                <li>✅ Understand the difference between a <strong>pointer (address)</strong> and a
+                    <strong>value</strong>.</li>
+                <li>✅ Define data using directives: <code>DB</code>, <code>DW</code>, <code>DD</code>, <code>DUP</code>.
+                </li>
+            </ul>
+            <div class="highlight-box">
+                💡 <strong>Why this unit matters:</strong> Every program moves data. Mastering addressing modes gives
+                you full control over memory — essential for reverse engineering, embedded systems, and performance
+                optimization.
+            </div>
+        </div>
+
+        <!-- 1. MOV, MOVZX, MOVSX, LEA -->
+        <div class="section-card" id="mov-instr">
+            <h2><i class="fas fa-exchange-alt"></i> 📦 Data Movement Instructions</h2>
+
+            <h3><code>MOV</code> – Move Data</h3>
+            <p>Copies data from source to destination. Source remains unchanged.</p>
+            <pre><code>MOV EAX, 5        ; immediate → register
+MOV EBX, EAX      ; register → register
+MOV [1234h], ECX  ; register → memory</code></pre>
+            <p><strong>Rules:</strong> Same size for both operands. Cannot move memory → memory directly. Cannot move
+                immediate → segment register directly.</p>
+
+            <h3><code>MOVZX</code> – Move with Zero‑Extension</h3>
+            <p>Moves a smaller value to a larger destination and fills new bits with zeros (for unsigned numbers).</p>
+            <pre><code>MOV AL, 0FFh
+MOVZX EAX, AL     ; EAX = 0x000000FF = 255 (not -1)</code></pre>
+
+            <h3><code>MOVSX</code> – Move with Sign‑Extension</h3>
+            <p>Moves a smaller signed value to a larger destination and copies the sign bit.</p>
+            <pre><code>MOV AL, 0FFh      ; -1 in signed
+MOVSX EAX, AL     ; EAX = 0xFFFFFFFF = -1</code></pre>
+
+            <h3><code>LEA</code> – Load Effective Address</h3>
+            <p>Calculates the address (inside brackets) and stores it in a register. Does NOT access memory.</p>
+            <pre><code>LEA EBX, [ESI+4]  ; EBX = ESI + 4  (address, not value)</code></pre>
+            <div class="highlight-box">
+                🔍 <strong>Key difference:</strong> <code>MOV EBX, [ESI]</code> loads the <em>value</em> from
+                memory.<br>
+                <code>LEA EBX, [ESI]</code> loads the <em>address</em> (the pointer) itself.
+            </div>
+        </div>
+
+        <!-- 2. Operand Types -->
+        <div class="section-card" id="operand-types">
+            <h2><i class="fas fa-tag"></i> 📌 Operand Types</h2>
+            <ul>
+                <li><strong>Immediate operand:</strong> A constant value written directly. <em>Example:</em>
+                    <code>MOV EAX, 100</code></li>
+                <li><strong>Register operand:</strong> A register name like AX, BX, ECX, DL. <em>Example:</em>
+                    <code>MOV EBX, EAX</code></li>
+                <li><strong>Memory operand:</strong> A location in memory, written inside square brackets
+                    <code>[ ]</code>. <em>Example:</em> <code>MOV AL, [2000h]</code></li>
+            </ul>
+            <pre><code>; Quick comparison
+MOV EAX, 42         ; 42 is immediate
+MOV ECX, EAX        ; EAX and ECX are register operands
+MOV [1000h], ECX    ; [1000h] is memory operand</code></pre>
+        </div>
+
+        <!-- 3. Addressing Modes (Detailed) -->
+        <div class="section-card" id="addressing-modes">
+            <h2><i class="fas fa-location-dot"></i> 🧭 Addressing Modes in Detail</h2>
+            <p>Seven fundamental ways to specify a memory operand address:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mode</th>
+                        <th>Example</th>
+                        <th>Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Direct</td>
+                        <td><code>MOV AL, [2000h]</code></td>
+                        <td>Fixed address</td>
+                    </tr>
+                    <tr>
+                        <td>Indirect</td>
+                        <td><code>MOV AL, [EBX]</code></td>
+                        <td>Address in a register</td>
+                    </tr>
+                    <tr>
+                        <td>Indirect + Displacement</td>
+                        <td><code>MOV AL, [EBX+4]</code></td>
+                        <td>Register + constant</td>
+                    </tr>
+                    <tr>
+                        <td>Indexed</td>
+                        <td><code>MOV AL, [myArray+ESI]</code></td>
+                        <td>Array base + index</td>
+                    </tr>
+                    <tr>
+                        <td>Based</td>
+                        <td><code>MOV AL, [EBX+5]</code></td>
+                        <td>Base register + displacement</td>
+                    </tr>
+                    <tr>
+                        <td>Based‑Indexed</td>
+                        <td><code>MOV AL, [EBX+ESI]</code></td>
+                        <td>Base + index</td>
+                    </tr>
+                    <tr>
+                        <td>Scaled Indexed</td>
+                        <td><code>MOV EAX, [EBX+ESI*4]</code></td>
+                        <td>For arrays with element size 4 bytes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔹 Indirect Addressing :: <code>[reg]</code></h3>
+            <pre><code>MOV EBX, OFFSET myArray
+MOV AL, [EBX]        ; reads first element</code></pre>
+
+            <h3>🔹 Indirect with Displacement :: <code>[reg+disp]</code></h3>
+            <pre><code>MOV EBX, 1000h
+MOV AL, [EBX + 4]    ; reads address 1004h</code></pre>
+
+            <h3>🔹 Based‑Indexed :: <code>[reg1+reg2]</code></h3>
+            <pre><code>MOV EBX, OFFSET arr   ; base
+MOV ESI, 2            ; index
+MOV AL, [EBX + ESI]   ; arr[2]</code></pre>
+
+            <h3>🔹 Scaled Indexed for 32‑bit arrays</h3>
+            <pre><code>MOV EBX, OFFSET intArray
+MOV ESI, 2
+MOV EAX, [EBX + ESI*4] ; gets the 3rd element (0‑based) of a DD array</code></pre>
+        </div>
+
+        <!-- 4. Data Definition Directives DB, DW, DD, DUP -->
+        <div class="section-card" id="data-directives">
+            <h2><i class="fas fa-database"></i> 📦 Data Definition Directives</h2>
+            <pre><code>DB  - Define Byte      (1 byte)   → var1 DB 10, 'A', 20h
+DW  - Define Word      (2 bytes)  → varW DW 1000, 2000
+DD  - Define Doubleword (4 bytes) → varD DD 12345678h
+DUP - Duplicate                   → buffer DB 100 DUP (0)</code></pre>
+            <p><strong>Examples:</strong></p>
+            <pre><code>.data
+    byteArray DB 10, 20, 30, 40          ; four bytes
+    wordArray DW 100, 200, 300           ; three words (6 bytes)
+    doubleArray DD 1, 2, 3, 4, 5         ; five doublewords (20 bytes)
+    zeros DW 50 DUP (0)                  ; 50 words initialized to zero
+    pattern DB 4 DUP (1, 2)              ; 1,2,1,2,1,2,1,2 (8 bytes)</code></pre>
+        </div>
+
+        <!-- 5. Arrays and using ESI, EDI, EBX -->
+        <div class="section-card" id="arrays">
+            <h2><i class="fas fa-table-list"></i> 📊 Arrays & Traversal with <code>ESI</code>, <code>EDI</code>,
+                <code>EBX</code></h2>
+            <p>An array is a contiguous memory block of same‑sized elements.</p>
+            <pre><code>.data
+myBytes DB 10h, 20h, 30h, 40h, 50h
+.code
+MOV ESI, OFFSET myBytes   ; ESI points to first element
+MOV AL, [ESI]             ; AL = 10h
+MOV AL, [ESI+2]           ; AL = 30h</code></pre>
+            <p><strong>Common register roles:</strong></p>
+            <ul>
+                <li><code>ESI</code> (Source Index) – usually points to source array</li>
+                <li><code>EDI</code> (Destination Index) – points to destination array</li>
+                <li><code>EBX</code> (Base) – holds start address</li>
+                <li><code>ECX</code> – loop counter</li>
+            </ul>
+            <h3>🔸 Two‑dimensional array example (3 rows × 2 columns of bytes)</h3>
+            <pre><code>matrix DB 1,2, 3,4, 5,6
+row_size = 2
+MOV EBX, OFFSET matrix
+MOV ESI, 1               ; row 1 (0‑based)
+MOV EDI, 0               ; column 0
+MOV AL, [EBX + ESI*row_size + EDI]  ; AL = 3</code></pre>
+        </div>
+
+        <!-- 6. Pointer vs Value -->
+        <div class="section-card" id="pointer-vs-value">
+            <h2><i class="fas fa-map-pin"></i> 🎯 Pointer vs Value</h2>
+            <p><strong>Pointer</strong> = memory address (e.g., <code>1000h</code>).<br>
+                <strong>Value</strong> = the actual content stored at that address (e.g., <code>42</code>).
+            </p>
+            <pre><code>LEA EBX, myVar   ; EBX = address of myVar (pointer)
+MOV ECX, [EBX]   ; ECX = value stored at that address</code></pre>
+            <div class="highlight-box">
+                💡 When passing an array to a function, we pass a <em>pointer</em> (the starting address) instead of
+                copying the entire array. This saves time and memory.
+            </div>
+        </div>
+
+        <!-- 7. Lab Exercise: Reverse an Array In‑Place -->
+        <div class="section-card" id="lab">
+            <h2><i class="fas fa-flask"></i> 🧪 Lab · Reverse an Array In‑Place</h2>
+            <p><strong>Task:</strong> Using only registers and indirect addressing modes, reverse an array of 5 integers
+                (32‑bit) in the same memory (in‑place). No extra memory allowed.</p>
+            <p><strong>Idea:</strong> Use two pointers – <code>ESI</code> at the start, <code>EDI</code> at the end.
+                Swap values, move them toward each other until they meet.</p>
+
+            <div class="bonus-box">
+                <h3><i class="fas fa-trophy"></i> Challenge</h3>
+                <ul>
+                    <li>Change the array to <code>DW</code> (words) and update offsets accordingly
+                        (<code>ADD ESI, 2</code>, <code>(size-1)*2</code>).</li>
+                    <li>Reverse an array of bytes (<code>DB</code>) using <code>AL</code> and <code>BL</code>.</li>
+                    <li>Make the array size flexible: ask the user for the size and values (bonus).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 8. Review Questions -->
+        <div class="section-card" id="questions">
+            <h2><i class="fas fa-question-circle"></i> ❓ Review Questions</h2>
+            <ol>
+                <li>What is the difference between <code>MOVZX</code> and <code>MOVSX</code>? Provide examples.</li>
+                <li>How do you calculate the address of the 6th element in a word array (<code>DW</code>) using
+                    based‑indexed addressing?</li>
+                <li>Write an <code>LEA</code> instruction that puts into <code>EAX</code> the address of element number
+                    <code>i</code> in an array <code>scores</code> (DD array) where <code>i</code> is stored in
+                    <code>ECX</code>.</li>
+                <li>Why can't we write <code>MOV [1000h], [2000h]</code>? How would you copy data between two memory
+                    addresses?</li>
+                <li>What does <code>DUP</code> mean? Write a directive that defines an array of 100 words all
+                    initialized to zero.</li>
+                <li>When would you prefer using <code>LEA</code> over <code>MOV OFFSET</code>?</li>
+                <li>What is the final value of EAX after these instructions?<br>
+                    <code>MOV AL, 0x80</code><br>
+                    <code>MOVSX EAX, AL</code>
+                </li>
+            </ol>
+            <div class="highlight-box">
+                📘 Try answering these before the next lab. Discuss with your classmates!
+            </div>
+        </div>
+
+        <hr>
+        <footer>
+            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
+            <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> & industry reverse‑engineering
+                practices | Instructor: <strong>Mahmoud Khalil</strong></p>
+            <p>© 2026 Mahmoud Khalil – For educational use only</p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scroll for sticky navigation
+        document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

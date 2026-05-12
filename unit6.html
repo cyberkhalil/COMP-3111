@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>COMP‑3111 | Unit 6 · Strings, I/O, and OS Interface</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.85);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            font-size: 1.05rem;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(124, 58, 237, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 58, 237, 0.08) 1px, transparent 1px);
+            background-size: 45px 45px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1a0a2e 0%, #3b1f6e 100%);
+            color: white;
+            padding: 2.5rem 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            background: rgba(124, 58, 237, 0.15);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            padding: 0.3rem 1.1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .sticky-nav a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .sticky-nav a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(0.96);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s, border-color 0.3s, box-shadow 0.3s;
+            scroll-margin-top: 90px;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 25px 40px -18px var(--primary-glow);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.6rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 1.5rem 0 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        p, li {
+            color: #cbd5e6;
+        }
+
+        ul, ol {
+            margin: 0.8rem 0 1rem 1.8rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.3rem;
+            border-radius: 16px;
+            margin: 1.2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(124, 58, 237, 0.25);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        pre {
+            background: #0b111e;
+            color: #e6edf3;
+            padding: 1.2rem 1.5rem;
+            border-radius: 20px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 1.2rem 0;
+            border: 1px solid #2d3748;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background: #1e293b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2.5rem;
+            padding: 1rem 0;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-light);
+            margin: 2rem 0 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="hero">
+        <h1>Unit 6 · Strings, I/O, and the OS Interface</h1>
+        <div class="subtitle">
+            <span class="badge"><i class="fas fa-stream"></i> String Primitives</span>
+            <span class="badge"><i class="fas fa-keyboard"></i> Irvine32 I/O</span>
+            <span class="badge"><i class="fas fa-file-alt"></i> File Operations</span>
+            <span class="badge"><i class="fab fa-windows"></i> Windows API</span>
+        </div>
+        <p class="course-info">COMP‑3111 · Microprocessor Lab (Practical) · UCAS</p>
+    </div>
+
+    <nav class="sticky-nav">
+        <a href="#intro"><i class="fas fa-microchip"></i> Intro</a>
+        <a href="#string-primitives"><i class="fas fa-arrow-right-arrow-left"></i> String Primitives</a>
+        <a href="#irvine32"><i class="fas fa-book"></i> Irvine32 I/O</a>
+        <a href="#file-functions"><i class="fas fa-file"></i> File Functions</a>
+        <a href="#windows-api"><i class="fab fa-windows"></i> Windows API</a>
+        <a href="#project"><i class="fas fa-calculator"></i> XOR Cipher</a>
+        <a href="#summary"><i class="fas fa-list-check"></i> Summary</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Section 1 -->
+        <div class="section-card" id="intro">
+            <h2><i class="fas fa-microchip"></i> 1. Strings & The Role of the OS</h2>
+            <p>A string in assembly is simply a sequence of bytes in memory, often terminated by a null (0). The operating system provides services like:</p>
+            <ul>
+                <li>Keyboard input</li>
+                <li>Screen output</li>
+                <li>File handling</li>
+                <li>Message boxes</li>
+            </ul>
+            <div class="highlight-box">
+                💡 The <strong>Irvine32 library</strong> wraps these OS services into easy‑to‑use functions for assembly programmers.
+            </div>
+        </div>
+
+        <!-- Section 2: String Primitives -->
+        <div class="section-card" id="string-primitives">
+            <h2><i class="fas fa-arrow-right-arrow-left"></i> 2. String Primitives (MOVSB, STOSB, LODSB, CMPSB)</h2>
+            <p>These instructions operate on memory blocks using <code>ESI</code> (source), <code>EDI</code> (destination) and <code>ECX</code> (counter).</p>
+            <table>
+                <thead><tr><th>Instruction</th><th>Operation</th><th>Direction effect</th></tr></thead>
+                <tbody>
+                    <tr><td><code>MOVSB</code></td><td>Move byte from [ESI] → [EDI]</td><td>ESI/EDI ± 1</td></tr>
+                    <tr><td><code>STOSB</code></td><td>Store AL → [EDI]</td><td>EDI ± 1</td></tr>
+                    <tr><td><code>LODSB</code></td><td>Load [ESI] → AL</td><td>ESI ± 1</td></tr>
+                    <tr><td><code>CMPSB</code></td><td>Compare byte [ESI] with [EDI]</td><td>ESI/EDI ± 1</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Repeat prefixes:</strong> <code>REP</code>, <code>REPE</code>, <code>REPNE</code> – repeat ECX times or while condition holds.</p>
+            <pre><code>; Copy a 5-byte string
+mov esi, OFFSET source
+mov edi, OFFSET dest
+mov ecx, 5
+cld               ; clear direction flag (forward)
+rep movsb</code></pre>
+        </div>
+
+
+        <!-- Section 4: File Functions -->
+        <div class="section-card" id="file-functions">
+            <h2><i class="fas fa-file"></i> 4. File Operations in Irvine32</h2>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>CreateOutputFile</code></td><td>EDX = filename → returns handle in EAX</td></tr>
+                    <tr><td><code>OpenFile</code></td><td>Open existing file (read mode)</td></tr>
+                    <tr><td><code>WriteToFile</code></td><td>EAX=handle, EDX=data, ECX=bytes → writes data</td></tr>
+                    <tr><td><code>ReadFromFile</code></td><td>Read from file into memory</td></tr>
+                    <tr><td><code>CloseFile</code></td><td>EAX=handle → close</td></tr>
+                </tbody>
+            </table>
+            <pre><code>; Write a string to a file
+.data
+    fname db "output.txt",0
+    content db "Hello File!",0
+.code
+    mov edx, OFFSET fname
+    call CreateOutputFile
+    mov ebx, eax          ; save handle
+    mov edx, OFFSET content
+    mov ecx, LENGTHOF content
+    call WriteToFile
+    mov eax, ebx
+    call CloseFile</code></pre>
+        </div>
+
+        <!-- Section 5: Windows API -->
+        <div class="section-card" id="windows-api">
+            <h2><i class="fab fa-windows"></i> 5. Windows API from Assembly</h2>
+            <p>API functions expect parameters on the stack (pushed right‑to‑left) and follow the <code>stdcall</code> convention.</p>
+            <pre><code>; ExitProcess
+push 0
+call ExitProcess
+
+; MessageBoxA (requires user32.lib)
+push 0          ; MB_OK
+push OFFSET caption
+push OFFSET message
+push 0          ; parent window
+call MessageBoxA</code></pre>
+            <div class="highlight-box">
+                ℹ️ When using Irvine32, many API functions are already linked. You can also use <code>INVOKE</code> for safer calls.
+            </div>
+        </div>
+
+        <!-- Section 6: Interactive Project – XOR Cipher Menu -->
+        <div class="section-card" id="project">
+            <h2><i class="fas fa-calculator"></i> 6. Mini Project: XOR Cipher (Menu‑Driven)</h2>
+            <p><strong>Task:</strong> Create a text‑based menu that lets the user:</p>
+            <ol>
+                <li>Enter a string</li>
+                <li>Encrypt/Decrypt it using a simple XOR key (same operation)</li>
+                <li>Display the current string</li>
+                <li>Exit</li>
+            </ol>
+            
+            <div class="highlight-box">
+                ✅ <strong>Write the complete code</strong>
+            </div>
+        </div>
+
+        <!-- Section 7: Summary -->
+        <div class="section-card" id="summary">
+            <h2><i class="fas fa-list-check"></i> 7. Summary</h2>
+            <ul>
+                <li><strong>String primitives</strong> (<code>MOVSB</code>, <code>STOSB</code>, <code>LODSB</code>, <code>CMPSB</code>) move and compare blocks of memory efficiently.</li>
+                <li><strong>Irvine32 library</strong> provides easy‑to‑use console I/O (<code>WriteString</code>, <code>ReadString</code>, <code>WriteInt</code>, etc.).</li>
+                <li><strong>File functions</strong> (<code>CreateOutputFile</code>, <code>WriteToFile</code>, ...) allow persistent storage.</li>
+                <li><strong>Windows API</strong> can be called directly (stack + <code>call</code>) for advanced features like message boxes.</li>
+                <li>The <strong>XOR cipher menu</strong> ties everything together: input, processing, output, and conditional logic.</li>
+            </ul>
+        </div>
+
+        <hr>
+        <footer>
+            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
+            <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> | Instructor: <strong>Mahmoud Khalil</strong></p>
+            <p>© 2026 Mahmoud Khalil – For educational use only</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
