@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>COMP‑3111 | Unit 2 · From C to Assembly</title>
+    <title>COMP‑3111 | Unit 2 · From C to Assembly: First Low‑Level Programs (MASM)</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght=14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ===== GLOBAL STYLES - PURPLE THEME ===== */
         :root {
             --bg-dark: #0a0f1c;
             --card-bg: rgba(18, 25, 45, 0.85);
@@ -22,8 +23,6 @@
             --border-light: rgba(255, 255, 255, 0.08);
             --success: #10b981;
             --warning: #f59e0b;
-            --exercise-bg: rgba(245, 158, 11, 0.1);
-            --exercise-border: #f59e0b;
         }
 
         * {
@@ -58,32 +57,31 @@
         .container {
             max-width: 960px;
             margin: 0 auto;
-            padding: 0 1.5rem 2rem;
+            padding: 2rem 1.5rem;
             position: relative;
             z-index: 2;
         }
 
         .hero {
-            background: linear-gradient(135deg, #1a0a2e 0%, #3b1f6e 100%);
-            color: white;
-            padding: 2.5rem 1.5rem 1rem;
+            background: linear-gradient(135deg, #0a1424 0%, #1a1f3a 100%);
             text-align: center;
+            padding: 2.5rem 1.5rem 2rem;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-size: 2.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .hero .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -119,7 +117,6 @@
             justify-content: center;
             gap: 0.4rem;
             padding: 0.7rem 1rem;
-            margin-bottom: 2rem;
         }
 
         .sticky-nav a {
@@ -163,15 +160,6 @@
             box-shadow: 0 25px 40px -18px var(--primary-glow);
         }
 
-        .exercise-card {
-            background: var(--exercise-bg);
-            border: 2px solid var(--exercise-border);
-            border-radius: 32px;
-            padding: 2rem;
-            margin: 2rem 0;
-            scroll-margin-top: 90px;
-        }
-
         h2 {
             font-size: 1.8rem;
             font-weight: 700;
@@ -194,13 +182,11 @@
             gap: 0.4rem;
         }
 
-        p,
-        li {
+        p, li {
             color: #cbd5e6;
         }
 
-        ul,
-        ol {
+        ul, ol {
             margin: 0.8rem 0 1rem 1.8rem;
         }
 
@@ -216,28 +202,6 @@
             margin: 1.2rem 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.2rem 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        th {
-            background: rgba(124, 58, 237, 0.25);
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        td {
-            padding: 0.65rem 1rem;
-            border-bottom: 1px solid var(--border-light);
-        }
-
         pre {
             background: #0b111e;
             color: #e6edf3;
@@ -249,6 +213,7 @@
             line-height: 1.5;
             margin: 1.2rem 0;
             border: 1px solid #2d3748;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
         }
 
         code {
@@ -263,22 +228,63 @@
         pre code {
             background: transparent;
             padding: 0;
+            color: #e6edf3;
         }
 
-        .hint {
-            background: rgba(16, 185, 129, 0.08);
-            border-left: 4px solid var(--success);
-            padding: 0.8rem 1.2rem;
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
             margin: 1rem 0;
-            border-radius: 12px;
         }
 
-        footer {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 2.5rem;
-            padding: 1rem 0;
+        .info-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 1rem;
+            font-weight: 500;
+        }
+
+        .directive-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .directive-table th, .directive-table td {
+            border: 1px solid var(--border-light);
+            padding: 0.7rem 1rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        .directive-table th {
+            background: rgba(124, 58, 237, 0.2);
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .btn-exercise {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 0.7rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-exercise:hover {
+            background: var(--primary-dark);
+            transform: scale(0.96);
         }
 
         hr {
@@ -288,18 +294,40 @@
             margin: 2rem 0 1rem;
         }
 
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid var(--primary);
+            border-radius: 40px;
+            padding: 0.5rem 1.3rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--primary);
+            transition: 0.2s;
+            margin-bottom: 1rem;
+        }
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
         @media (max-width: 640px) {
             .hero h1 {
                 font-size: 1.8rem;
             }
-
-            .section-card,
-            .exercise-card {
+            .section-card {
                 padding: 1.5rem;
             }
-
-            .hero {
-                padding: 2rem 1rem 1rem;
+            .directive-table th, .directive-table td {
+                padding: 0.5rem;
             }
         }
     </style>
@@ -307,246 +335,287 @@
 
 <body>
     <div class="bg-grid"></div>
+
     <div class="hero">
-        <h1>Unit 2 · From C to Assembly</h1>
+        <h1>Unit 2 · From C to Assembly<br>Your First Low‑Level Programs</h1>
         <div class="subtitle">
-            <span class="badge"><i class="fas fa-code"></i> MASM / VS Code</span>
-            <span class="badge"><i class="fas fa-layer-group"></i> High‑level mapping</span>
-            <span class="badge"><i class="fas fa-file-code"></i>First .exe</span>
+            <span class="badge"><i class="fab fa-windows"></i> MASM / VS Code</span>
+            <span class="badge"><i class="fas fa-microchip"></i> x86 32-bit</span>
+            <span class="badge"><i class="fas fa-code-branch"></i> C → ASM mapping</span>
         </div>
-        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+        <p style="margin-top:1rem; color: var(--text-muted);">COMP‑3111 · Microprocessor & Assembly Lab · Instructor: Mahmoud Khalil</p>
+        <div style="margin-top: 1.2rem;">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> ← Back to Course Home</a>
+        </div>
     </div>
 
-
     <nav class="sticky-nav">
-        <a href="#c-to-asm"><i class="fas fa-arrow-right-arrow-left"></i> C → Assembly</a>
-        <a href="#structure"><i class="fas fa-cubes"></i> MASM Structure</a>
-        <a href="#hello"><i class="fas fa-heart"></i> Hello World</a>
-        <a href="#addressing"><i class="fas fa-memory"></i> Addressing Modes</a>
-        <a href="#cheatsheet"><i class="fas fa-table"></i> Cheat Sheet</a>
-        <a href="#loops"><i class="fas fa-repeat"></i> Loops (for/while)</a>
-        <a href="#setup"><i class="fas fa-cog"></i> Setup</a>
-        <a href="#lab"><i class="fas fa-flask"></i> Lab</a>
+        <a href="#why-mapping"><i class="fas fa-exchange-alt"></i> C → ASM</a>
+        <a href="#setup-masm"><i class="fas fa-tools"></i> Setup MASM</a>
+        <a href="#hello-world"><i class="fas fa-smile-wink"></i> Hello World</a>
+        <a href="#directives"><i class="fas fa-cog"></i> Directives</a>
+        <a href="#first-program"><i class="fas fa-code"></i> Add Integers</a>
+        <a href="#instructions"><i class="fas fa-calculator"></i> MOV / ADD</a>
+        <a href="#high-level"><i class="fas fa-diagram-project"></i> If/Loops</a>
+        <a href="#exercise"><i class="fas fa-pen-to-square"></i> Lab Exercise</a>
     </nav>
 
     <div class="container">
 
-        <!-- 1. From C to Assembly -->
-        <div class="section-card" id="c-to-asm">
-            <h2><i class="fas fa-arrow-right-arrow-left"></i> 1. From C to Assembly – A Peek Under the Hood</h2>
-            <p>Take this simple C code:</p>
-            <pre><code>int a = 10;
-int b = 20;
-if (a > b) {
-    a = a + 1;
-} else {
-    b = b - 1;
-}</code></pre>
-            <p>A compiler (roughly) turns it into:</p>
-            <pre><code>mov eax, [a]
-cmp eax, [b]
-jle else_block
-inc a
-jmp end_if
-else_block:
-dec b
-end_if:</code></pre>
+        <div class="section-card" id="why-mapping">
+            <h2><i class="fas fa-exchange-alt"></i> Why C → Assembly? See the Real Machine</h2>
+            <p>High‑level languages hide the processor. As a cybersecurity engineer, reading assembly lets you reverse compiler output, find exploits, and understand exactly what the CPU executes. This unit bridges <strong>C code</strong> and <strong>x86 assembly</strong> so you can think like both a developer and a debugger.</p>
             <div class="highlight-box">
-                💡 Notice: <code>if (a > b)</code> is reversed to <code>jle</code> (jump if less or equal) to skip the
-                if‑body. Loops (<code>for</code>, <code>while</code>) work similarly with labels and conditional jumps.
+                💡 <strong>Key insight:</strong> Every <code>if</code>, <code>while</code>, and <code>for</code> becomes a <code>CMP</code> + conditional jump (<code>JE</code>, <code>JG</code>). Every function call becomes <code>CALL</code>/<code>RET</code> with stack adjustments.
+            </div>
+            <h3><i class="fas fa-file-code"></i> Example: C addition → Assembly</h3>
+            <pre><code>// C code
+int a = 5, b = 10, c = 3;
+int sum = a + b + c;</code></pre>
+            <p>Under the hood (x86 assembly, MASM syntax):</p>
+            <pre><code>mov eax, a         ; load value of 'a' into EAX register
+add eax, b         ; EAX = 5 + 10 = 15
+add eax, c         ; EAX = 15 + 3 = 18
+mov sum, eax       ; store the final result back into memory</code></pre>
+            <p>No magic — just registers and arithmetic. The compiler does exactly this.</p>
+        </div>
+
+        <div class="section-card" id="setup-masm">
+            <h2><i class="fas fa-tools"></i> Setting Up MASM + Visual Studio Code</h2>
+            <ol>
+                <li><strong>Install Visual Studio Build Tools</strong> (or Visual Studio Community) – includes <code>ml.exe</code> (MASM assembler) and <code>link.exe</code>.</li>
+                <li><strong>Windows SDK</strong> (required for Win32 API core libraries like kernel32 and user32).</li>
+                <li><strong>VS Code</strong> + extensions: <strong>MASM/TASM</strong> or <strong>x86 Assembly</strong> syntax highlight.</li>
+                <li><strong>Configure environment:</strong> Open “Developer Command Prompt for VS” or add MASM path to system variables.</li>
+                <li>Test with a minimal <code>.asm</code> file: assemble with <code>ml /c /coff example.asm</code> then link <code>link /SUBSYSTEM:CONSOLE example.obj</code>.</li>
+            </ol>
+            <div class="highlight-box">
+                📌 <strong>Pro tip:</strong> Use the “x86 Native Tools Command Prompt” to run ml/link without path headaches. All examples in this unit assume 32‑bit flat memory model.
             </div>
         </div>
 
-        <!-- 2. Structure of a MASM Program -->
-        <div class="section-card" id="structure">
-            <h2><i class="fas fa-cubes"></i> 2. Structure of a MASM Program (32‑bit)</h2>
-            <pre><code>.586
+        <div class="section-card" id="hello-world">
+            <h2><i class="fas fa-smile-wink"></i> First Assembly: "Hello, World!" (No External Libraries)</h2>
+            <p>As required by the syllabus, we start with a classic "Hello, World!" using only the Windows API — no Irvine32, no C runtime. This gives you pure insight into system calls.</p>
+            <pre><code>; hello_win32.asm
+; Compile: ml /c /coff hello_win32.asm
+; Link with Windows API Import Libraries: 
+; link /SUBSYSTEM:WINDOWS hello_win32.obj user32.lib kernel32.lib
+
+.386
 .model flat, stdcall
-.stack 4096
+option casemap:none
+
+; === Windows API prototypes ===
+MessageBoxA PROTO :DWORD, :DWORD, :DWORD, :DWORD
+ExitProcess PROTO :DWORD
 
 .data
-    message db "Hello, Assembly!", 0
-    sum     DWORD 0
+    msg db 'Hello, World! This is your first MASM program.', 0
+    title db 'COMP‑3111 Unit 2', 0
 
 .code
 main PROC
-    mov eax, 5
-    add eax, 10
-    mov sum, eax
+    ; Arguments are pushed from right to left (stdcall convention)
+    push 0               ; MB_OK (OK button only)
+    push offset title    ; Pointer to dialog title
+    push offset msg      ; Pointer to message text
+    push 0               ; hWnd = NULL (No parent window)
+    call MessageBoxA
 
+    push 0               ; exit code (0 = success)
+    call ExitProcess
+main ENDP
+END main</code></pre>
+            <p><strong>Assemble & link:</strong></p>
+            <pre><code>ml /c /coff hello_win32.asm
+link /SUBSYSTEM:WINDOWS hello_win32.obj user32.lib kernel32.lib</code></pre>
+            <p>Run <code>hello_win32.exe</code> — a message box appears! 🎉 This is a true standalone executable.</p>
+            <div class="highlight-box">
+                🔍 <strong>Why this matters:</strong> No libraries, no black boxes. The CPU directly calls into system DLLs. Reverse engineers see exactly this pattern.
+            </div>
+        </div>
+
+        <div class="section-card" id="directives">
+            <h2><i class="fas fa-cog"></i> MASM Directives Explained (Your New Vocabulary)</h2>
+            <p>Unlike simple emulators, MASM uses directives to tell the assembler how to structure and build the standalone executable. Let's break down what we just saw:</p>
+            <table class="directive-table">
+                <thead>
+                    <tr><th>Directive</th><th>Meaning</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>.386</code></td><td>Allow 80386 instructions (enables 32-bit registers like EAX, EBX).</td></tr>
+                    <tr><td><code>.model flat, stdcall</code></td><td>Flat memory model (single 4GB address space) + stdcall calling convention (callee cleans stack).</td></tr>
+                    <tr><td><code>.stack 4096</code></td><td>Reserve 4KB for the runtime stack (return addresses, local variables).</td></tr>
+                    <tr><td><code>.data</code></td><td>Section for initialized global variables.</td></tr>
+                    <tr><td><code>.code</code></td><td>Section for executable CPU instructions.</td></tr>
+                    <tr><td><code>PROTO</code></td><td>Function prototype (declares an external function from Windows API).</td></tr>
+                    <tr><td><code>INVOKE</code></td><td>An advanced directive to call functions with argument checking (automatically handles pushes).</td></tr>
+                    <tr><td><code>END</code></td><td>End of source code, specifies the program entry point (e.g., <code>END main</code>).</td></tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                💡 <strong>Syntax Note:</strong> MASM is case‑insensitive, but modern practice uses lowercase for directives/instructions and mixed case for labels/variables. Also, note that <code>mov eax, a</code> and <code>mov eax, [a]</code> do the exact same thing for explicit variables in MASM!
+            </div>
+        </div>
+
+        <div class="section-card" id="first-program">
+            <h2><i class="fas fa-code"></i> Add Three Integers – Data Section in Action</h2>
+            <p>Now that you know the structural directives, let's look at a pure computational routine. This program uses <code>.data</code> for declaring integer variables, <code>.code</code> for mathematical instructions, and safely exits using the <code>INVOKE</code> wrapper directive.</p>
+            <pre><code>; add_three.asm
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+
+.data
+    a       DWORD 5
+    b       DWORD 10
+    c       DWORD 3
+    sum     DWORD ?
+
+.code
+main PROC
+    mov eax, a            ; load first number (5) into EAX
+    add eax, b            ; add second number (5 + 10 = 15)
+    add eax, c            ; add third number (15 + 3 = 18)
+    mov sum, eax          ; store final result (18) into 'sum' variable
+
+    ; exit process cleanly using INVOKE directive
     INVOKE ExitProcess, 0
 main ENDP
 END main</code></pre>
-            <ul>
-                <li><code>.data</code> holds initialised variables.</li>
-                <li><code>.code</code> contains procedures.</li>
-                <li><code>main PROC</code> … <code>main ENDP</code> defines the entry point.</li>
-                <li><code>INVOKE</code> calls Windows API functions (e.g., <code>ExitProcess</code>).</li>
-            </ul>
+            <p><strong>What's happening?</strong> <code>DWORD</code> = Double Word (32-bit unsigned integer). The three values are allocated sequentially in memory. The CPU accumulates them inside the <code>EAX</code> register, then copies the total back to <code>sum</code>.</p>
+            <p>Assemble & link:</p>
+            <pre><code>ml /c /coff add_three.asm
+link /SUBSYSTEM:CONSOLE add_three.obj kernel32.lib</code></pre>
+            <p>Run <code>add_three.exe</code> – it does nothing visible on the screen, but the result <strong>18 (0x12)</strong> is securely updated in memory. We’ll verify it live with a debugger!</p>
         </div>
 
-        <!-- 3. Hello World without external libraries (DOS interrupt) -->
-        <div class="section-card" id="hello">
-            <h2><i class="fas fa-heart"></i> 3. Your First Program: "Hello, World!"</h2>
-            <p>Using direct DOS interrupts (works under emulators like DOSBox, or in 32‑bit console with some
-                adjustments). This is the classic way to print a string without Irvine32.</p>
-            <pre><code>.model small
-.stack 100h
-.data
-    msg db 'Hello, World!$'   ; $ is the string terminator for DOS
-.code
-main PROC
-    mov ax, @data
-    mov ds, ax
-    mov dx, OFFSET msg
-    mov ah, 9        ; DOS function to print string
-    int 21h
-    mov ah, 4Ch      ; DOS exit function
-    int 21h
-main ENDP
-END main</code></pre>
+        <div class="section-card" id="instructions">
+            <h2><i class="fas fa-calculator"></i> Core Instructions: MOV, ADD, SUB, INC, DEC</h2>
+            <div class="grid-2col">
+                <div class="info-card"><strong>MOV dest, src</strong><br>Copies data (register ← register, immediate → register, memory ↔ register).<br><code>mov eax, var</code> , <code>mov var, ebx</code></div>
+                <div class="info-card"><strong>ADD dest, src</strong><br>dest = dest + src, updates OF/SF/ZF/CF flags.</div>
+                <div class="info-card"><strong>SUB dest, src</strong><br>dest = dest – src, affects flags based on comparison.</div>
+                <div class="info-card"><strong>INC dest</strong><br>dest++ (increment by 1; faster execution than ADD 1).</div>
+                <div class="info-card"><strong>DEC dest</strong><br>dest-- (decrement by 1; common for loops counter).</div>
+            </div>
+            <h3>🔍 Example: Subtracting & flags</h3>
+            <pre><code>mov eax, 10
+sub eax, 10      ; ZF = 1 (Zero flag set because result is 0)
+mov ebx, -1
+cmp ebx, 0       ; SF = 1 (Sign flag set because result is negative)</code></pre>
             <div class="highlight-box">
-                💡 Explanation: <code>int 21h</code> is a software interrupt that calls DOS services. Service 9 prints a
-                string, service 4Ch exits the program.
+                💡 The <strong>EFLAGS</strong> register shifts instantly after arithmetic: Zero flag (ZF), Sign flag (SF), Carry flag (CF - unsigned overflow), and Overflow flag (OF - signed overflow).
             </div>
         </div>
 
-        <!-- 4. Addressing Modes: Immediate, Register, Direct -->
-        <div class="section-card" id="addressing">
-            <h2><i class="fas fa-memory"></i> 4. Addressing Modes: Immediate, Register, Direct</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mode</th>
-                        <th>Example</th>
-                        <th>Meaning</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Immediate</strong></td>
-                        <td><code>mov eax, 5</code></td>
-                        <td>Constant value 5 is placed into EAX.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Register</strong></td>
-                        <td><code>mov eax, ebx</code></td>
-                        <td>Copy contents of EBX into EAX.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Direct (memory)</strong></td>
-                        <td><code>mov eax, [sum]</code></td>
-                        <td>Load from memory variable <code>sum</code> into EAX.</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>These patterns are the foundation of data movement in assembly.</p>
-        </div>
+        <div class="section-card" id="high-level">
+            <h2><i class="fas fa-diagram-project"></i> Translating C Control Flow to Assembly</h2>
+            <p>Compilers convert structured high-level logic into comparison instructions and conditional jumps. Mastering this pattern is the key to mastering disassembly analysis.</p>
+            
+            <h3><i class="fas fa-code-branch"></i> If-Else Example</h3>
+            <pre><code>// C
+if (x > y) max = x;
+else max = y;</code></pre>
+            <p>Assembly translation (x in EAX, y in EBX):</p>
+            <pre><code>    cmp eax, ebx
+    jle else_label   ; jump if EAX <= EBX
+    mov max, eax
+    jmp done
+else_label:
+    mov max, ebx
+done:</code></pre>
 
-        <!-- 5. Basic Instructions Cheat Sheet -->
-        <div class="section-card" id="cheatsheet">
-            <h2><i class="fas fa-table"></i> 5. Basic Instructions Cheat Sheet</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Instruction</th>
-                        <th>Example</th>
-                        <th>Effect</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>MOV</code></td>
-                        <td><code>mov eax, 10</code></td>
-                        <td>EAX = 10</td>
-                    </tr>
-                    <tr>
-                        <td><code>ADD</code></td>
-                        <td><code>add eax, 5</code></td>
-                        <td>EAX = EAX + 5</td>
-                    </tr>
-                    <tr>
-                        <td><code>SUB</code></td>
-                        <td><code>sub eax, 2</code></td>
-                        <td>EAX = EAX – 2</td>
-                    </tr>
-                    <tr>
-                        <td><code>INC</code></td>
-                        <td><code>inc eax</code></td>
-                        <td>EAX = EAX + 1</td>
-                    </tr>
-                    <tr>
-                        <td><code>DEC</code></td>
-                        <td><code>dec eax</code></td>
-                        <td>EAX = EAX – 1</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 6. Loops: for and while in assembly -->
-        <div class="section-card" id="loops">
-            <h2><i class="fas fa-repeat"></i> 6. Translating Loops (for, while)</h2>
-            <p><strong>C for-loop:</strong> <code>for(i=0; i<10; i++) { sum = sum + i; }</code></p>
-            <p><strong>Assembly translation (using ECX as counter):</strong></p>
-            <pre><code>    mov ecx, 0          ; i = 0
-    mov eax, 0          ; sum = 0
-for_loop:
-    cmp ecx, 10
-    jge end_for
-    add eax, ecx
-    inc ecx
-    jmp for_loop
-end_for:
-    ; result in EAX</code></pre>
-            <p><strong>while loop example:</strong> <code>while (x > 0) { x--; }</code></p>
-            <pre><code>    mov eax, x
+            <h3><i class="fas fa-infinity"></i> While Loop</h3>
+            <pre><code>// C
+while (count > 0) {
+    sum += count;
+    count--;
+}</code></pre>
+            <pre><code>    mov ecx, count
+    xor eax, eax    ; sum = 0
 while_start:
-    cmp eax, 0
-    jle end_while
-    dec eax
+    cmp ecx, 0
+    jle while_end
+    add eax, ecx
+    dec ecx
     jmp while_start
-end_while:</code></pre>
-            <div class="highlight-box">
-                🔁 Notice: conditional jump at the top (or bottom) controls the loop. The compiler often reverses the
-                condition.
-            </div>
+while_end:
+    mov sum, eax</code></pre>
+            <p>Every high-level loop is just a <code>CMP</code>, conditional jump, and an unconditional <code>JMP</code> back.</p>
         </div>
 
-        <!-- 7. Setting up MASM + VS Code -->
-        <div class="section-card" id="setup">
-            <h2><i class="fas fa-cog"></i> 7. Setting Up MASM + Visual Studio Code</h2>
+        <div class="section-card">
+            <h2><i class="fas fa-bug"></i> Assemble, Link & Trace with a Debugger</h2>
+            <p>Lab requirement: <strong>“Write a program that adds three integers and stores the result – then trace it in a debugger”</strong>. Let’s see how to witness every CPU step.</p>
             <ol>
-                <li>📥 Download & install <strong>MASM32 SDK</strong> from <a href="http://www.masm32.com/"
-                        target="_blank" style="color:var(--primary);">masm32.com</a>.</li>
-                <li>📁 Add <code>C:\masm32\bin</code> to your system PATH.</li>
-                <li>📝 In VS Code, create a <code>.asm</code> file.</li>
-                <li>⚙️ Assemble & link:
-                    <pre><code>ml /c /coff /Zi program.asm
-link /SUBSYSTEM:CONSOLE /DEBUG program.obj</code></pre>
-                </li>
-                <li>▶️ Run <code>program.exe</code> or debug with <code>x64dbg</code> / WinDbg.</li>
+                <li>Assemble and link <code>add_three.asm</code> → <code>add_three.exe</code>.</li>
+                <li>Launch <strong>x64dbg</strong> (or OllyDbg / VS debugger).</li>
+                <li>Load the executable, set a breakpoint at <code>main</code> (or at the first instruction).</li>
+                <li>Step through (<kbd>F7</kbd> or <kbd>F8</kbd>) and watch <strong>EAX register</strong> change: after first MOV EAX becomes 5, after first ADD becomes 15, after second ADD becomes 18.</li>
+                <li>Examine memory at address of <code>sum</code> – after final MOV you’ll see value 0x12 (18 decimal).</li>
             </ol>
+            <div class="highlight-box">
+                🔬 <strong>Debugger insight:</strong> You can also view the flags (ZF, CF, OF) in the registers panel. Try adding 0x7FFFFFFF + 1 to see overflow!
+            </div>
+            <pre><code>; alternative code to observe overflow
+mov eax, 0x7FFFFFFF
+add eax, 1        ; now OF=1, EAX becomes 0x80000000 (negative)</code></pre>
         </div>
 
-        <!-- 8. Lab Exercise (Hardcoded) – Main Task -->
-        <div class="section-card" id="lab">
-            <h2><i class="fas fa-flask"></i> 8. Lab Exercise (Hardcoded Values – Main Task)</h2>
-            <p>✅ <strong>Write a program that adds three integers and stores the result – then trace it in a
-                    debugger.</strong></p>
-            <p>💻 Use <strong>fixed (hardcoded)</strong> numbers so you can focus on how the instructions work.</p>
+        <div class="section-card" id="exercise">
+            <h2><i class="fas fa-pen-to-square"></i> Lab Exercise – Trace & Modify</h2>
+            <ol>
+                <li>✅ <strong>Task 1 (mandatory):</strong> Write the “add three integers” program shown above. Assemble, link, and run it under a debugger (x64dbg or Visual Studio). 
+                    <br>➜ Take a <strong>screenshot</strong> showing the <code>EAX</code> register after the third addition (value = 18) and the final <code>sum</code> variable in memory.
+                </li>
+                <li>🔄 <strong>Task 2 (modification):</strong> Modify the program to <strong>add five integers</strong> instead of three. Use any values you like and store the total in a variable named <code>total</code>. Trace again to verify correctness.</li>
+                <li>🧪 <strong>Task 3 (challenge – flag observation):</strong> Write a small routine that computes <code>200 + 100</code> and then <code>100 - 200</code>. Before and after each operation, record the state of <strong>ZF (Zero Flag)</strong>, <strong>SF (Sign Flag)</strong> and <strong>CF (Carry Flag)</strong>. Explain why the carry flag and sign flag are set in the subtraction case.</li>
+                <li>💡 <strong>Extra (reverse thinking):</strong> Given the following disassembly fragment, reconstruct the original C condition:
+                    <pre><code>cmp eax, ebx
+jg  greater
+mov ecx, 0
+jmp next
+greater:
+mov ecx, 1
+next:</code></pre>
+                    <p>What does this code compute? (Answer: ecx = (eax > ebx) ? 1 : 0)</p>
+                </li>
+            </ol>
+            <div class="highlight-box">
+                📥 <strong>Submission:</strong> Provide a short report (PDF) containing the code listings, debugger screenshots, and flag analysis. Due before next lab session.
+            </div>
+            <a href="#" class="btn-exercise" id="downloadPlaceholder"><i class="fas fa-download"></i> Download starter template (add_three.asm)</a>
+            <p style="margin-top: 0.8rem; font-size:0.9rem;">* The template contains a ready‑to‑use .asm file with addition skeleton.</p>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-memory"></i> Memory Layout for MASM Programs</h2>
+            <p>When you write <code>.data</code> and <code>.code</code>, the assembler organizes sections into virtual pages:</p>
+            <ul>
+                <li><strong>.data</strong> – initialized global variables (Read/Write memory).</li>
+                <li><strong>.data?</strong> – uninitialized data (faster loading, implicitly initialized to 0).</li>
+                <li><strong>.const</strong> – read-only constants (Read-Only memory).</li>
+                <li><strong>.code</strong> – executable instructions (Read/Execute memory).</li>
+            </ul>
+            <p>The linker creates a flat 32‑bit virtual address space. Local variables will be stored on the runtime stack (Unit 5). For now, remember that <code>MOV eax, var</code> loads from memory, while <code>MOV eax, OFFSET var</code> loads the raw address of <code>var</code>.</p>
+            <pre><code>mov esi, OFFSET array   ; ESI points to the base memory address of array
+mov eax, [esi]           ; fetches the first element from ESI location</code></pre>
         </div>
 
         <hr>
         <footer>
-            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
-            <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> & industry reverse‑engineering
-                practices | Instructor: <strong>Mahmoud Khalil</strong></p>
-            <p>© 2026 Mahmoud Khalil – For educational use only</p>
+            <p><i class="fas fa-microchip"></i> COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+            <p>Instructor: <strong>Mahmoud Khalil</strong> — mkhalil@ucas.edu.ps</p>
+            <p>© 2026 Mahmoud Khalil · Based on Kip Irvine, Assembly Language for x86 Processors</p>
+            <p><a href="index.html" style="color: var(--primary);">← Back to course syllabus</a></p>
         </footer>
     </div>
 
     <script>
+        // Smooth scroll for navigation links
         document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const target = document.querySelector(this.getAttribute('href'));
@@ -556,6 +625,46 @@ link /SUBSYSTEM:CONSOLE /DEBUG program.obj</code></pre>
                 }
             });
         });
+
+        // Download starter .asm file
+        const downloadBtn = document.getElementById('downloadPlaceholder');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const asmContent = `; add_three_starter.asm
+; COMP-3111 Unit 2 starter template - Add three integers
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+
+.data
+    a   DWORD 5
+    b   DWORD 10
+    c   DWORD 3
+    sum DWORD ?
+
+.code
+main PROC
+    mov eax, a
+    add eax, b
+    add eax, c
+    mov sum, eax
+
+    ; TODO: Insert your modifications for Task 2 / Task 3
+    ; Example: add two more numbers, check flags
+
+    INVOKE ExitProcess, 0
+main ENDP
+END main`;
+                const blob = new Blob([asmContent], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'add_three_starter.asm';
+                link.click();
+                URL.revokeObjectURL(link.href);
+            });
+        }
     </script>
 </body>
 
