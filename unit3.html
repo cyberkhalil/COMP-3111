@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>COMP‑3111 | Unit 3 · Data Movement & Addressing Modes</title>
+    <title>COMP‑3111 | Unit 3 · Data Movement and Addressing Modes (MASM)</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
         rel="stylesheet">
@@ -21,6 +21,8 @@
             --text-muted: #94a3b8;
             --border-light: rgba(255, 255, 255, 0.08);
             --success: #10b981;
+            --warning: #f59e0b;
+            --code-bg: #0b111e;
         }
 
         * {
@@ -55,32 +57,31 @@
         .container {
             max-width: 960px;
             margin: 0 auto;
-            padding: 0 1.5rem 2rem;
+            padding: 2rem 1.5rem;
             position: relative;
             z-index: 2;
         }
 
         .hero {
-            background: linear-gradient(135deg, #1a0a2e 0%, #3b1f6e 100%);
-            color: white;
-            padding: 2.5rem 1.5rem 1rem;
+            background: linear-gradient(135deg, #0a1424 0%, #1a1f3a 100%);
             text-align: center;
+            padding: 2.5rem 1.5rem 2rem;
             border-bottom: 1px solid var(--border-light);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-size: 2.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #fff, var(--primary), #c4b5fd);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .hero .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
@@ -88,12 +89,6 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
-        }
-
-        .hero .course-info {
-            margin-top: 0.75rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
         }
 
         .badge {
@@ -122,7 +117,6 @@
             justify-content: center;
             gap: 0.4rem;
             padding: 0.7rem 1rem;
-            margin-bottom: 2rem;
         }
 
         .sticky-nav a {
@@ -210,30 +204,8 @@
             margin: 1.2rem 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.2rem 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        th {
-            background: rgba(124, 58, 237, 0.25);
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        td {
-            padding: 0.65rem 1rem;
-            border-bottom: 1px solid var(--border-light);
-        }
-
         pre {
-            background: #0b111e;
+            background: var(--code-bg);
             color: #e6edf3;
             padding: 1.2rem 1.5rem;
             border-radius: 20px;
@@ -261,6 +233,121 @@
             color: #e6edf3;
         }
 
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 1rem;
+            font-weight: 500;
+        }
+
+        .info-card strong {
+            color: var(--accent);
+        }
+
+        .addressing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .addressing-table th,
+        .addressing-table td {
+            border: 1px solid var(--border-light);
+            padding: 0.7rem 1rem;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.9rem;
+        }
+
+        .addressing-table th {
+            background: rgba(124, 58, 237, 0.2);
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .addressing-table td:first-child {
+            font-weight: 700;
+            white-space: nowrap;
+            color: #f1f5f9;
+        }
+
+        .addressing-table code {
+            font-size: 0.8rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border-light);
+            padding: 0.7rem 1rem;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: rgba(124, 58, 237, 0.2);
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .visual-diagram {
+            background: rgba(124, 58, 237, 0.06);
+            border: 2px dashed rgba(124, 58, 237, 0.35);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 1.2rem 0;
+            text-align: center;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #cbd5e6;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .visual-diagram .reg {
+            color: #a78bfa;
+            font-weight: 700;
+        }
+
+        .visual-diagram .addr {
+            color: #f59e0b;
+        }
+
+        .visual-diagram .val {
+            color: #10b981;
+        }
+
+        .visual-diagram .arrow {
+            color: #94a3b8;
+        }
+
+        .visual-diagram .mem-label {
+            color: #f472b6;
+        }
+
         .btn-exercise {
             display: inline-block;
             background: var(--primary);
@@ -275,6 +362,7 @@
             cursor: pointer;
             font-size: 1rem;
             box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+            font-family: inherit;
         }
 
         .btn-exercise:hover {
@@ -282,17 +370,11 @@
             transform: scale(0.96);
         }
 
-        .bonus-box {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            border-radius: 20px;
-            padding: 1.2rem 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .bonus-box h3 {
-            color: var(--success);
-            margin-top: 0;
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-light);
+            margin: 2rem 0 1rem;
         }
 
         footer {
@@ -300,14 +382,25 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             margin-top: 2.5rem;
-            padding: 1rem 0;
         }
 
-        hr {
-            border: 0;
-            height: 1px;
-            background: var(--border-light);
-            margin: 2rem 0 1rem;
+        .back-link {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid var(--primary);
+            border-radius: 40px;
+            padding: 0.5rem 1.3rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--primary);
+            transition: 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+            color: white;
         }
 
         @media (max-width: 640px) {
@@ -319,8 +412,17 @@
                 padding: 1.5rem;
             }
 
-            .hero {
-                padding: 2rem 1rem 1rem;
+            .addressing-table th,
+            .addressing-table td,
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .visual-diagram {
+                font-size: 0.7rem;
+                padding: 1rem;
             }
         }
     </style>
@@ -331,285 +433,675 @@
 
     <!-- Hero -->
     <div class="hero">
-        <h1>📦 Unit 3 · Data Movement & Addressing Modes</h1>
+        <h1>Unit 3 · Data Movement<br>and Addressing Modes</h1>
         <div class="subtitle">
-            <span class="badge"><i class="fas fa-microchip"></i> MOV · MOVZX · MOVSX · LEA</span>
-            <span class="badge"><i class="fas fa-map-marker-alt"></i> Direct · Indirect · Indexed · Based</span>
-            <span class="badge"><i class="fas fa-database"></i> Arrays & Pointers</span>
+            <span class="badge"><i class="fas fa-exchange-alt"></i> MOV · LEA · XCHG</span>
+            <span class="badge"><i class="fas fa-map-pin"></i> Direct · Indirect · Indexed</span>
+            <span class="badge"><i class="fas fa-layer-group"></i> Arrays & Pointers</span>
         </div>
-        <p class="course-info">COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+        <p style="margin-top:1rem; color: var(--text-muted);">COMP‑3111 · Microprocessor & Assembly Language Lab ·
+            Instructor: Mahmoud Khalil</p>
+        <div style="margin-top: 1.2rem;">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> ← Back to Course Home</a>
+        </div>
     </div>
 
     <!-- Sticky Navigation -->
     <nav class="sticky-nav">
-        <a href="#outcomes"><i class="fas fa-bullseye"></i> Outcomes</a>
-        <a href="#mov-instr"><i class="fas fa-exchange-alt"></i> MOV · MOVZX · MOVSX · LEA</a>
-        <a href="#operand-types"><i class="fas fa-tag"></i> Operand Types</a>
-        <a href="#addressing-modes"><i class="fas fa-location-dot"></i> Addressing Modes</a>
-        <a href="#data-directives"><i class="fas fa-database"></i> DB / DW / DD / DUP</a>
-        <a href="#arrays"><i class="fas fa-table-list"></i> Arrays & ESI/EDI/EBX</a>
-        <a href="#pointer-vs-value"><i class="fas fa-map-pin"></i> Pointer vs Value</a>
-        <a href="#lab"><i class="fas fa-flask"></i> Lab · Reverse Array</a>
-        <a href="#questions"><i class="fas fa-question-circle"></i> Review</a>
+        <a href="#why-addressing"><i class="fas fa-question-circle"></i> Why Addressing</a>
+        <a href="#mov-family"><i class="fas fa-arrow-right-arrow-left"></i> MOV Family</a>
+        <a href="#lea"><i class="fas fa-map-pin"></i> LEA</a>
+        <a href="#operand-types"><i class="fas fa-cubes"></i> Operands</a>
+        <a href="#addressing-modes"><i class="fas fa-table"></i> Modes</a>
+        <a href="#data-directives"><i class="fas fa-database"></i> DB/DW/DD</a>
+        <a href="#arrays"><i class="fas fa-list-ol"></i> Arrays</a>
+        <a href="#pointer-vs-value"><i class="fas fa-fingerprint"></i> Pointer vs Value</a>
+        <a href="#lab"><i class="fas fa-flask"></i> Lab</a>
     </nav>
 
     <div class="container">
 
-        <!-- Learning Outcomes -->
-        <div class="section-card" id="outcomes">
-            <h2><i class="fas fa-bullseye"></i> 🎯 Learning Outcomes</h2>
+        <!-- Why Addressing Modes Matter -->
+        <div class="section-card" id="why-addressing">
+            <h2><i class="fas fa-question-circle"></i> Why Addressing Modes Matter</h2>
+            <p>In high-level languages, you write <code>arr[i] = arr[i] + 1</code> and the compiler handles all memory
+                access transparently. In assembly, <strong>you</strong> are the one who decides exactly <em>how</em> the
+                CPU reaches each byte of memory. Mastering addressing modes gives you:</p>
             <ul>
-                <li>✅ Master <code>MOV</code>, <code>MOVZX</code>, <code>MOVSX</code>, and <code>LEA</code> instructions
-                    professionally.</li>
-                <li>✅ Distinguish between operand types: <strong>immediate, register, memory</strong>.</li>
-                <li>✅ Apply all addressing modes: <strong>direct, indirect, indexed, based, based‑indexed, scaled
-                        indexed</strong>.</li>
-                <li>✅ Work with one‑dimensional and two‑dimensional arrays using <code>ESI</code>, <code>EDI</code>,
-                    <code>EBX</code>.</li>
-                <li>✅ Understand the difference between a <strong>pointer (address)</strong> and a
-                    <strong>value</strong>.</li>
-                <li>✅ Define data using directives: <code>DB</code>, <code>DW</code>, <code>DD</code>, <code>DUP</code>.
+                <li>🔬 <strong>Complete control</strong> over memory layout and access patterns</li>
+                <li>⚡ <strong>Performance optimization</strong> – choosing the right mode can reduce instruction count
+                </li>
+                <li>🛡️ <strong>Vulnerability analysis</strong> – buffer overflows exploit pointer arithmetic mistakes
+                </li>
+                <li>🔍 <strong>Reverse engineering</strong> – recognizing addressing patterns reveals data structures
                 </li>
             </ul>
             <div class="highlight-box">
-                💡 <strong>Why this unit matters:</strong> Every program moves data. Mastering addressing modes gives
-                you full control over memory — essential for reverse engineering, embedded systems, and performance
-                optimization.
+                💡 <strong>Core concept:</strong> An <em>addressing mode</em> answers one question: "Where does the CPU
+                find the data for this instruction?" It could be inside the instruction itself, inside a register, or
+                somewhere in memory – and "somewhere in memory" has many ways to be specified.
             </div>
         </div>
 
-        <!-- 1. MOV, MOVZX, MOVSX, LEA -->
-        <div class="section-card" id="mov-instr">
-            <h2><i class="fas fa-exchange-alt"></i> 📦 Data Movement Instructions</h2>
+        <!-- The MOV Family -->
+        <div class="section-card" id="mov-family">
+            <h2><i class="fas fa-arrow-right-arrow-left"></i> The MOV Family: MOV, MOVZX, MOVSX, XCHG</h2>
 
-            <h3><code>MOV</code> – Move Data</h3>
-            <p>Copies data from source to destination. Source remains unchanged.</p>
-            <pre><code>MOV EAX, 5        ; immediate → register
-MOV EBX, EAX      ; register → register
-MOV [1234h], ECX  ; register → memory</code></pre>
-            <p><strong>Rules:</strong> Same size for both operands. Cannot move memory → memory directly. Cannot move
-                immediate → segment register directly.</p>
-
-            <h3><code>MOVZX</code> – Move with Zero‑Extension</h3>
-            <p>Moves a smaller value to a larger destination and fills new bits with zeros (for unsigned numbers).</p>
-            <pre><code>MOV AL, 0FFh
-MOVZX EAX, AL     ; EAX = 0x000000FF = 255 (not -1)</code></pre>
-
-            <h3><code>MOVSX</code> – Move with Sign‑Extension</h3>
-            <p>Moves a smaller signed value to a larger destination and copies the sign bit.</p>
-            <pre><code>MOV AL, 0FFh      ; -1 in signed
-MOVSX EAX, AL     ; EAX = 0xFFFFFFFF = -1</code></pre>
-
-            <h3><code>LEA</code> – Load Effective Address</h3>
-            <p>Calculates the address (inside brackets) and stores it in a register. Does NOT access memory.</p>
-            <pre><code>LEA EBX, [ESI+4]  ; EBX = ESI + 4  (address, not value)</code></pre>
+            <h3>🔹 MOV – The Fundamental Data Mover</h3>
+            <p><code>MOV</code> copies data from a source to a destination. It <strong>does not</strong> remove data
+                from the source – think "copy," not "cut."</p>
+            <pre><code>MOV  eax, 42          ; immediate → register (EAX = 42)
+MOV  ebx, eax          ; register → register (EBX = 42)
+MOV  ecx, myVar        ; memory → register (ECX = value at myVar)
+MOV  myVar, edx        ; register → memory (store EDX into myVar)</code></pre>
             <div class="highlight-box">
-                🔍 <strong>Key difference:</strong> <code>MOV EBX, [ESI]</code> loads the <em>value</em> from
-                memory.<br>
-                <code>LEA EBX, [ESI]</code> loads the <em>address</em> (the pointer) itself.
+                ⚠️ <strong>Restriction:</strong> Both operands must be the <strong>same size</strong>. You cannot
+                <code>MOV ax, ebx</code> (16-bit vs 32-bit). Also, <strong>memory-to-memory</strong> MOV is <em>not
+                    allowed</em> in x86 – you must use a register as an intermediary.
+            </div>
+
+            <h3>🔹 MOVZX – Move with Zero-Extend</h3>
+            <p>Copies a <strong>smaller</strong> source into a <strong>larger</strong> destination, filling the upper
+                bits with zeros. Perfect for unsigned values.</p>
+            <pre><code>MOV  al, 0xFF          ; AL = 255 (unsigned)
+MOVZX ebx, al          ; EBX = 0x000000FF (255, zero-extended)</code></pre>
+            <div class="visual-diagram">
+                <span class="mem-label">AL (8-bit):</span> <span class="val">11111111</span>
+                <span class="arrow">↓ MOVZX</span>
+                <span class="mem-label">EBX (32-bit):</span> <span class="val">00000000 00000000 00000000
+                    11111111</span>
+                <span class="reg">(upper 24 bits = zero)</span>
+            </div>
+
+            <h3>🔹 MOVSX – Move with Sign-Extend</h3>
+            <p>Copies a smaller source into a larger destination, <strong>preserving the sign</strong> by replicating
+                the most significant bit. Essential for signed values.</p>
+            <pre><code>MOV  al, 0xFF          ; AL = -1 (signed interpretation)
+MOVSX ebx, al          ; EBX = 0xFFFFFFFF (-1, sign-extended)</code></pre>
+            <div class="visual-diagram">
+                <span class="mem-label">AL (8-bit):</span> <span class="val">11111111</span> (MSB=1, so negative)
+                <span class="arrow">↓ MOVSX</span>
+                <span class="mem-label">EBX (32-bit):</span> <span class="val">11111111 11111111 11111111
+                    11111111</span>
+                <span class="reg">(upper 24 bits = sign bit copy)</span>
+            </div>
+
+            <h3>🔹 XCHG – Exchange Two Operands</h3>
+            <p>Swaps the contents of two registers, or a register and a memory location. No temporary storage needed!
+            </p>
+            <pre><code>MOV  eax, 10
+MOV  ebx, 20
+XCHG eax, ebx          ; now EAX=20, EBX=10 – swapped!</code></pre>
+        </div>
+
+        <!-- LEA Instruction -->
+        <div class="section-card" id="lea">
+            <h2><i class="fas fa-map-pin"></i> LEA – Load Effective Address</h2>
+            <p><code>LEA</code> <strong>computes a memory address</strong> and stores that address (not the data at that
+                address) into a register. It's an address calculator – no memory is read.</p>
+
+            <h3>🔹 LEA vs MOV with OFFSET</h3>
+            <pre><code>; Assume myArray is at memory address 0x00403000
+
+MOV  esi, OFFSET myArray   ; ESI = 0x00403000 (address computed at assemble time)
+LEA  esi, myArray          ; ESI = 0x00403000 (same result for simple label)
+
+; But LEA can do arithmetic that OFFSET cannot:
+LEA  esi, [ebx + ecx*4 + 8]  ; ESI = EBX + (ECX × 4) + 8
+                              ; This is computed at RUNTIME – far more flexible!</code></pre>
+            <div class="highlight-box">
+                💡 <strong>Key insight:</strong> <code>LEA</code> is often used for fast arithmetic (e.g.,
+                <code>LEA eax, [eax + eax*4]</code> multiplies EAX by 5 in one instruction, without touching memory).
+                It's also essential for obtaining the address of stack variables and array elements.
+            </div>
+
+            <h3>🔹 Practical LEA Use Cases</h3>
+            <pre><code>; 1. Get address of a local variable on the stack
+LEA  eax, [ebp - 4]        ; EAX = address of local DWORD variable
+
+; 2. Compute array element address without reading memory
+LEA  edx, [esi + edi]      ; EDX = ESI + EDI (pointer arithmetic)
+
+; 3. Fast multiply by constant
+LEA  ecx, [eax + eax*2]    ; ECX = EAX * 3 (no MUL needed!)
+LEA  ecx, [eax + eax*4]    ; ECX = EAX * 5
+LEA  ecx, [eax + eax*8]    ; ECX = EAX * 9</code></pre>
+        </div>
+
+        <!-- Operand Types -->
+        <div class="section-card" id="operand-types">
+            <h2><i class="fas fa-cubes"></i> The Three Operand Types</h2>
+            <p>Every x86 instruction works with operands. Understanding the three fundamental types is the foundation of
+                addressing modes.</p>
+
+            <div class="grid-2col">
+                <div class="info-card">
+                    <strong>① Immediate</strong><br>
+                    The value is <em>inside the instruction itself</em>.<br>
+                    <code>MOV eax, 100</code><br>
+                    <code>ADD ebx, 0x1A</code><br>
+                    <small>Fast – no memory access needed. The constant is embedded in the opcode bytes.</small>
+                </div>
+                <div class="info-card">
+                    <strong>② Register</strong><br>
+                    The value is <em>inside a CPU register</em>.<br>
+                    <code>MOV eax, ebx</code><br>
+                    <code>ADD ecx, edx</code><br>
+                    <small>Fastest – no memory bus traffic. Operands are inside the CPU core.</small>
+                </div>
+                <div class="info-card">
+                    <strong>③ Memory</strong><br>
+                    The value is <em>in RAM</em>, referenced by an address.<br>
+                    <code>MOV eax, [esi]</code><br>
+                    <code>ADD ebx, [myVar]</code><br>
+                    <small>Slower – requires address calculation and memory bus access. But essential for large
+                        data.</small>
+                </div>
+            </div>
+            <div class="highlight-box">
+                📌 <strong>Important:</strong> In MASM, writing <code>MOV eax, myVar</code> (without brackets) and
+                <code>MOV eax, [myVar]</code> (with brackets) both load the <em>value</em> from memory for named
+                variables. However, for register-indirect addressing, brackets are required: <code>MOV eax, [esi]</code>
+                loads the value at address ESI, while <code>MOV eax, esi</code> loads ESI itself. <strong>Be explicit
+                    with brackets to avoid confusion.</strong>
             </div>
         </div>
 
-        <!-- 2. Operand Types -->
-        <div class="section-card" id="operand-types">
-            <h2><i class="fas fa-tag"></i> 📌 Operand Types</h2>
-            <ul>
-                <li><strong>Immediate operand:</strong> A constant value written directly. <em>Example:</em>
-                    <code>MOV EAX, 100</code></li>
-                <li><strong>Register operand:</strong> A register name like AX, BX, ECX, DL. <em>Example:</em>
-                    <code>MOV EBX, EAX</code></li>
-                <li><strong>Memory operand:</strong> A location in memory, written inside square brackets
-                    <code>[ ]</code>. <em>Example:</em> <code>MOV AL, [2000h]</code></li>
-            </ul>
-            <pre><code>; Quick comparison
-MOV EAX, 42         ; 42 is immediate
-MOV ECX, EAX        ; EAX and ECX are register operands
-MOV [1000h], ECX    ; [1000h] is memory operand</code></pre>
-        </div>
-
-        <!-- 3. Addressing Modes (Detailed) -->
+        <!-- Addressing Modes Deep Dive -->
         <div class="section-card" id="addressing-modes">
-            <h2><i class="fas fa-location-dot"></i> 🧭 Addressing Modes in Detail</h2>
-            <p>Seven fundamental ways to specify a memory operand address:</p>
+            <h2><i class="fas fa-table"></i> All x86 Addressing Modes (32-bit)</h2>
+            <p>The x86 architecture supports a remarkably flexible set of memory addressing modes. Here's the complete
+                reference:</p>
 
-            <table>
+            <table class="addressing-table">
                 <thead>
                     <tr>
                         <th>Mode</th>
-                        <th>Example</th>
-                        <th>Explanation</th>
+                        <th>MASM Syntax</th>
+                        <th>Effective Address</th>
+                        <th>Example Use</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td>Immediate</td>
+                        <td><code>imm</code></td>
+                        <td>N/A (value is in instruction)</td>
+                        <td><code>MOV eax, 100</code></td>
+                    </tr>
+                    <tr>
+                        <td>Register</td>
+                        <td><code>reg</code></td>
+                        <td>N/A (value is in register)</td>
+                        <td><code>MOV eax, ebx</code></td>
+                    </tr>
+                    <tr>
                         <td>Direct</td>
-                        <td><code>MOV AL, [2000h]</code></td>
-                        <td>Fixed address</td>
+                        <td><code>[label]</code></td>
+                        <td>Address of label (fixed)</td>
+                        <td><code>MOV eax, [myVar]</code></td>
                     </tr>
                     <tr>
-                        <td>Indirect</td>
-                        <td><code>MOV AL, [EBX]</code></td>
-                        <td>Address in a register</td>
-                    </tr>
-                    <tr>
-                        <td>Indirect + Displacement</td>
-                        <td><code>MOV AL, [EBX+4]</code></td>
-                        <td>Register + constant</td>
-                    </tr>
-                    <tr>
-                        <td>Indexed</td>
-                        <td><code>MOV AL, [myArray+ESI]</code></td>
-                        <td>Array base + index</td>
+                        <td>Register Indirect</td>
+                        <td><code>[reg]</code></td>
+                        <td>Value in register</td>
+                        <td><code>MOV eax, [esi]</code></td>
                     </tr>
                     <tr>
                         <td>Based</td>
-                        <td><code>MOV AL, [EBX+5]</code></td>
-                        <td>Base register + displacement</td>
+                        <td><code>[reg + disp]</code></td>
+                        <td>reg + displacement</td>
+                        <td><code>MOV eax, [ebx + 8]</code></td>
                     </tr>
                     <tr>
-                        <td>Based‑Indexed</td>
-                        <td><code>MOV AL, [EBX+ESI]</code></td>
-                        <td>Base + index</td>
+                        <td>Indexed</td>
+                        <td><code>[reg + reg*scale]</code></td>
+                        <td>reg + (index × scale)</td>
+                        <td><code>MOV eax, [esi + edi*4]</code></td>
                     </tr>
                     <tr>
-                        <td>Scaled Indexed</td>
-                        <td><code>MOV EAX, [EBX+ESI*4]</code></td>
-                        <td>For arrays with element size 4 bytes</td>
+                        <td>Based-Indexed</td>
+                        <td><code>[base + index*scale]</code></td>
+                        <td>base + (index × scale)</td>
+                        <td><code>MOV eax, [ebx + esi*4]</code></td>
+                    </tr>
+                    <tr>
+                        <td>Based-Indexed w/ Disp</td>
+                        <td><code>[base + index*scale + disp]</code></td>
+                        <td>base + (index × scale) + displacement</td>
+                        <td><code>MOV eax, [ebx + esi*4 + 16]</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.9rem; color: var(--text-muted);">* Valid base registers: <strong>EAX, EBX, ECX, EDX,
+                    ESI, EDI, EBP, ESP</strong> (any 32-bit general-purpose register). Valid index registers:
+                <strong>EAX, EBX, ECX, EDX, ESI, EDI, EBP</strong> (all except ESP). Valid scale factors: <strong>1, 2,
+                    4, 8</strong>.
+            </p>
+
+            <h3>🔹 Indirect Addressing – The Gateway to Dynamic Memory</h3>
+            <pre><code>MOV  esi, OFFSET myArray     ; ESI = address of myArray
+MOV  eax, [esi]              ; EAX = first DWORD at that address (indirect)
+ADD  esi, 4                  ; move pointer to next DWORD
+MOV  ebx, [esi]              ; EBX = second DWORD</code></pre>
+            <div class="visual-diagram">
+                <span class="reg">ESI</span> <span class="arrow">──────►</span> <span class="addr">[0x00403000]</span>
+                <span class="arrow">→</span> <span class="val">12</span> (<span class="mem-label">myArray[0]</span>)
+                <span class="reg">ESI+4</span> <span class="arrow">────►</span> <span class="addr">[0x00403004]</span>
+                <span class="arrow">→</span> <span class="val">7</span> (<span class="mem-label">myArray[1]</span>)
+                <span class="reg">ESI+8</span> <span class="arrow">────►</span> <span class="addr">[0x00403008]</span>
+                <span class="arrow">→</span> <span class="val">25</span> (<span class="mem-label">myArray[2]</span>)
+            </div>
+
+            <h3>🔹 Indexed Addressing with Scale Factor</h3>
+            <p>The scale factor (1, 2, 4, or 8) automatically multiplies the index register – perfect for array element
+                sizes:</p>
+            <pre><code>; Array of DWORDs (4 bytes each)
+; Access myArray[i] where ECX = i
+MOV  eax, [myArray + ecx*4]    ; scale=4 because DWORD = 4 bytes
+
+; Array of WORDs (2 bytes each)
+MOV  ax, [myArray + ecx*2]     ; scale=2 because WORD = 2 bytes</code></pre>
+
+            <h3>🔹 Base-Index Addressing with Displacement</h3>
+            <p>The most general form combines everything. Think of it as: <strong>address = base_register +
+                    index_register × scale + constant_offset</strong></p>
+            <pre><code>; Access struct member: assume EBX = struct base, ESI = array index
+MOV  eax, [ebx + esi*4 + 12]   ; offset 12 bytes into struct, element ESI
+
+; Equivalent C:  eax = struct_ptr->data_array[i];  // where data_array offset = 12</code></pre>
+        </div>
+
+        <!-- Data Definition Directives -->
+        <div class="section-card" id="data-directives">
+            <h2><i class="fas fa-database"></i> Data Definition Directives: DB, DW, DD, DUP</h2>
+            <p>Before you can address data, you must <strong>define</strong> it. MASM provides directives to allocate
+                and initialize memory in the <code>.data</code> section.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Directive</th>
+                        <th>Size</th>
+                        <th>C Equivalent</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>DB</code></td>
+                        <td>1 byte</td>
+                        <td><code>char</code>, <code>unsigned char</code></td>
+                        <td><code>myByte DB 0x41</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DW</code></td>
+                        <td>2 bytes</td>
+                        <td><code>short</code>, <code>unsigned short</code></td>
+                        <td><code>myWord DW 1000</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DD</code></td>
+                        <td>4 bytes</td>
+                        <td><code>int</code>, <code>float</code>, pointer</td>
+                        <td><code>myDword DD 12345678h</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DQ</code></td>
+                        <td>8 bytes</td>
+                        <td><code>long long</code>, <code>double</code></td>
+                        <td><code>myQword DQ 0</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>DUP</code></td>
+                        <td>(repeats)</td>
+                        <td>Array declaration</td>
+                        <td><code>buffer DB 256 DUP(0)</code></td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>🔹 Indirect Addressing :: <code>[reg]</code></h3>
-            <pre><code>MOV EBX, OFFSET myArray
-MOV AL, [EBX]        ; reads first element</code></pre>
-
-            <h3>🔹 Indirect with Displacement :: <code>[reg+disp]</code></h3>
-            <pre><code>MOV EBX, 1000h
-MOV AL, [EBX + 4]    ; reads address 1004h</code></pre>
-
-            <h3>🔹 Based‑Indexed :: <code>[reg1+reg2]</code></h3>
-            <pre><code>MOV EBX, OFFSET arr   ; base
-MOV ESI, 2            ; index
-MOV AL, [EBX + ESI]   ; arr[2]</code></pre>
-
-            <h3>🔹 Scaled Indexed for 32‑bit arrays</h3>
-            <pre><code>MOV EBX, OFFSET intArray
-MOV ESI, 2
-MOV EAX, [EBX + ESI*4] ; gets the 3rd element (0‑based) of a DD array</code></pre>
-        </div>
-
-        <!-- 4. Data Definition Directives DB, DW, DD, DUP -->
-        <div class="section-card" id="data-directives">
-            <h2><i class="fas fa-database"></i> 📦 Data Definition Directives</h2>
-            <pre><code>DB  - Define Byte      (1 byte)   → var1 DB 10, 'A', 20h
-DW  - Define Word      (2 bytes)  → varW DW 1000, 2000
-DD  - Define Doubleword (4 bytes) → varD DD 12345678h
-DUP - Duplicate                   → buffer DB 100 DUP (0)</code></pre>
-            <p><strong>Examples:</strong></p>
+            <h3>🔹 Common Data Definition Patterns</h3>
             <pre><code>.data
-    byteArray DB 10, 20, 30, 40          ; four bytes
-    wordArray DW 100, 200, 300           ; three words (6 bytes)
-    doubleArray DD 1, 2, 3, 4, 5         ; five doublewords (20 bytes)
-    zeros DW 50 DUP (0)                  ; 50 words initialized to zero
-    pattern DB 4 DUP (1, 2)              ; 1,2,1,2,1,2,1,2 (8 bytes)</code></pre>
-        </div>
+    ; Single values
+    count      DD  0                ; 32-bit integer, initialized to 0
+    pi         DD  3.14159          ; 32-bit float (use REAL4 for clarity)
+    flag       DB  1                ; byte-sized boolean flag
+    letter     DB  'A'              ; ASCII character (0x41)
+    greeting   DB  'Hello', 0       ; null-terminated string
 
-        <!-- 5. Arrays and using ESI, EDI, EBX -->
-        <div class="section-card" id="arrays">
-            <h2><i class="fas fa-table-list"></i> 📊 Arrays & Traversal with <code>ESI</code>, <code>EDI</code>,
-                <code>EBX</code></h2>
-            <p>An array is a contiguous memory block of same‑sized elements.</p>
-            <pre><code>.data
-myBytes DB 10h, 20h, 30h, 40h, 50h
-.code
-MOV ESI, OFFSET myBytes   ; ESI points to first element
-MOV AL, [ESI]             ; AL = 10h
-MOV AL, [ESI+2]           ; AL = 30h</code></pre>
-            <p><strong>Common register roles:</strong></p>
-            <ul>
-                <li><code>ESI</code> (Source Index) – usually points to source array</li>
-                <li><code>EDI</code> (Destination Index) – points to destination array</li>
-                <li><code>EBX</code> (Base) – holds start address</li>
-                <li><code>ECX</code> – loop counter</li>
-            </ul>
-            <h3>🔸 Two‑dimensional array example (3 rows × 2 columns of bytes)</h3>
-            <pre><code>matrix DB 1,2, 3,4, 5,6
-row_size = 2
-MOV EBX, OFFSET matrix
-MOV ESI, 1               ; row 1 (0‑based)
-MOV EDI, 0               ; column 0
-MOV AL, [EBX + ESI*row_size + EDI]  ; AL = 3</code></pre>
-        </div>
+    ; Arrays
+    scores     DD  85, 92, 78, 95, 88         ; array of 5 DWORDs
+    hexBytes   DB  0Ah, 0Bh, 0Ch, 0Dh, 0Eh    ; array of bytes
 
-        <!-- 6. Pointer vs Value -->
-        <div class="section-card" id="pointer-vs-value">
-            <h2><i class="fas fa-map-pin"></i> 🎯 Pointer vs Value</h2>
-            <p><strong>Pointer</strong> = memory address (e.g., <code>1000h</code>).<br>
-                <strong>Value</strong> = the actual content stored at that address (e.g., <code>42</code>).
-            </p>
-            <pre><code>LEA EBX, myVar   ; EBX = address of myVar (pointer)
-MOV ECX, [EBX]   ; ECX = value stored at that address</code></pre>
+    ; Using DUP for large buffers
+    buffer     DB  1024 DUP(0)      ; 1024 bytes, all zero
+    matrix     DD  16 DUP(?)        ; 16 DWORDs, uninitialized
+    pattern    DB  10 DUP('X')      ; 10 copies of 'X'
+
+    ; Mixed types
+    studentId  DD  2024001
+    studentName DB 'Mahmoud Khalil', 0
+    studentGPA  DD  3.75</code></pre>
             <div class="highlight-box">
-                💡 When passing an array to a function, we pass a <em>pointer</em> (the starting address) instead of
-                copying the entire array. This saves time and memory.
+                📌 <strong>Memory layout note:</strong> Data is laid out <strong>sequentially</strong> in the order you
+                declare it. The assembler assigns increasing addresses. Multi-byte values (DW, DD, DQ) are stored in
+                <strong>little-endian</strong> byte order (least significant byte at the lowest address).
             </div>
         </div>
 
-        <!-- 7. Lab Exercise: Reverse an Array In‑Place -->
+        <!-- Working with Arrays -->
+        <div class="section-card" id="arrays">
+            <h2><i class="fas fa-list-ol"></i> Working with Arrays – Traversal Techniques</h2>
+            <p>Arrays are contiguous blocks of memory. In assembly, you traverse them by <strong>updating a pointer
+                    register</strong> (ESI, EDI, EBX) or by using an <strong>index register</strong> with a scale
+                factor.</p>
+
+            <h3>🔹 Method 1: Pointer Walking (Register Indirect)</h3>
+            <pre><code>; Sum all elements of a DWORD array
+.data
+    arr   DD  10, 20, 30, 40, 50
+    arrSize = ($ - arr) / 4      ; calculate number of elements
+    total DD  ?
+
+.code
+    mov  esi, OFFSET arr         ; ESI points to first element
+    mov  ecx, arrSize            ; loop counter
+    xor  eax, eax                ; sum accumulator = 0
+
+sum_loop:
+    add  eax, [esi]              ; add current element to sum
+    add  esi, 4                  ; move pointer to next DWORD (4 bytes)
+    loop sum_loop
+
+    mov  total, eax              ; store final sum</code></pre>
+
+            <h3>🔹 Method 2: Index Register with Scale</h3>
+            <pre><code>; Same task, using index + scale
+    xor  eax, eax                ; sum = 0
+    xor  ecx, ecx                ; index i = 0
+
+sum_loop2:
+    cmp  ecx, arrSize
+    jge  done
+    add  eax, [arr + ecx*4]      ; arr[i] – scale=4 for DWORD
+    inc  ecx
+    jmp  sum_loop2
+done:
+    mov  total, eax</code></pre>
+
+            <h3>🔹 Method 3: Base-Index with Two Registers</h3>
+            <pre><code>; Using EBX as base, ESI as index
+    mov  ebx, OFFSET arr         ; base address
+    xor  esi, esi                ; index = 0
+    xor  eax, eax
+
+sum_loop3:
+    cmp  esi, arrSize
+    jge  done3
+    add  eax, [ebx + esi*4]      ; base + index*scale
+    inc  esi
+    jmp  sum_loop3
+done3:</code></pre>
+        </div>
+
+        <!-- Pointer vs Value -->
+        <div class="section-card" id="pointer-vs-value">
+            <h2><i class="fas fa-fingerprint"></i> Pointer vs. Value – The Critical Distinction</h2>
+            <p>This is one of the most important concepts in assembly (and in C). A <strong>pointer</strong> is an
+                address – a number that tells you <em>where</em> something is. A <strong>value</strong> is the actual
+                data at that address.</p>
+
+            <div class="visual-diagram">
+                <span class="mem-label">Register ESI:</span> <span class="addr">0x00403000</span> ← <span
+                    class="reg">This is a POINTER (address)</span>
+
+                <span class="mem-label">Memory at 0x00403000:</span> <span class="val">42</span> ← <span
+                    class="val">This is a VALUE (data)</span>
+            </div>
+
+            <h3>🔹 The Square Bracket Rule</h3>
+            <pre><code>MOV  eax, esi        ; EAX = ESI (copies the POINTER/address itself)
+MOV  eax, [esi]      ; EAX = value AT address ESI (dereferences the pointer)
+
+; Think of it as C:
+; eax = esi;    →  eax = (int)esi;        (treat ESI as a number)
+; eax = [esi];  →  eax = *(int*)esi;      (load value from that address)</code></pre>
+
+            <h3>🔹 Common Confusion – Watch Out!</h3>
+            <pre><code>.data
+    myVar  DD  99
+
+.code
+    MOV  eax, myVar        ; EAX = 99 (the VALUE at myVar)
+    MOV  eax, OFFSET myVar ; EAX = address of myVar (a POINTER)
+    LEA  eax, myVar        ; EAX = address of myVar (same result as OFFSET)
+
+    ; Now with indirect:
+    MOV  esi, OFFSET myVar ; ESI = pointer to myVar
+    MOV  eax, esi          ; EAX = the address (not 99!)
+    MOV  eax, [esi]        ; EAX = 99 (dereferenced – got the value)</code></pre>
+            <div class="highlight-box">
+                ⚠️ <strong>Debugging tip:</strong> If your register contains a strange large number like
+                <code>0x00403000</code> when you expected a small value like <code>99</code>, you probably forgot the
+                brackets and loaded the pointer instead of the value. This is the #1 beginner mistake!
+            </div>
+        </div>
+
+        <!-- Complete Example: Array Copy -->
+        <div class="section-card" id="example-copy">
+            <h2><i class="fas fa-copy"></i> Complete Example: Copy an Array Using ESI & EDI</h2>
+            <p>ESI is traditionally the <strong>source index</strong> and EDI the <strong>destination index</strong>.
+                This convention comes from the string instructions, but it's widely used for all memory operations.</p>
+            <pre><code>; Copy contents of source array into destination array
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+
+.data
+    source    DD  10, 20, 30, 40, 50
+    srcSize   =   ($ - source) / 4
+    dest      DD  5 DUP(0)           ; allocate space for 5 DWORDs
+
+.code
+main PROC
+    mov  esi, OFFSET source          ; ESI = source pointer
+    mov  edi, OFFSET dest            ; EDI = destination pointer
+    mov  ecx, srcSize                ; ECX = number of elements
+
+copy_loop:
+    mov  eax, [esi]                  ; load from source
+    mov  [edi], eax                  ; store to destination
+    add  esi, 4                      ; advance source pointer (DWORD = 4 bytes)
+    add  edi, 4                      ; advance destination pointer
+    loop copy_loop
+
+    ; Verify: dest now contains {10, 20, 30, 40, 50}
+
+    INVOKE ExitProcess, 0
+main ENDP
+END main</code></pre>
+            <div class="highlight-box">
+                🔍 <strong>Trace in debugger:</strong> Set breakpoints at <code>copy_loop</code>. Watch ESI and EDI
+                increment by 4 each iteration. Examine the memory at <code>dest</code> – it fills up one DWORD per loop
+                pass.
+            </div>
+        </div>
+
+        <!-- Lab Exercise: Reverse Array -->
         <div class="section-card" id="lab">
-            <h2><i class="fas fa-flask"></i> 🧪 Lab · Reverse an Array In‑Place</h2>
-            <p><strong>Task:</strong> Using only registers and indirect addressing modes, reverse an array of 5 integers
-                (32‑bit) in the same memory (in‑place). No extra memory allowed.</p>
-            <p><strong>Idea:</strong> Use two pointers – <code>ESI</code> at the start, <code>EDI</code> at the end.
-                Swap values, move them toward each other until they meet.</p>
+            <h2><i class="fas fa-flask"></i> Lab Exercise – Reverse an Array In Place</h2>
+            <p><strong>Objective:</strong> Reverse the elements of a DWORD array <em>in place</em> using only registers
+                and indirect addressing. No additional arrays allowed – you must swap elements within the same memory
+                block.</p>
 
-            <div class="bonus-box">
-                <h3><i class="fas fa-trophy"></i> Challenge</h3>
-                <ul>
-                    <li>Change the array to <code>DW</code> (words) and update offsets accordingly
-                        (<code>ADD ESI, 2</code>, <code>(size-1)*2</code>).</li>
-                    <li>Reverse an array of bytes (<code>DB</code>) using <code>AL</code> and <code>BL</code>.</li>
-                    <li>Make the array size flexible: ask the user for the size and values (bonus).</li>
-                </ul>
+            <h3>🔹 The Algorithm</h3>
+            <ol>
+                <li>Set one pointer (<strong>ESI</strong>) to the <strong>first element</strong> (left side).</li>
+                <li>Set another pointer (<strong>EDI</strong>) to the <strong>last element</strong> (right side).</li>
+                <li>Swap the values at ESI and EDI using a temporary register.</li>
+                <li>Move ESI forward by 4 bytes, EDI backward by 4 bytes.</li>
+                <li>Repeat until ESI ≥ EDI (pointers meet or cross in the middle).</li>
+            </ol>
+
+            <div class="visual-diagram">
+                Before: <span class="val">[10]</span> <span class="val">[20]</span> <span class="val">[30]</span> <span
+                    class="val">[40]</span> <span class="val">[50]</span>
+                <span class="reg">↑ESI</span> <span class="reg">↑EDI</span>
+
+                Swap 1: <span class="val">[50]</span> <span class="val">[20]</span> <span class="val">[30]</span> <span
+                    class="val">[40]</span> <span class="val">[10]</span>
+                <span class="reg">↑ESI</span> <span class="reg">↑EDI</span>
+
+                Swap 2: <span class="val">[50]</span> <span class="val">[40]</span> <span class="val">[30]</span> <span
+                    class="val">[20]</span> <span class="val">[10]</span>
+                <span class="reg">↑ESI,EDI</span> (meet → done!)
+
+                After: <span class="val">[50]</span> <span class="val">[40]</span> <span class="val">[30]</span> <span
+                    class="val">[20]</span> <span class="val">[10]</span> ✓ Reversed!
             </div>
+
+            <h3>📋 Complete Reverse Array Program</h3>
+            <pre><code>; reverse_array.asm – Reverse a DWORD array in place
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+
+.data
+    arr     DD  10, 20, 30, 40, 50
+    arrSize =   ($ - arr) / 4        ; number of elements
+
+.code
+main PROC
+    ; Set up left and right pointers
+    mov  esi, OFFSET arr             ; ESI = &arr[0] (left pointer)
+    mov  edi, OFFSET arr             ; EDI = &arr[0]
+    mov  eax, arrSize
+    dec  eax                         ; EAX = last index
+    ; EDI = &arr[last_index]
+    lea  edi, [edi + eax*4]          ; EDI = address of last element
+
+reverse_loop:
+    cmp  esi, edi                    ; have pointers crossed?
+    jge  done                        ; if ESI >= EDI, we're finished
+
+    ; Swap [ESI] and [EDI] using EAX and EBX as temporaries
+    mov  eax, [esi]                  ; EAX = value at left pointer
+    mov  ebx, [edi]                  ; EBX = value at right pointer
+    mov  [esi], ebx                  ; left gets right's value
+    mov  [edi], eax                  ; right gets left's value
+
+    ; Move pointers toward the middle
+    add  esi, 4                      ; left moves right (next DWORD)
+    sub  edi, 4                      ; right moves left (previous DWORD)
+    jmp  reverse_loop
+
+done:
+    ; Array is now reversed: {50, 40, 30, 20, 10}
+    INVOKE ExitProcess, 0
+main ENDP
+END main</code></pre>
+
+            <h3>🔎 Step-by-Step Debugger Trace Guide</h3>
+            <ol>
+                <li>Assemble and link: <code>ml /c /coff reverse_array.asm</code> →
+                    <code>link /SUBSYSTEM:CONSOLE reverse_array.obj kernel32.lib</code>
+                </li>
+                <li>Open <strong>x64dbg</strong> and load <code>reverse_array.exe</code>.</li>
+                <li>Set a breakpoint at the first instruction after <code>main PROC</code>.</li>
+                <li>Step through (<kbd>F7</kbd>) and watch:
+                    <ul>
+                        <li><strong>ESI</strong> starts at the array base address.</li>
+                        <li><strong>EDI</strong> is computed as base + (size-1)×4.</li>
+                        <li>In each swap iteration, the memory dump at <code>arr</code> updates.</li>
+                        <li>After the loop, examine memory – the array is reversed!</li>
+                    </ul>
+                </li>
+                <li>Take <strong>screenshots</strong> of: (a) registers after pointer setup, (b) memory before first
+                    swap, (c) memory after each swap, (d) final reversed array.</li>
+            </ol>
         </div>
 
-        <!-- 8. Review Questions -->
-        <div class="section-card" id="questions">
-            <h2><i class="fas fa-question-circle"></i> ❓ Review Questions</h2>
+        <!-- Exercises -->
+        <div class="section-card" id="exercises">
+            <h2><i class="fas fa-pen-to-square"></i> Additional Practice Exercises</h2>
             <ol>
-                <li>What is the difference between <code>MOVZX</code> and <code>MOVSX</code>? Provide examples.</li>
-                <li>How do you calculate the address of the 6th element in a word array (<code>DW</code>) using
-                    based‑indexed addressing?</li>
-                <li>Write an <code>LEA</code> instruction that puts into <code>EAX</code> the address of element number
-                    <code>i</code> in an array <code>scores</code> (DD array) where <code>i</code> is stored in
-                    <code>ECX</code>.</li>
-                <li>Why can't we write <code>MOV [1000h], [2000h]</code>? How would you copy data between two memory
-                    addresses?</li>
-                <li>What does <code>DUP</code> mean? Write a directive that defines an array of 100 words all
-                    initialized to zero.</li>
-                <li>When would you prefer using <code>LEA</code> over <code>MOV OFFSET</code>?</li>
-                <li>What is the final value of EAX after these instructions?<br>
-                    <code>MOV AL, 0x80</code><br>
-                    <code>MOVSX EAX, AL</code>
+                <li><strong>Array Sum with Indirect:</strong> Write a program that sums all elements of a WORD array
+                    (2-byte elements) using register-indirect addressing. Watch your pointer increment size!</li>
+                <li><strong>Find Minimum:</strong> Using indexed addressing, find the smallest value in a DWORD array.
+                    Store the minimum value <em>and</em> its index.</li>
+                <li><strong>Count Occurrences:</strong> Given a byte array and a target byte value, count how many times
+                    the target appears. Use <code>[esi]</code> with byte-sized operations.</li>
+                <li><strong>LEA Arithmetic:</strong> Without using <code>MUL</code> or <code>IMUL</code>, compute
+                    <code>y = x * 7</code> using only <code>LEA</code> and <code>ADD</code>. (Hint: 7 = 4 + 2 + 1, or
+                    use LEA to compute x*8 then subtract x.)
                 </li>
+                <li><strong>Struct Field Access:</strong> Define a "student" structure in the data section with fields:
+                    ID (DWORD), grade (BYTE), and score (DWORD). Access each field using base+displacement addressing.
+                </li>
+                <li><strong>Reverse a String:</strong> Apply the same in-place reversal technique to a null-terminated
+                    byte string. Watch out – bytes are 1 byte each, not 4!</li>
             </ol>
             <div class="highlight-box">
-                📘 Try answering these before the next lab. Discuss with your classmates!
+                📥 <strong>Submission:</strong> Complete the reverse-array lab (mandatory) plus <strong>two</strong>
+                additional exercises of your choice. Submit a PDF with code listings, debugger screenshots, and brief
+                explanations of your addressing mode choices.
+            </div>
+            <button class="btn-exercise" id="downloadReverseStarter"><i class="fas fa-download"></i> Download Reverse
+                Array Starter Template</button>
+            <p style="margin-top: 0.8rem; font-size:0.9rem; color: var(--text-muted);">* The template contains a
+                skeleton .asm file ready for you to complete.</p>
+        </div>
+
+        <!-- Summary -->
+        <div class="section-card">
+            <h2><i class="fas fa-clipboard-check"></i> Unit 3 Summary – What You've Learned</h2>
+            <div class="grid-2col">
+                <div class="info-card">
+                    <strong>✅ Data Movement</strong><br>
+                    <code>MOV</code>, <code>MOVZX</code>, <code>MOVSX</code>, <code>XCHG</code> – moving data with
+                    proper size handling and sign awareness.
+                </div>
+                <div class="info-card">
+                    <strong>✅ Address Computation</strong><br>
+                    <code>LEA</code> – computing addresses (and doing fast arithmetic) without accessing memory.
+                </div>
+                <div class="info-card">
+                    <strong>✅ Addressing Modes</strong><br>
+                    Direct, indirect, based, indexed, based-indexed – the complete toolkit for reaching any memory
+                    location.
+                </div>
+                <div class="info-card">
+                    <strong>✅ Data Directives</strong><br>
+                    <code>DB</code>, <code>DW</code>, <code>DD</code>, <code>DUP</code> – defining and initializing
+                    memory with proper sizes.
+                </div>
+                <div class="info-card">
+                    <strong>✅ Array Traversal</strong><br>
+                    Pointer walking, indexed access, base+index patterns – three ways to process sequential data.
+                </div>
+                <div class="info-card">
+                    <strong>✅ Pointer vs Value</strong><br>
+                    The bracket rule: <code>[reg]</code> dereferences, <code>reg</code> is just a number. Master this
+                    forever.
+                </div>
             </div>
         </div>
 
         <hr>
         <footer>
-            <p>🛡️ COMP‑3111 · Bachelor of Cybersecurity Engineering · UCAS</p>
-            <p>Based on <strong>Kip Irvine, Assembly Language for x86 Processors</strong> & industry reverse‑engineering
-                practices | Instructor: <strong>Mahmoud Khalil</strong></p>
-            <p>© 2026 Mahmoud Khalil – For educational use only</p>
+            <p><i class="fas fa-microchip"></i> COMP‑3111 · Microprocessor & Assembly Language Lab · UCAS</p>
+            <p>Instructor: <strong>Mahmoud Khalil</strong> — mkhalil@ucas.edu.ps</p>
+            <p>Based on Kip Irvine, <em>Assembly Language for x86 Processors</em> (7th/8th Edition), Chapters 3–4</p>
+            <p>© 2026 Mahmoud Khalil · For educational use only</p>
+            <p><a href="index.html" style="color: var(--primary);">← Back to course syllabus</a></p>
         </footer>
     </div>
 
     <script>
-        // Smooth scroll for sticky navigation
+        // Smooth scroll for navigation links
         document.querySelectorAll('.sticky-nav a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const target = document.querySelector(this.getAttribute('href'));
@@ -619,6 +1111,56 @@ MOV ECX, [EBX]   ; ECX = value stored at that address</code></pre>
                 }
             });
         });
+
+        // Download starter template for reverse array lab
+        const downloadBtn = document.getElementById('downloadReverseStarter');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const asmContent = `; reverse_array_starter.asm
+; COMP-3111 Unit 3 – Reverse Array In Place (Starter Template)
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+
+.data
+    arr     DD  10, 20, 30, 40, 50
+    arrSize =   ($ - arr) / 4        ; number of elements (calculated by assembler)
+
+.code
+main PROC
+    ; === YOUR CODE HERE ===
+    ; Step 1: Set ESI to point to the first element of arr
+    ; Step 2: Set EDI to point to the last element of arr
+    ;         Hint: EDI = OFFSET arr + (arrSize - 1) * 4
+    ; Step 3: Write a loop that swaps [ESI] and [EDI],
+    ;         then moves ESI forward (+4) and EDI backward (-4)
+    ; Step 4: Stop when ESI >= EDI (pointers meet or cross)
+    ; ========================
+
+    INVOKE ExitProcess, 0
+main ENDP
+END main`;
+                const blob = new Blob([asmContent], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'reverse_array_starter.asm';
+                link.click();
+                URL.revokeObjectURL(link.href);
+            });
+        }
+
+        // Add keyboard shortcut hint
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && e.key === 's') {
+                // Ctrl+S could trigger download – handled by browser
+                console.log('💡 Tip: Use the sticky nav to jump between sections quickly.');
+            }
+        });
+        console.log('🛡️ COMP-3111 | Unit 3 – Data Movement & Addressing Modes loaded.');
+        console.log('   Navigate using the sticky menu at the top of the page.');
+        console.log('   All code examples are ready for MASM 32-bit assembly.');
     </script>
 </body>
 
