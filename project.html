@@ -304,6 +304,23 @@
             line-height: 1.5;
         }
 
+        /* --- عنصر print-answer (يظهر فقط في الطباعة) --- */
+        .print-answer {
+            display: none;
+            /* مخفي في الوضع العادي */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: #f8fafc;
+            color: #0b1120;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 0.7rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-top: 4px;
+        }
+
         .screenshot-zone {
             background: rgba(16, 185, 129, 0.05);
             border: 2px dashed var(--success);
@@ -455,7 +472,6 @@
                 color: #555 !important;
             }
 
-            /* ★ الأهم: إظهار الصور المرفوعة في الطباعة بالقوة ★ */
             .screenshot-zone img.preview {
                 display: block !important;
                 max-width: 100% !important;
@@ -464,32 +480,31 @@
                 border: 1px solid #ccc !important;
                 border-radius: 4px !important;
                 max-height: 400px !important;
-                /* منع الصورة من تجاوز الصفحة */
             }
 
-            /* إخفاء الصورة إذا لم تكن موجودة أصلاً (لن يكون هناك عنصر img أساساً) */
             .screenshot-zone:not(.has-image) img.preview {
                 display: none !important;
             }
 
-            /* التكست ارا: إظهار كل المحتوى بدون تمرير */
+            /* --- إخفاء الـ textarea وإظهار الـ print-answer --- */
             .answer-block textarea {
-                height: auto !important;
-                min-height: 60px !important;
-                max-height: none !important;
-                overflow: visible !important;
-                resize: none !important;
-                border: 1px solid #888 !important;
-                background: #fafafa !important;
-                color: #000 !important;
-                padding: 8px 10px !important;
+                display: none !important;
+            }
+
+            .print-answer {
+                display: block !important;
+                /* يظهر في الطباعة */
+                background: #f8fafc !important;
+                border: 1px solid #aaa !important;
+                color: #0b1120 !important;
+                padding: 8px 12px !important;
+                border-radius: 6px !important;
                 font-size: 10.5pt !important;
                 line-height: 1.5 !important;
                 font-family: 'Courier New', monospace !important;
                 white-space: pre-wrap !important;
                 word-wrap: break-word !important;
-                border-radius: 6px !important;
-                box-shadow: none !important;
+                margin: 0 !important;
             }
 
             .answer-block {
@@ -608,10 +623,12 @@ MOV DX, CX</code></pre>
                 <div class="answer-block">
                     <label>❓ After ADD CX, BX – CX in hex and decimal?</label>
                     <textarea rows="2" placeholder="CX = ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Does AX change after MOV CX, AX? Why?</label>
                     <textarea rows="2" placeholder="Explain..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone1_1">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -635,14 +652,17 @@ ADD CL, 1</code></pre>
                 <div class="answer-block">
                     <label>❓ After ADD AL,200 – AL=44, CF=1, OF=1. Why?</label>
                     <textarea rows="3" placeholder="Explain carry and overflow..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ After SUB BL,50 – ZF=1. What does ZF tell us?</label>
                     <textarea rows="2" placeholder="Zero flag meaning..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ After ADD CL,1 (CL was 0xFF) – CF=1. Final CL?</label>
                     <textarea rows="2" placeholder="Explain carry..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone1_2">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -667,10 +687,12 @@ INT 20h</code></pre>
                 <div class="answer-block">
                     <label>❓ How many iterations? CX at exit?</label>
                     <textarea rows="2" placeholder="Answer..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Rewrite to print 1→5 ascending.</label>
                     <textarea rows="4" class="code-answer" placeholder="Your code..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone1_3">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -712,10 +734,12 @@ end main</code></pre>
                 <div class="answer-block">
                     <label>❓ Final max in AL? At which index?</label>
                     <textarea rows="2" placeholder="Max = ..., index = ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Modify to find minimum – which instruction changes?</label>
                     <textarea rows="2" class="code-answer" placeholder="Change JAE to ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone1_4">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -732,6 +756,7 @@ end main</code></pre>
                     <label>❓ Describe the path of <code>MOV AX,5</code> from assembler to register file (opcode, control
                         unit, data bus).</label>
                     <textarea rows="5" placeholder="Use the terms..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
         </div>
@@ -764,6 +789,7 @@ end main</code></pre>
                 <div class="answer-block">
                     <label>❓ What does <code>INT 21h, AH=9</code> do? Why is '$' needed?</label>
                     <textarea rows="3" placeholder="Explain DOS function 9..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone2_1">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -803,6 +829,7 @@ END main</code></pre>
                 <div class="answer-block">
                     <label>❓ Why are the arguments pushed right-to-left? Which calling convention is used?</label>
                     <textarea rows="3" placeholder="stdcall convention..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone2_2">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -840,10 +867,12 @@ END main</code></pre>
                     <label>❓ After the second ADD, what is the value in EAX? What is stored in <code>sum</code>
                         (hex)?</label>
                     <textarea rows="2" placeholder="EAX = 18, sum = 0x12..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Modify the code to add five integers. Paste your new .data and .code sections.</label>
                     <textarea rows="6" class="code-answer" placeholder="Your code..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
 
@@ -859,10 +888,12 @@ ADD BL, 1        ; unsigned carry</code></pre>
                 <div class="answer-block">
                     <label>❓ After ADD AL,1 – AL=? Signed decimal? Why OF=1?</label>
                     <textarea rows="3" placeholder="AL = 128 = -128, OF=1 because..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ After ADD BL,1 – BL=0, CF=1. Difference CF vs OF?</label>
                     <textarea rows="3" placeholder="CF for unsigned, OF for signed..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone2_4">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -879,11 +910,13 @@ ADD BL, 1        ; unsigned carry</code></pre>
                     <label>❓ Write 32‑bit MASM code for: if (EAX > EBX) ECX = EAX; else ECX = EBX; (use CMP, JG,
                         labels).</label>
                     <textarea rows="6" class="code-answer" placeholder="CMP EAX, EBX ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Reconstruct the C ternary from this disassembly: cmp eax,ebx; jg greater; mov ecx,0; jmp
                         next; greater: mov ecx,1; next:</label>
                     <textarea rows="2" class="code-answer" placeholder="ecx = (eax > ebx) ? 1 : 0;"></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
         </div>
@@ -908,6 +941,7 @@ CBW                ; AX = 007Fh (+127)</code></pre>
                 <div class="answer-block">
                     <label>❓ Why does CBW turn 0xFF into 0xFFFF?</label>
                     <textarea rows="2" placeholder="Sign bit replication..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone3_1">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -929,11 +963,13 @@ lea edx, [eax + eax*8]   ; 7*9</code></pre>
                 <div class="answer-block">
                     <label>❓ What values will be in EBX, ECX, EDX?</label>
                     <textarea rows="2" placeholder="EBX=21, ECX=35, EDX=63..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Write a single LEA instruction to compute y = x * 7 (x in EAX, result in EBX) without
                         MUL.</label>
                     <textarea rows="2" class="code-answer" placeholder="lea ebx, [eax*8] / sub ebx, eax..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
 
@@ -962,6 +998,7 @@ done:</code></pre>
                 <div class="answer-block">
                     <label>❓ Which method uses fewer instructions inside the loop body?</label>
                     <textarea rows="2" placeholder="Method A/B..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone3_3">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -978,10 +1015,12 @@ done:</code></pre>
                 <div class="answer-block">
                     <label>❓ How many swap operations for 5 elements? Formula for N elements?</label>
                     <textarea rows="2" placeholder="swaps = floor(N/2)..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Paste your complete MASM reversal code.</label>
                     <textarea rows="10" class="code-answer" placeholder=".386 ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
 
@@ -1010,6 +1049,7 @@ done:</code></pre>
                 <div class="answer-block">
                     <label>❓ Verify the final array order.</label>
                     <textarea rows="2" placeholder="50,40,30,20,10..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="screenshot-zone" id="zone3_5">
                     <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -1026,10 +1066,12 @@ done:</code></pre>
                     <label>❓ In 16‑bit: after MOV SI, offset var and MOV AX, SI vs MOV AX, [SI] – what does AX
                         hold?</label>
                     <textarea rows="2" placeholder="AX = address vs AX = value..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ In 32‑bit, a student gets a large number instead of the array element. Why? Fix?</label>
                     <textarea rows="3" placeholder="They loaded the address; use brackets..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
 
@@ -1041,11 +1083,13 @@ done:</code></pre>
                     <label>❓ How many bytes in <code>buffer DB 256 DUP(0)</code>? What about
                         <code>buffer DD 256 DUP(0)</code>?</label>
                     <textarea rows="2" placeholder="256 bytes vs 1024 bytes..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
                 <div class="answer-block">
                     <label>❓ Define a 32‑bit array of 10 uninitialized DWORDs and a null‑terminated string
                         "Hello".</label>
                     <textarea rows="3" class="code-answer" placeholder="arr DD 10 DUP(?) ..."></textarea>
+                    <div class="print-answer"></div>
                 </div>
             </div>
         </div>
@@ -1079,14 +1123,17 @@ end main</code></pre>
             <div class="answer-block">
                 <label>❓ After reversal, new first and last element?</label>
                 <textarea rows="2" placeholder="First=..., Last=..."></textarea>
+                <div class="print-answer"></div>
             </div>
             <div class="answer-block">
                 <label>❓ What is the average (integer)? Where is the remainder?</label>
                 <textarea rows="2" placeholder="Avg = ..., remainder in AH"></textarea>
+                <div class="print-answer"></div>
             </div>
             <div class="answer-block">
                 <label>❓ Paste your complete working code.</label>
                 <textarea rows="15" class="code-answer" placeholder="Your full .asm code..."></textarea>
+                <div class="print-answer"></div>
             </div>
             <div class="screenshot-zone" id="zone_mini">
                 <span class="overlay-text">📸 Click or paste screenshot here</span>
@@ -1207,12 +1254,23 @@ end main`;
                 URL.revokeObjectURL(a.href);
             };
 
-            // ── دالة الطباعة الذكية (توسيع textarea + عرض الصور) ──
+            // ── دالة تحديث محتوى print-answer من textarea ──
+            function updatePrintAnswers() {
+                document.querySelectorAll('.answer-block').forEach(block => {
+                    const textarea = block.querySelector('textarea');
+                    const printDiv = block.querySelector('.print-answer');
+                    if (textarea && printDiv) {
+                        printDiv.textContent = textarea.value || '(لم يتم تقديم إجابة)';
+                    }
+                });
+            }
+
+            // ── دالة الطباعة الذكية ──
             const allTextareas = document.querySelectorAll('.answer-block textarea');
 
+            // توسيع textarea مؤقتاً (لضمان رؤية المحتوى أثناء التحرير – اختياري)
             function expandTextareas() {
                 allTextareas.forEach(function (ta) {
-                    // حفظ القيمة الأصلية للـ rows إذا لم تكن محفوظة
                     if (!ta.dataset.origRows) {
                         ta.dataset.origRows = ta.getAttribute('rows') || '2';
                     }
@@ -1244,11 +1302,18 @@ end main`;
                 });
             }
 
-            // دالة الطباعة الرئيسية التي نربطها بالزر
+            // دالة الطباعة الرئيسية
             window.handlePrint = function () {
+                // 1. نسخ المحتوى إلى print-answer
+                updatePrintAnswers();
+
+                // 2. توسيع textarea (اختياري، لكنه يساعد في المعاينة)
                 expandTextareas();
+
+                // 3. طباعة
                 window.print();
-                // نعيد الحالة بعد إغلاق نافذة الطباعة (مع تأخير بسيط)
+
+                // 4. إعادة textarea إلى حالتها بعد الطباعة
                 setTimeout(function () {
                     restoreTextareas();
                 }, 800);
@@ -1256,6 +1321,7 @@ end main`;
 
             // ربط أحداث الطباعة من المتصفح (Ctrl+P)
             window.addEventListener('beforeprint', function () {
+                updatePrintAnswers();
                 expandTextareas();
             });
 
@@ -1263,10 +1329,21 @@ end main`;
                 restoreTextareas();
             });
 
-            // تأكد من أن أي زر PDF آخر يستخدم نفس الدالة (إن وجد)
+            // التأكد من أن أي زر PDF آخر يستخدم نفس الدالة
             document.querySelectorAll('.pdf-btn').forEach(function (btn) {
                 if (!btn.getAttribute('onclick')) {
                     btn.addEventListener('click', window.handlePrint);
+                }
+            });
+
+            // عند تحرير أي textarea، نقوم بتحديث الـ print-answer (اختياري، لكنه يجعل الطباعة فورية)
+            document.addEventListener('input', function (e) {
+                if (e.target.tagName === 'TEXTAREA' && e.target.closest('.answer-block')) {
+                    const block = e.target.closest('.answer-block');
+                    const printDiv = block.querySelector('.print-answer');
+                    if (printDiv) {
+                        printDiv.textContent = e.target.value || '(لم يتم تقديم إجابة)';
+                    }
                 }
             });
 
