@@ -225,17 +225,9 @@
             scroll-margin-top: 90px;
         }
 
-        .unit1 {
-            border-left: 4px solid #8b5cf6;
-        }
-
-        .unit2 {
-            border-left: 4px solid #6366f1;
-        }
-
-        .unit3 {
-            border-left: 4px solid #a78bfa;
-        }
+        .unit1 { border-left: 4px solid #8b5cf6; }
+        .unit2 { border-left: 4px solid #6366f1; }
+        .unit3 { border-left: 4px solid #a78bfa; }
 
         h2 {
             font-size: 1.7rem;
@@ -304,10 +296,8 @@
             line-height: 1.5;
         }
 
-        /* --- عنصر print-answer (يظهر فقط في الطباعة) --- */
         .print-answer {
             display: none;
-            /* مخفي في الوضع العادي */
             white-space: pre-wrap;
             word-wrap: break-word;
             background: #f8fafc;
@@ -422,13 +412,8 @@
         /*            PRINT STYLES (محسّنة بالكامل)        */
         /* ============================================== */
         @media print {
-
             /* إخفاء العناصر غير الضرورية */
-            .bg-grid,
-            .bg-orb,
-            .top-bar,
-            .btn,
-            .pdf-btn {
+            .bg-grid, .bg-orb, .top-bar, .btn, .pdf-btn {
                 display: none !important;
             }
 
@@ -436,13 +421,19 @@
                 background: #fff !important;
                 color: #000 !important;
                 font-size: 11pt !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
-            /* منع تقسيم البطاقات والأنشطة ومناطق الصور بين الصفحات */
-            .section-card,
-            .activity-card,
-            .screenshot-zone,
-            .screenshot-zone img.preview {
+            /* السماح بفاصل صفحات داخل البطاقات والإجابات لمنع الاقتطاع */
+            .section-card, .activity-card, .answer-block {
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+                overflow: visible !important;
+            }
+
+            /* منع كسر الصفحة داخل العناوين أو الأكواد القصيرة فقط */
+            .activity-card h4, .activity-card > p, .act-number {
                 break-inside: avoid !important;
                 page-break-inside: avoid !important;
             }
@@ -460,17 +451,15 @@
                 background: #fcfcfc !important;
             }
 
-            /* منطقة الـ screenshot: تظهر بشكل لائق مع الصورة */
             .screenshot-zone {
                 border: 2px solid #666 !important;
                 background: #f9f9f9 !important;
                 min-height: 80px !important;
                 padding: 0.8rem !important;
+                break-inside: avoid !important;
             }
 
-            .screenshot-zone .overlay-text {
-                color: #555 !important;
-            }
+            .screenshot-zone .overlay-text { color: #555 !important; }
 
             .screenshot-zone img.preview {
                 display: block !important;
@@ -486,33 +475,45 @@
                 display: none !important;
             }
 
-            /* --- إخفاء الـ textarea وإظهار الـ print-answer --- */
+            /* --- إخفاء الـ textarea تماماً ومنع أي أثر له --- */
             .answer-block textarea {
                 display: none !important;
+                height: 0 !important;
+                overflow: hidden !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
             }
 
+            /* --- إظهار وتنسيق عنصر الإجابة المطبوع لتمدد كامل --- */
             .print-answer {
                 display: block !important;
-                /* يظهر في الطباعة */
+                visibility: visible !important;
+                height: auto !important;
+                min-height: 40px !important;
+                overflow: visible !important; /* يمنع ظهور شريط التمرير */
+                white-space: pre-wrap !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important; /* يكسر أسطر الكود الطويلة جداً */
                 background: #f8fafc !important;
                 border: 1px solid #aaa !important;
                 color: #0b1120 !important;
-                padding: 8px 12px !important;
+                padding: 12px !important;
                 border-radius: 6px !important;
                 font-size: 10.5pt !important;
                 line-height: 1.5 !important;
-                font-family: 'Courier New', monospace !important;
-                white-space: pre-wrap !important;
-                word-wrap: break-word !important;
-                margin: 0 !important;
+                font-family: 'Courier New', Courier, monospace !important;
+                margin: 0.5rem 0 1rem 0 !important;
             }
 
             .answer-block {
                 border-left-color: #666 !important;
+                overflow: visible !important;
             }
 
             .answer-block label {
                 color: #222 !important;
+                font-weight: 700 !important;
             }
 
             .act-number {
@@ -520,15 +521,21 @@
                 color: #fff !important;
             }
 
+            /* ضمان التفاف الأكواد الطويلة في الطباعة */
             pre {
                 background: #f4f4f4 !important;
                 color: #111 !important;
                 border-color: #ccc !important;
+                white-space: pre-wrap !important;
+                word-wrap: break-word !important;
+                word-break: break-all !important;
+                overflow: visible !important;
             }
 
             code {
                 background: #eee !important;
                 color: #111 !important;
+                word-break: break-all !important;
             }
 
             h2 {
@@ -536,10 +543,7 @@
                 border-bottom-color: #ccc !important;
             }
 
-            h3,
-            h4 {
-                color: #222 !important;
-            }
+            h3, h4 { color: #222 !important; }
 
             .hero {
                 background: #f5f5f5 !important;
@@ -563,9 +567,7 @@
                 color: #555 !important;
             }
 
-            .sticky-nav a {
-                display: none !important;
-            }
+            .sticky-nav a { display: none !important; }
         }
     </style>
 </head>
@@ -1254,95 +1256,41 @@ end main`;
                 URL.revokeObjectURL(a.href);
             };
 
-            // ── دالة تحديث محتوى print-answer من textarea ──
-            function updatePrintAnswers() {
+            // ── دالة موحدة ومضمونة لنسخ محتوى textarea إلى عنصر الطباعة ──
+            function syncAnswersForPrint() {
                 document.querySelectorAll('.answer-block').forEach(block => {
                     const textarea = block.querySelector('textarea');
                     const printDiv = block.querySelector('.print-answer');
                     if (textarea && printDiv) {
-                        printDiv.textContent = textarea.value || '(لم يتم تقديم إجابة)';
+                        // نستخدم textContent للحفاظ على المسافات والأسطر الجديدة بدقة
+                        printDiv.textContent = textarea.value.trim() === '' ? '(لم يتم تقديم إجابة)' : textarea.value;
                     }
                 });
             }
 
-            // ── دالة الطباعة الذكية ──
-            const allTextareas = document.querySelectorAll('.answer-block textarea');
-
-            // توسيع textarea مؤقتاً (لضمان رؤية المحتوى أثناء التحرير – اختياري)
-            function expandTextareas() {
-                allTextareas.forEach(function (ta) {
-                    if (!ta.dataset.origRows) {
-                        ta.dataset.origRows = ta.getAttribute('rows') || '2';
-                    }
-                    const val = ta.value || '';
-                    const lines = val.split('\n');
-                    let lineCount = lines.length;
-                    let extra = 0;
-                    const maxLen = 55;
-                    for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].length > maxLen) {
-                            extra += Math.floor((lines[i].length - maxLen) / maxLen) + 1;
-                        }
-                    }
-                    const rowsNeeded = Math.min(lineCount + extra + 1, 40);
-                    ta.setAttribute('rows', rowsNeeded);
-                    ta.style.height = 'auto';
-                    ta.style.overflow = 'visible';
-                    ta.style.resize = 'none';
-                });
-            }
-
-            function restoreTextareas() {
-                allTextareas.forEach(function (ta) {
-                    const orig = ta.dataset.origRows || '2';
-                    ta.setAttribute('rows', orig);
-                    ta.style.height = '';
-                    ta.style.overflow = '';
-                    ta.style.resize = '';
-                });
-            }
-
-            // دالة الطباعة الرئيسية
+            // ── دالة الطباعة الرئيسية ──
             window.handlePrint = function () {
-                // 1. نسخ المحتوى إلى print-answer
-                updatePrintAnswers();
-
-                // 2. توسيع textarea (اختياري، لكنه يساعد في المعاينة)
-                expandTextareas();
-
-                // 3. طباعة
-                window.print();
-
-                // 4. إعادة textarea إلى حالتها بعد الطباعة
-                setTimeout(function () {
-                    restoreTextareas();
-                }, 800);
+                // 1. مزامنة الإجابات فوراً قبل فتح نافذة الطباعة
+                syncAnswersForPrint();
+                
+                // 2. إعطاء المتصفح جزء من الثانية لتطبيق الـ DOM updates
+                setTimeout(() => {
+                    window.print();
+                }, 100);
             };
 
-            // ربط أحداث الطباعة من المتصفح (Ctrl+P)
+            // ربط أحداث الطباعة من المتصفح (Ctrl+P) لضمان المزامنة حتى لو لم يضغط على الزر
             window.addEventListener('beforeprint', function () {
-                updatePrintAnswers();
-                expandTextareas();
+                syncAnswersForPrint();
             });
 
-            window.addEventListener('afterprint', function () {
-                restoreTextareas();
-            });
-
-            // التأكد من أن أي زر PDF آخر يستخدم نفس الدالة
-            document.querySelectorAll('.pdf-btn').forEach(function (btn) {
-                if (!btn.getAttribute('onclick')) {
-                    btn.addEventListener('click', window.handlePrint);
-                }
-            });
-
-            // عند تحرير أي textarea، نقوم بتحديث الـ print-answer (اختياري، لكنه يجعل الطباعة فورية)
+            // عند تحرير أي textarea، نقوم بتحديث الـ print-answer فورياً في الخلفية
             document.addEventListener('input', function (e) {
                 if (e.target.tagName === 'TEXTAREA' && e.target.closest('.answer-block')) {
                     const block = e.target.closest('.answer-block');
                     const printDiv = block.querySelector('.print-answer');
                     if (printDiv) {
-                        printDiv.textContent = e.target.value || '(لم يتم تقديم إجابة)';
+                        printDiv.textContent = e.target.value.trim() === '' ? '(لم يتم تقديم إجابة)' : e.target.value;
                     }
                 }
             });
@@ -1350,5 +1298,4 @@ end main`;
         })();
     </script>
 </body>
-
 </html>
