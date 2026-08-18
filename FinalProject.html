@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>COMP‑3111 | Compact Workbook · 20 Core Activities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(18, 25, 45, 0.88);
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-glow: rgba(124, 58, 237, 0.5);
+            --accent: #a78bfa;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --code-bg: #0b111e;
+            --input-bg: rgba(0,0,0,0.35);
+            --input-border: rgba(124,58,237,0.4);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 1.02rem;
+            scroll-behavior: smooth;
+        }
+        .bg-grid {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background-image: linear-gradient(rgba(124,58,237,0.07) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(124,58,237,0.07) 1px, transparent 1px);
+            background-size:45px 45px; pointer-events:none; z-index:-2;
+        }
+        .container { max-width:1000px; margin:0 auto; padding:1.5rem; }
+        .hero {
+            background:linear-gradient(160deg,#0f172a 0%,#1a1430 50%,#0f172a 100%);
+            text-align:center; padding:2.5rem 1.5rem 2rem;
+            border-bottom:1px solid var(--border-light); margin-bottom:0.5rem;
+        }
+        .hero h1 {
+            font-size:clamp(2rem,5vw,3rem); font-weight:800;
+            background:linear-gradient(135deg,#fff 20%,var(--primary) 55%,#c4b5fd 90%);
+            background-clip:text; -webkit-background-clip:text; color:transparent;
+        }
+        .hero .subtitle {
+            font-size:1.15rem; color:var(--text-muted);
+            display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:0.55rem;
+            margin-top:0.5rem;
+        }
+        .badge {
+            background:rgba(124,58,237,0.14); backdrop-filter:blur(4px);
+            border:1px solid rgba(124,58,237,0.4); padding:0.35rem 1.2rem;
+            border-radius:40px; font-weight:600; font-size:0.85rem; color:var(--primary);
+            display:inline-flex; align-items:center; gap:0.4rem; white-space:nowrap;
+        }
+        .top-bar {
+            position:sticky; top:0; z-index:100;
+            background:rgba(10,15,28,0.92); backdrop-filter:blur(16px);
+            border-bottom:1px solid var(--border-light);
+            display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+            padding:0.5rem 1.5rem; gap:0.5rem;
+        }
+        .sticky-nav {
+            display:flex; flex-wrap:wrap; gap:0.3rem;
+        }
+        .sticky-nav a {
+            text-decoration:none; font-size:0.7rem; font-weight:600;
+            color:var(--text-light); padding:0.25rem 0.7rem; border-radius:50px;
+            background:rgba(124,58,237,0.10); border:1px solid rgba(124,58,237,0.25);
+            transition:0.22s; display:flex; align-items:center; gap:0.2rem; white-space:nowrap;
+        }
+        .sticky-nav a:hover, .sticky-nav a.active {
+            background:var(--primary); color:#fff; border-color:var(--primary);
+            transform:scale(0.96); box-shadow:0 0 18px var(--primary-glow);
+        }
+        .top-bar-actions {
+            display:flex; gap:0.4rem; flex-wrap:wrap;
+        }
+        .pdf-btn, .clear-btn {
+            padding:0.35rem 0.9rem; border-radius:50px; font-weight:700; font-size:0.75rem;
+            border:none; cursor:pointer; font-family:inherit; transition:0.2s;
+            display:flex; align-items:center; gap:0.3rem; white-space:nowrap;
+        }
+        .pdf-btn { background:var(--success); color:#fff; box-shadow:0 4px 14px rgba(16,185,129,0.4); }
+        .pdf-btn:hover { background:#059669; transform:scale(0.96); }
+        .clear-btn { background:rgba(239,68,68,0.8); color:#fff; }
+        .clear-btn:hover { background:#dc2626; transform:scale(0.96); }
+        .progress-wrapper {
+            background:rgba(0,0,0,0.3); border-radius:40px; padding:0.5rem 1.5rem;
+            margin:0.8rem auto; max-width:600px; text-align:center; border:1px solid var(--border-light);
+        }
+        .progress-wrapper span { color:var(--text-muted); font-size:0.85rem; font-weight:600; }
+        .progress-bar-bg {
+            background:rgba(255,255,255,0.1); height:6px; border-radius:20px; margin-top:0.3rem; overflow:hidden;
+        }
+        .progress-bar-fill {
+            height:100%; width:0%; background:linear-gradient(90deg,var(--primary),var(--accent));
+            border-radius:20px; transition:width 0.3s ease;
+        }
+        .section-card {
+            background:var(--card-bg); backdrop-filter:blur(12px);
+            border:1px solid var(--border-light); border-radius:28px; padding:1.5rem;
+            margin:1.5rem 0; box-shadow:0 6px 22px rgba(0,0,0,0.45);
+            scroll-margin-top:80px;
+        }
+        .unit1 { border-left:4px solid #8b5cf6; }
+        .unit2 { border-left:4px solid #6366f1; }
+        .unit3 { border-left:4px solid #a78bfa; }
+        .unit4 { border-left:4px solid #f59e0b; }
+        .unit5 { border-left:4px solid #10b981; }
+        .unit6 { border-left:4px solid #f472b6; }
+        .unit7 { border-left:4px solid #ef4444; }
+        .final-project { border-left:4px solid #fbbf24; border:2px solid rgba(251,191,36,0.3); }
+        h2 { font-size:1.5rem; font-weight:700; color:#fff; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem; border-bottom:1px solid var(--border-light); padding-bottom:0.4rem; }
+        h4 { font-size:1rem; font-weight:600; color:var(--text-light); margin:0.6rem 0 0.3rem; display:flex; align-items:center; gap:0.4rem; }
+        p, li { color:#cbd5e6; font-size:0.95rem; }
+        ul, ol { margin:0.5rem 0 0.8rem 1.5rem; }
+        li { margin-bottom:0.2rem; }
+        .highlight-box {
+            background:rgba(124,58,237,0.08); border-left:4px solid var(--primary);
+            padding:0.8rem 1.2rem; border-radius:14px; margin:1rem 0;
+        }
+        .activity-card {
+            background:rgba(0,0,0,0.22); border:1px dashed rgba(124,58,237,0.45);
+            border-radius:18px; padding:1.2rem 1.2rem; margin:1rem 0; position:relative;
+        }
+        .act-number {
+            position:absolute; top:-12px; left:16px;
+            background:var(--primary); color:#fff; font-weight:800; font-size:0.65rem;
+            padding:0.15rem 0.7rem; border-radius:30px;
+        }
+        .act-icon { margin-right:0.3rem; font-size:0.9rem; }
+        .answer-block {
+            margin:0.6rem 0 1rem 0.5rem;
+            border-left:3px solid rgba(124,58,237,0.5); padding-left:0.8rem;
+        }
+        .answer-block label {
+            display:block; font-weight:600; color:var(--accent); font-size:0.85rem; margin-bottom:0.2rem;
+        }
+        .answer-block textarea {
+            width:100%; background:var(--input-bg); border:1px solid var(--input-border);
+            border-radius:10px; color:#e2e8f0; font-family:inherit; font-size:0.88rem;
+            padding:0.5rem; resize:vertical; line-height:1.5; min-height:45px;
+        }
+        .print-answer {
+            display:none; white-space:pre-wrap; word-wrap:break-word;
+            background:#f8fafc; color:#0b1120; border:1px solid #ccc; border-radius:10px;
+            padding:0.5rem; font-family:inherit; font-size:0.88rem; line-height:1.5; margin-top:3px;
+        }
+        .screenshot-zone {
+            background:rgba(16,185,129,0.05); border:2px dashed var(--success);
+            border-radius:14px; padding:0.6rem; margin:0.6rem 0 0.8rem;
+            text-align:center; cursor:pointer; position:relative;
+            min-height:70px; display:flex; align-items:center; justify-content:center; flex-direction:column;
+            transition:background 0.2s, border-color 0.2s;
+        }
+        .screenshot-zone.drag-over {
+            background:rgba(16,185,129,0.20);
+            border-color: var(--primary);
+            border-style: solid;
+        }
+        .screenshot-zone:hover { background:rgba(16,185,129,0.10); }
+        .screenshot-zone .overlay-text { color:var(--success); font-weight:600; font-size:0.85rem; pointer-events:none; }
+        .screenshot-zone img.preview { max-width:100%; max-height:220px; border-radius:8px; display:none; margin-bottom:0.2rem; }
+        .screenshot-zone.has-image .overlay-text { display:none; }
+        .screenshot-zone.has-image img.preview { display:block; }
+        .screenshot-zone input[type="file"] { display:none; }
+        .screenshot-zone .remove-img-btn {
+            position:absolute; top:3px; right:8px;
+            background:rgba(239,68,68,0.85); color:#fff; border:none; border-radius:50%;
+            width:24px; height:24px; font-size:0.9rem; line-height:24px; text-align:center;
+            cursor:pointer; display:none; z-index:10; transition:0.2s; font-weight:bold;
+        }
+        .screenshot-zone .remove-img-btn:hover { background:#dc2626; transform:scale(1.1); }
+        .screenshot-zone.has-image .remove-img-btn { display:block; }
+        pre {
+            background:var(--code-bg); color:#e6edf3; padding:0.8rem; border-radius:14px;
+            overflow-x:auto; font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+            margin:0.6rem 0; border:1px solid #2d3748;
+        }
+        code { font-family:'JetBrains Mono',monospace; background:#1e293b; padding:0.15rem 0.4rem; border-radius:20px; font-size:0.78rem; }
+        pre code { background:transparent; padding:0; }
+        .btn {
+            display:inline-block; background:var(--primary); color:#fff; font-weight:700;
+            padding:0.4rem 1.2rem; border-radius:50px; border:none; cursor:pointer;
+            font-size:0.85rem; box-shadow:0 4px 14px rgba(124,58,237,0.4); font-family:inherit;
+            margin-top:0.4rem; transition:0.2s;
+        }
+        .btn:hover { background:var(--primary-dark); transform:scale(0.96); }
+        footer {
+            text-align:center; color:var(--text-muted); font-size:0.8rem;
+            margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border-light);
+        }
+        .toast {
+            position:fixed; bottom:20px; right:20px; background:rgba(16,185,129,0.95);
+            color:#fff; padding:0.6rem 1.5rem; border-radius:50px; font-weight:600;
+            box-shadow:0 8px 30px rgba(0,0,0,0.5); z-index:999; opacity:0; transform:translateY(20px);
+            transition:opacity 0.3s, transform 0.3s; pointer-events:none; font-size:0.9rem;
+        }
+        .toast.show { opacity:1; transform:translateY(0); }
+        @media print {
+            .bg-grid,.top-bar,.btn,.pdf-btn,.clear-btn,.progress-wrapper,.toast { display:none !important; }
+            body { background:#fff !important; color:#000 !important; font-size:9.5pt !important; -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+            .section-card { box-shadow:none !important; border:1px solid #ccc !important; background:#fff !important; padding:0.8rem !important; margin:0.5rem 0 !important; }
+            .activity-card { border-color:#aaa !important; background:#fcfcfc !important; }
+            .answer-block textarea { display:none !important; height:0 !important; padding:0 !important; border:none !important; }
+            .print-answer { display:block !important; visibility:visible !important; height:auto !important; min-height:15px !important; overflow:visible !important; background:#f8fafc !important; border:1px solid #aaa !important; color:#0b1120 !important; padding:6px !important; border-radius:4px !important; font-size:8.5pt !important; font-family:'Courier New',monospace !important; margin:0.2rem 0 0.4rem 0 !important; }
+            .screenshot-zone { border:2px solid #666 !important; background:#f9f9f9 !important; min-height:50px !important; padding:0.4rem !important; break-inside:avoid !important; }
+            .screenshot-zone .overlay-text { color:#555 !important; }
+            .screenshot-zone img.preview { display:block !important; max-width:100% !important; height:auto !important; margin:0 auto !important; border:1px solid #ccc !important; border-radius:4px !important; max-height:200px !important; }
+            .screenshot-zone .remove-img-btn { display:none !important; }
+            .screenshot-zone:not(.has-image) img.preview { display:none !important; }
+            .unit1,.unit2,.unit3,.unit4,.unit5,.unit6,.unit7 { border-left-color:#888 !important; }
+            h2 { color:#111 !important; border-bottom-color:#ccc !important; }
+            .hero { background:#f5f5f5 !important; border-bottom:2px solid #ccc !important; }
+            .hero h1 { background:none !important; color:#111 !important; -webkit-text-fill-color:#111 !important; }
+            .badge { background:#eee !important; border-color:#aaa !important; color:#333 !important; }
+            footer { border-top-color:#ccc !important; color:#555 !important; }
+            .sticky-nav a { display:none !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="toast" id="toast"></div>
+
+<div class="hero">
+    <h1>🧪 Core Activities Workbook</h1>
+    <div class="subtitle">
+        <span class="badge"><i class="fas fa-laptop"></i> 20 Essential Tasks</span>
+        <span class="badge"><i class="fas fa-code"></i> MASM / emu8086</span>
+        <span class="badge"><i class="fas fa-file-pdf"></i> PDF ready</span>
+        <span class="badge"><i class="fas fa-arrows-alt"></i> Drag & Drop</span>
+    </div>
+    <p style="margin-top:0.3rem; color:var(--text-muted);">COMP‑3111 · Microprocessor & Assembly Lab · Units 1–7</p>
+</div>
+
+<div class="top-bar">
+    <nav class="sticky-nav">
+        <a href="#unit1">U1</a><a href="#unit2">U2</a><a href="#unit3">U3</a>
+        <a href="#unit4">U4</a><a href="#unit5">U5</a><a href="#unit6">U6</a>
+        <a href="#final">Final</a><a href="#unit7">RE</a>
+    </nav>
+    <div class="top-bar-actions">
+        <button class="clear-btn" onclick="clearAllData()"><i class="fas fa-trash"></i> Clear</button>
+        <button class="pdf-btn" onclick="handlePrint()"><i class="fas fa-file-pdf"></i> PDF</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="progress-wrapper">
+        <span id="progressText">Progress: 0 / 20</span>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 1 (4 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit1" id="unit1">
+        <h2><i class="fas fa-cube"></i> Unit 1 · Foundations</h2>
+        <div class="activity-card">
+            <span class="act-number">1.1</span>
+            <h4><span class="act-icon">🔍</span> Registers & Flags</h4>
+            <p>Run the code. Screenshot after each <code>MOV</code> and <code>ADD</code> showing registers and flags.</p>
+            <pre><code>MOV AX, 0x1234
+MOV BX, 0x5678
+MOV CX, AX
+ADD CX, BX
+MOV AL, 100
+ADD AL, 200</code></pre>
+            <div class="answer-block"><label>❓ CX (hex)? After ADD AL,200 – CF & OF?</label><textarea rows="2" placeholder="CX=..., CF=..., OF=..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="1.1"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">1.2</span>
+            <h4><span class="act-icon">🔁</span> Loop Construction</h4>
+            <p>Run the countdown loop. Screenshot output and CX. Rewrite to print 1→5.</p>
+            <pre><code>MOV CX, 5
+MOV AH, 2
+MOV DL, '5'
+print_loop: INT 21h
+    DEC DL
+    LOOP print_loop</code></pre>
+            <div class="answer-block"><label>❓ Iterations? CX at exit? Paste ascending code.</label><textarea rows="3" placeholder="Answer & code..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="1.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">1.3</span>
+            <h4><span class="act-icon">🏆</span> Find Max / Min</h4>
+            <p>Step through the Find Max program. Modify to find minimum.</p>
+            <pre><code>arr db 12,7,25,9,18,3
+count db 6
+; loop with CMP, JAE ...</code></pre>
+            <div class="answer-block"><label>❓ Final max? Which instruction for min?</label><textarea rows="2" placeholder="Max=..., change JAE to ..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="1.3"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">1.4</span>
+            <h4><span class="act-icon">🧠</span> Assembly → Circuit</h4>
+            <p>Describe the path of <code>MOV AX, 5</code> from assembler to register file.</p>
+            <div class="answer-block"><label>❓ Use: opcode, control unit, data bus, register file.</label><textarea rows="4" placeholder="The assembler encodes ..."></textarea><div class="print-answer"></div></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 2 (2 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit2" id="unit2">
+        <h2><i class="fas fa-code"></i> Unit 2 · C → Assembly</h2>
+        <div class="activity-card">
+            <span class="act-number">2.1</span>
+            <h4><span class="act-icon">🖥️</span> Hello World (MessageBox)</h4>
+            <p>Assemble and run. Screenshot the message box. Explain the calling convention.</p>
+            <pre><code>.386
+.model flat, stdcall
+MessageBoxA PROTO :DWORD,:DWORD,:DWORD,:DWORD
+ExitProcess PROTO :DWORD
+.data msg db 'Hello!',0
+.code main: push 0 ...</code></pre>
+            <div class="answer-block"><label>❓ Why push right-to-left? Which convention?</label><textarea rows="3" placeholder="stdcall convention..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="2.1"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">2.2</span>
+            <h4><span class="act-icon">➕</span> Arithmetic & Overflow</h4>
+            <p>Add three DWORDs. Test overflow: 127+1, 255+1. Translate C if-statement.</p>
+            <pre><code>mov eax, a
+add eax, b
+add eax, c
+mov sum, eax</code></pre>
+            <div class="answer-block"><label>❓ EAX after? CF vs OF? Write: if (EAX>EBX) ECX=EAX else ECX=EBX</label><textarea rows="4" placeholder="EAX=..., CF..., code..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="2.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 3 (4 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit3" id="unit3">
+        <h2><i class="fas fa-exchange-alt"></i> Unit 3 · Data Movement</h2>
+        <div class="activity-card">
+            <span class="act-number">3.1</span>
+            <h4><span class="act-icon">🧮</span> LEA Arithmetic</h4>
+            <p>Compute 7*3, 7*5, 7*9 using LEA. Write single LEA for x*7.</p>
+            <pre><code>mov eax, 7
+lea ebx, [eax + eax*2] ; etc.</code></pre>
+            <div class="answer-block"><label>❓ EBX, ECX, EDX? LEA for x*7?</label><textarea rows="2" placeholder="EBX=21... lea ebx, [eax*8] ..."></textarea><div class="print-answer"></div></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">3.2</span>
+            <h4><span class="act-icon">🗂️</span> Array Traversal & Data Directives</h4>
+            <p>Sum a byte array using pointer walking and indexed addressing. Screenshot final AL.</p>
+            <pre><code>; Method A: MOV SI, offset arr ... ADD AL,[SI] ...
+; Method B: XOR BX,BX ... ADD AL, arr[BX] ...</code></pre>
+            <div class="answer-block"><label>❓ Which method has fewer instructions? Final sum?</label><textarea rows="2" placeholder="Method ..., sum=..."></textarea><div class="print-answer"></div></div>
+            <!-- NEW QUESTION about DB, DW, DD -->
+            <div class="answer-block"><label>❓ In the definition <code>arr db 12,7,25,9,18,3</code>, what do <code>DB</code>, <code>DW</code>, and <code>DD</code> stand for? If this array was defined as <code>DW</code> instead of <code>DB</code>, how many bytes would it occupy? Calculate the size difference.</label><textarea rows="3" placeholder="DB = Define Byte, DW = Define Word, DD = Define DoubleWord. DW would take 12 bytes (6*2) vs DB takes 6 bytes. Difference = 6 bytes."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="3.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">3.3</span>
+            <h4><span class="act-icon">🔄</span> Reverse Array (16-bit)</h4>
+            <p>Reverse a byte array in place using SI and DI.</p>
+            <pre><code>arr db 10,20,30,40,50
+; SI = offset arr, DI = offset arr + len -1</code></pre>
+            <div class="answer-block"><label>❓ Final order? Write the swap logic.</label><textarea rows="3" placeholder="50,40,30,20,10; mov al,[si] ..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="3.3"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">3.4</span>
+            <h4><span class="act-icon">🧠</span> Pointer vs. Value</h4>
+            <p>Explain the critical distinction.</p>
+            <div class="answer-block"><label>❓ In 16-bit: MOV SI, offset var; MOV AX, SI vs MOV AX, [SI]? In 32-bit, why does a student get a large number instead of the array element?</label><textarea rows="3" placeholder="AX=address vs AX=value; missing brackets..."></textarea><div class="print-answer"></div></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 4 (3 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit4" id="unit4">
+        <h2><i class="fas fa-calculator"></i> Unit 4 · Arithmetic & Logic</h2>
+        <div class="activity-card">
+            <span class="act-number">4.1</span>
+            <h4><span class="act-icon">➗</span> MUL & DIV</h4>
+            <pre><code>MOV AL, 5
+MOV BL, 3
+MUL BL        ; AX = 15
+MOV AX, 25
+MOV BL, 4
+DIV BL        ; AL = 6, AH = 1</code></pre>
+            <div class="answer-block"><label>❓ Result if AL=0xFF, BL=0x02? What if quotient doesn't fit?</label><textarea rows="2" placeholder="AX=0x01FE; overflow interrupt..."></textarea><div class="print-answer"></div></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">4.2</span>
+            <h4><span class="act-icon">🧩</span> Logic Ops (AND, OR, XOR)</h4>
+            <p>Mask high nibble (`AND AL,0x0F`). Set bit 2 (`OR BL,00000100b`). Toggle bit 0 (`XOR CL,1`).</p>
+            <div class="answer-block"><label>❓ AND AL,0x0F if AL=0x7C? Why XOR AX,AX faster than MOV AX,0?</label><textarea rows="2" placeholder="AL=0x0C; XOR is 1 byte..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="4.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">4.3</span>
+            <h4><span class="act-icon">🔄</span> Shifts (SHL, SHR, SAR)</h4>
+            <p>Multiply by 2 (`SHL`), divide by 2 (`SHR`). Signed division (`SAR`).</p>
+            <div class="answer-block"><label>❓ SHL AL,1 if AL=0x80 – result and flag? Why use SAR for signed?</label><textarea rows="2" placeholder="AL=0x00, CF=1; SAR preserves sign..."></textarea><div class="print-answer"></div></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 5 (1 Activity)                                          -->
+    <!-- ============================================================ -->
+    <div class="section-card unit5" id="unit5">
+        <h2><i class="fas fa-code-branch"></i> Unit 5 · Procedures & Stack</h2>
+        <div class="activity-card">
+            <span class="act-number">5.1</span>
+            <h4><span class="act-icon">📞</span> Stack Parameters & Locals</h4>
+            <p>Write a procedure that adds two DWORDs from the stack (stdcall). Explain prologue/epilogue.</p>
+            <pre><code>Add PROC
+    push ebp
+    mov ebp, esp
+    mov eax, [ebp+8]
+    add eax, [ebp+12]
+    mov esp, ebp
+    pop ebp
+    ret 8</code></pre>
+            <div class="answer-block"><label>❓ Calling code for cdecl? Where is the first local ([ebp-4])? Why use EBP?</label><textarea rows="4" placeholder="push 3 / push 5 / call Add / add esp,8 ; [ebp-4]..."></textarea><div class="print-answer"></div></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 6 (2 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit6" id="unit6">
+        <h2><i class="fas fa-keyboard"></i> Unit 6 · Strings & I/O</h2>
+        <div class="activity-card">
+            <span class="act-number">6.1</span>
+            <h4><span class="act-icon">📝</span> String Primitives (MOVSB)</h4>
+            <p>Copy a 5-byte string using `REP MOVSB`. Write code to scan for a byte using `REPNE SCASB`.</p>
+            <div class="answer-block"><label>❓ What does REP do? How does DF affect MOVSB? Write SCASB code.</label><textarea rows="4" placeholder="REP repeats ECX times; DF controls direction; mov al, target..."></textarea><div class="print-answer"></div></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">6.2</span>
+            <h4><span class="act-icon">⌨️</span> Irvine32 Console I/O</h4>
+            <p>Write a program that asks for a name and prints "Hello, [name]!".</p>
+            <div class="answer-block"><label>❓ Paste your complete program using ReadString and WriteString.</label><textarea rows="6" placeholder=".386 ..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="6.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINAL PROJECT                                                 -->
+    <!-- ============================================================ -->
+    <div class="section-card final-project" id="final">
+        <h2><i class="fas fa-rocket"></i> 🏆 Final Project</h2>
+        <p>Write a 32‑bit MASM program with a menu: 1. Enter array, 2. Max, 3. Min, 4. Reverse, 5. Average, 6. Exit. Use procedures and Irvine32/Windows API.</p>
+        <div class="highlight-box">⚠️ Keep your <code>.exe</code> – you'll need it for Unit 7.</div>
+        <div class="answer-block"><label>❓ Paste your final project code.</label><textarea rows="12" placeholder=".386 ..."></textarea><div class="print-answer"></div></div>
+        <button class="btn" onclick="downloadFinalStarter()"><i class="fas fa-download"></i> Download Starter</button>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- UNIT 7 (3 Activities)                                        -->
+    <!-- ============================================================ -->
+    <div class="section-card unit7" id="unit7">
+        <h2><i class="fas fa-bug"></i> Unit 7 · Reverse Engineering</h2>
+        <p>Load your Final Project <code>.exe</code> in x64dbg. Set a breakpoint on the menu <code>CMP</code>.</p>
+        <div class="activity-card">
+            <span class="act-number">7.1</span>
+            <h4><span class="act-icon">🔍</span> Setup & Breakpoint</h4>
+            <p>Load your <code>.exe</code>, find the menu code, set a breakpoint on <code>CMP</code>. Screenshot the disassembly.</p>
+            <div class="answer-block"><label>❓ Screenshot showing the breakpoint.</label><textarea rows="2"></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="7.1"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">7.2</span>
+            <h4><span class="act-icon">📋</span> Trace Options 1, 2, 3</h4>
+            <p>Run and enter options 1 (Enter array), 2 (Max), and 3 (Min). Observe flags and registers.</p>
+            <div class="answer-block"><label>❓ Describe what happens for each option. Screenshot of Dump/Registers for one.</label><textarea rows="4" placeholder="Description..."></textarea><div class="print-answer"></div></div>
+            <div class="screenshot-zone" data-key="7.2"><button class="remove-img-btn">✕</button><span class="overlay-text">📸 Screenshot or Drop Image</span><input type="file" accept="image/*"><img class="preview" alt="Screenshot" /></div>
+        </div>
+        <div class="activity-card">
+            <span class="act-number">7.3</span>
+            <h4><span class="act-icon">📝</span> Final Report</h4>
+            <p>Summarize your experience. How does the disassembly match your MASM code? What did you learn?</p>
+            <div class="answer-block"><label>❓ Write your reflection (1-2 paragraphs).</label><textarea rows="5" placeholder="My report..."></textarea><div class="print-answer"></div></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>COMP‑3111 · Microprocessor & Assembly Lab · UCAS | Instructor: <strong>Mahmoud Khalil</strong></p>
+        <p>© 2026 · For educational use only</p>
+    </footer>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+    function autoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    }
+    document.querySelectorAll('.answer-block textarea').forEach(ta => {
+        autoResize(ta);
+        ta.addEventListener('input', function() { autoResize(this); });
+    });
+
+    // LocalStorage
+    const STORAGE_KEY = 'comp3111_workbook_20';
+    function loadAll() {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        document.querySelectorAll('.answer-block textarea').forEach((ta, i) => {
+            const key = `answer-${i}`;
+            if (data[key] !== undefined) { ta.value = data[key]; autoResize(ta); }
+        });
+    }
+    function saveAll() {
+        const data = {};
+        document.querySelectorAll('.answer-block textarea').forEach((ta, i) => {
+            data[`answer-${i}`] = ta.value;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        updateProgress();
+    }
+    document.querySelectorAll('.answer-block textarea').forEach(ta => ta.addEventListener('input', saveAll));
+    window.addEventListener('load', () => { loadAll(); updateProgress(); });
+
+    // Screenshots (Upload, Paste, Drag & Drop, Remove)
+    function setupScreenshotZone(zone) {
+        const input = zone.querySelector('input[type="file"]');
+        const img = zone.querySelector('.preview');
+        const removeBtn = zone.querySelector('.remove-img-btn');
+
+        // Click to upload
+        zone.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-img-btn')) return;
+            if (e.target.tagName === 'IMG') return;
+            input.click();
+        });
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => { img.src = e.target.result; zone.classList.add('has-image'); updateProgress(); };
+                reader.readAsDataURL(file);
+            }
+        });
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            img.src = ''; zone.classList.remove('has-image'); input.value = ''; updateProgress();
+        });
+
+        // --- Drag and Drop ---
+        zone.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            zone.classList.add('drag-over');
+        });
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Required for drop to work
+            zone.classList.add('drag-over');
+        });
+        zone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+        });
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    img.src = ev.target.result;
+                    zone.classList.add('has-image');
+                    // Clear the input file selection if any
+                    input.value = '';
+                    updateProgress();
+                    showToast('Image dropped successfully!');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                showToast('Please drop an image file.');
+            }
+        });
+    }
+
+    document.querySelectorAll('.screenshot-zone').forEach(setupScreenshotZone);
+
+    // Paste from clipboard
+    let lastZone = null;
+    document.querySelectorAll('.screenshot-zone').forEach(z => z.addEventListener('click', () => lastZone = z));
+    document.addEventListener('paste', (e) => {
+        if (!lastZone) return;
+        const items = e.clipboardData?.items;
+        if (!items) return;
+        for (let item of items) {
+            if (item.type.startsWith('image/')) {
+                const blob = item.getAsFile();
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = lastZone.querySelector('.preview');
+                    img.src = ev.target.result;
+                    lastZone.classList.add('has-image');
+                    const input = lastZone.querySelector('input[type="file"]');
+                    if (input) input.value = '';
+                    updateProgress();
+                    showToast('Image pasted from clipboard!');
+                };
+                reader.readAsDataURL(blob);
+                e.preventDefault(); break;
+            }
+        }
+    });
+
+    // Progress
+    function updateProgress() {
+        const totalAreas = document.querySelectorAll('.answer-block textarea').length;
+        const totalZones = document.querySelectorAll('.screenshot-zone').length;
+        let filled = 0;
+        document.querySelectorAll('.answer-block textarea').forEach(ta => { if (ta.value.trim()) filled++; });
+        document.querySelectorAll('.screenshot-zone.has-image').forEach(() => filled++);
+        const total = totalAreas + totalZones;
+        const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+        document.getElementById('progressText').textContent = `Progress: ${filled} / ${total}`;
+        document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    // Clear
+    window.clearAllData = function() {
+        if (confirm('Delete all your answers and images?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('.answer-block textarea').forEach(ta => { ta.value = ''; autoResize(ta); });
+            document.querySelectorAll('.screenshot-zone').forEach(z => {
+                z.classList.remove('has-image');
+                const img = z.querySelector('.preview');
+                if (img) img.src = '';
+                const input = z.querySelector('input[type="file"]');
+                if (input) input.value = '';
+            });
+            updateProgress();
+            showToast('All data cleared.');
+        }
+    };
+
+    // Print
+    function syncForPrint() {
+        document.querySelectorAll('.answer-block').forEach(block => {
+            const ta = block.querySelector('textarea');
+            const printDiv = block.querySelector('.print-answer');
+            if (ta && printDiv) {
+                const val = ta.value.trim();
+                printDiv.textContent = val === '' ? '(No answer provided)' : val;
+            }
+        });
+    }
+    window.handlePrint = function() {
+        syncForPrint();
+        document.body.style.display = 'none';
+        document.body.offsetHeight;
+        document.body.style.display = 'block';
+        showToast('Preparing PDF...');
+        setTimeout(() => window.print(), 200);
+    };
+    window.addEventListener('beforeprint', syncForPrint);
+
+    // Download Starter
+    window.downloadFinalStarter = function() {
+        const content = `; final_project_starter.asm
+.386
+.model flat, stdcall
+.stack 4096
+ExitProcess PROTO, dwExitCode:DWORD
+; Add Irvine32 includes if needed
+
+.data
+    menuMsg db '=== MENU ===',0Dh,0Ah
+             db '1. Enter array',0Dh,0Ah
+             db '2. Find max',0Dh,0Ah
+             db '3. Find min',0Dh,0Ah
+             db '4. Reverse array',0Dh,0Ah
+             db '5. Compute average',0Dh,0Ah
+             db '6. Exit',0Dh,0Ah
+             db 'Choice: ',0
+    arr     DD 5 DUP(?)
+    arrSize = 5
+    choice  DB ?
+    maxVal  DD ?
+    minVal  DD ?
+    avgVal  DD ?
+
+.code
+main PROC
+    ; Implement menu loop
+    INVOKE ExitProcess, 0
+main ENDP
+END main`;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'final_project_starter.asm';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        showToast('Starter downloaded!');
+    };
+})();
+</script>
+</body>
+</html>
